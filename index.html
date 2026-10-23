@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <title>Miss Collection | Luxury Ladies Undergarments & Lingerie Pakistan</title>
+  <meta name="description" content="Shop premium ladies undergarments in Pakistan. Seamless bras, breathable panties, bridal trousseau, sleepwear & shapewear. 100% Discreet Packaging & Cash on Delivery nationwide." />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome 6 Pro CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-white text-stone-900 antialiased selection:bg-rose-500 selection:text-white pb-16 md:pb-0">
+
+  <!-- 1. TOP ANNOUNCEMENT TICKER BAR (Ella Theme Inspired) -->
+  <div class="bg-stone-950 text-white text-xs py-2 px-4 border-b border-white/10 relative z-30">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2 overflow-hidden text-[11px] sm:text-xs">
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-600/30 text-rose-300 font-bold uppercase tracking-wider text-[9px] border border-rose-500/40">
+          <i class="fa-solid fa-lock"></i> 100% Discreet Packaging
+        </span>
+        <span class="text-stone-300 hidden sm:inline">&bull; Plain brown unbranded boxes &bull; Zero sensitive labels outside</span>
+      </div>
+
+      <div class="flex items-center gap-4 text-[11px] font-medium text-stone-300">
+        <span class="hidden md:inline"><i class="fa-solid fa-truck-fast text-rose-400"></i> Free Delivery on orders over Rs. 2,500</span>
+        <a href="javascript:void(0)" onclick="App.openOrderTrackingModal()" class="hover:text-white transition flex items-center gap-1 text-rose-300">
+          <i class="fa-solid fa-location-crosshairs"></i> Track Order
+        </a>
+        <a href="admin.html" class="hover:text-white transition text-stone-400 text-[10px] uppercase tracking-wider border-l border-white/20 pl-3">
+          Admin Portal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. MAIN HEADER & NAVIGATION (Sticky with Search, Wishlist & Cart) -->
+  <header class="header-sticky border-b border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
+      
+      <!-- Mobile Menu Hamburger Button -->
+      <button onclick="App.openMobileNav()" class="lg:hidden p-2 text-stone-800 hover:text-rose-600 transition" aria-label="Open Navigation Menu">
+        <i class="fa-solid fa-bars text-lg"></i>
+      </button>
+
+      <!-- Brand Logo -->
+      <a href="index.html" class="flex flex-col items-start leading-none py-1">
+        <span class="text-xl sm:text-2xl font-extrabold tracking-widest text-stone-900 font-serif-luxury uppercase">
+          MISS<span class="text-rose-600 font-normal">COLLECTION</span>
+        </span>
+        <span class="text-[9px] uppercase tracking-[0.25em] text-stone-500 font-medium">Lingerie &bull; Intimates &bull; Comfort</span>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="hidden lg:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-stone-800">
+        <a href="javascript:void(0)" onclick="App.filterByCategory('all')" class="nav-link active">All Intimates</a>
+        <a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="nav-link">Bras & Bralettes</a>
+        <a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="nav-link">Panties & Briefs</a>
+        <a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="nav-link text-rose-700">Bridal Sets</a>
+        <a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="nav-link">Silky Sleepwear</a>
+        <a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="nav-link">Shapewear</a>
+        <a href="javascript:void(0)" onclick="App.openBraCalculatorModal()" class="nav-link text-amber-700 flex items-center gap-1">
+          <i class="fa-solid fa-ruler-combined text-amber-600"></i> Size Calculator
+        </a>
+      </nav>
+
+      <!-- Header Action Icons -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        
+        <!-- Search Trigger / Bar -->
+        <div class="relative hidden sm:block w-48 md:w-56">
+          <input 
+            type="text" 
+            placeholder="Search bras, panties..." 
+            class="site-search-input w-full bg-stone-100/80 hover:bg-stone-100 text-xs py-2 pl-8 pr-3 rounded-full border border-stone-200 focus:outline-none focus:border-rose-500 focus:bg-white transition"
+          />
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-stone-400 text-xs"></i>
+          
+          <!-- Predictive Search Dropdown -->
+          <div id="predictiveSearchResults" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-stone-200 overflow-hidden z-50"></div>
+        </div>
+
+        <!-- Mobile Search Button -->
+        <button onclick="document.getElementById('mobileSearchBar').classList.toggle('hidden')" class="sm:hidden p-2 text-stone-700 hover:text-rose-600 transition">
+          <i class="fa-solid fa-magnifying-glass text-base"></i>
+        </button>
+
+        <!-- Wishlist Icon with count badge -->
+        <button onclick="App.openWishlistDrawer()" class="p-2 text-stone-700 hover:text-rose-600 relative transition" title="Wishlist">
+          <i class="fa-regular fa-heart text-base sm:text-lg"></i>
+          <span class="wishlist-count-badge hidden absolute top-0.5 right-0.5 w-4 h-4 bg-rose-600 text-white rounded-full text-[9px] font-bold flex items-center justify-center">
+            0
+          </span>
+        </button>
+
+        <!-- Cart Icon with count badge -->
+        <button onclick="App.openCartDrawer()" class="p-2 text-stone-700 hover:text-rose-600 relative transition flex items-center gap-1.5" title="Shopping Bag">
+          <div class="relative">
+            <i class="fa-solid fa-bag-shopping text-base sm:text-lg"></i>
+            <span class="cart-count-badge hidden absolute -top-1 -right-1 w-4 h-4 bg-rose-600 text-white rounded-full text-[9px] font-bold flex items-center justify-center">
+              0
+            </span>
+          </div>
+          <span class="hidden md:inline text-xs font-bold text-stone-800">Bag</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Expandable Search Bar -->
+    <div id="mobileSearchBar" class="hidden sm:hidden px-4 pb-3 pt-1 border-t border-stone-100 bg-white">
+      <div class="relative">
+        <input 
+          type="text" 
+          placeholder="Search intimates, bras, sizes..." 
+          class="site-search-input w-full bg-stone-100 text-xs py-2.5 pl-8 pr-3 rounded-full border border-stone-200 focus:outline-none focus:border-rose-500"
+        />
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-stone-400 text-xs"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. HERO SLIDER BANNER (Ella Theme Carousel Style) -->
+  <section class="relative bg-stone-900 text-white overflow-hidden min-h-[360px] sm:min-h-[440px] md:min-h-[520px] flex items-center">
+    
+    <!-- Slide 1: Seamless Feather-Comfort -->
+    <div class="hero-slide absolute inset-0 opacity-100 transition-opacity duration-1000 flex items-center">
+      <img 
+        src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1800&q=85" 
+        alt="Seamless Bra Banner" 
+        class="absolute inset-0 w-full h-full object-cover object-center brightness-75"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-stone-950/90 via-stone-950/60 to-transparent"></div>
+      <div class="relative max-w-7xl mx-auto px-6 sm:px-12 w-full py-12">
+        <div class="max-w-xl space-y-4">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs font-bold uppercase tracking-widest">
+            ✨ Pure Comfort Edition
+          </span>
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight font-serif-luxury leading-tight text-white">
+            Zero Pressure.<br><span class="text-rose-400 italic">Feather-Light Comfort</span>
+          </h1>
+          <p class="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-md">
+            Seamless wireless bras with buttery-soft micro-modal touch. Perfect lift, zero underwire pinch, and 100% invisible under lawn suits and kurtis.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button onclick="App.filterByCategory('bras')" class="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded transition shadow-lg">
+              Shop Seamless Bras &rarr;
+            </button>
+            <button onclick="App.openBraCalculatorModal()" class="px-5 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold text-xs uppercase tracking-wider rounded transition">
+              <i class="fa-solid fa-ruler-horizontal mr-1.5"></i> Find My Bra Size
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Bridal Luxury Edit -->
+    <div class="hero-slide absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-1000 flex items-center">
+      <img 
+        src="https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=1800&q=85" 
+        alt="Bridal Trousseau Banner" 
+        class="absolute inset-0 w-full h-full object-cover object-center brightness-70"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-stone-950/90 via-stone-950/60 to-transparent"></div>
+      <div class="relative max-w-7xl mx-auto px-6 sm:px-12 w-full py-12">
+        <div class="max-w-xl space-y-4">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold uppercase tracking-widest">
+            👑 Bridal Trousseau 2026
+          </span>
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight font-serif-luxury leading-tight text-white">
+            Royal Velvet & Chantilly Lace
+          </h2>
+          <p class="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-md">
+            Handcrafted luxury bridal sets, embroidered plunge corsets, and silk honeymoon nightwear delivered in luxury keepsake gift boxes.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button onclick="App.filterByCategory('bridal')" class="px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs uppercase tracking-wider rounded transition shadow-lg">
+              Explore Bridal Edit &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Shapewear & Sculpting -->
+    <div class="hero-slide absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-1000 flex items-center">
+      <img 
+        src="https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=1800&q=85" 
+        alt="Shapewear Banner" 
+        class="absolute inset-0 w-full h-full object-cover object-center brightness-70"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-stone-950/90 via-stone-950/60 to-transparent"></div>
+      <div class="relative max-w-7xl mx-auto px-6 sm:px-12 w-full py-12">
+        <div class="max-w-xl space-y-4">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold uppercase tracking-widest">
+            ⏳ 360° Firm Sculpting
+          </span>
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight font-serif-luxury leading-tight text-white">
+            Effortless Contouring & Tummy Control
+          </h2>
+          <p class="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-md">
+            Anti-roll spiral bone shapers designed for Pakistani formal wear and everyday kurtis. Instant waist smoothing with zero suffocation.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button onclick="App.filterByCategory('shapewear')" class="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded transition shadow-lg">
+              Shop Shapewear &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slider Dots -->
+    <div class="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+      <button class="hero-dot w-8 h-2 rounded-full bg-rose-600 transition-all duration-300" aria-label="Go to Slide 1"></button>
+      <button class="hero-dot w-2.5 h-2 rounded-full bg-white/60 hover:bg-white transition-all duration-300" aria-label="Go to Slide 2"></button>
+      <button class="hero-dot w-2.5 h-2 rounded-full bg-white/60 hover:bg-white transition-all duration-300" aria-label="Go to Slide 3"></button>
+    </div>
+  </section>
+
+  <!-- 4. TRUST BADGES / DISCREET DELIVERY VALUE PROPOSITION -->
+  <section class="bg-stone-50 border-y border-stone-200/80 py-4 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+      
+      <div class="flex items-center justify-center gap-3 p-2">
+        <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 text-base">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <div class="text-left">
+          <h4 class="text-xs font-bold text-stone-900 uppercase">100% Discreet Packaging</h4>
+          <p class="text-[11px] text-stone-500">Unbranded brown box, sealed privacy</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-3 p-2">
+        <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 text-base">
+          <i class="fa-solid fa-money-bill-wave"></i>
+        </div>
+        <div class="text-left">
+          <h4 class="text-xs font-bold text-stone-900 uppercase">Cash on Delivery</h4>
+          <p class="text-[11px] text-stone-500">Pay at your doorstep across Pakistan</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-3 p-2">
+        <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 text-base">
+          <i class="fa-solid fa-rotate-left"></i>
+        </div>
+        <div class="text-left">
+          <h4 class="text-xs font-bold text-stone-900 uppercase">Hygienic Size Exchange</h4>
+          <p class="text-[11px] text-stone-500">7-day easy fit exchange guarantee</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-3 p-2">
+        <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 text-base">
+          <i class="fa-brands fa-whatsapp"></i>
+        </div>
+        <div class="text-left">
+          <h4 class="text-xs font-bold text-stone-900 uppercase">Female Fitting Experts</h4>
+          <p class="text-[11px] text-stone-500">WhatsApp consultation assistance</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. CIRCULAR CATEGORY STORY HIGHLIGHTS (Ella Theme Characteristic) -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xs font-bold uppercase tracking-widest text-stone-400">Explore by Silhouette</h3>
+      <span class="text-xs text-rose-600 font-semibold cursor-pointer" onclick="App.filterByCategory('all')">View All Collections &rarr;</span>
+    </div>
+    
+    <!-- Circular Scroll Area -->
+    <div id="categoryCirclesContainer" class="flex gap-5 sm:gap-8 overflow-x-auto pb-3 scrollbar-none">
+      <!-- Injected via App.renderCategoryCircles() -->
+    </div>
+  </section>
+
+  <!-- 6. BRA SIZE CALCULATOR PROMO CARD -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+    <div class="bg-gradient-to-r from-rose-50 via-[#fdf2f4] to-rose-100 border border-rose-200 rounded-xl p-5 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+      <div class="space-y-2 text-center md:text-left">
+        <span class="inline-block px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold uppercase tracking-widest">
+          Fitting Tool
+        </span>
+        <h3 class="text-xl sm:text-2xl font-bold text-stone-900 font-serif-luxury">
+          80% of Women Wear the Wrong Bra Size. What’s Yours?
+        </h3>
+        <p class="text-xs sm:text-sm text-stone-600 max-w-xl">
+          Use our interactive 30-second Bra Size Calculator to find your exact band & cup size (A to DD) and eliminate shoulder gouging, riding bands, and spillage forever.
+        </p>
+      </div>
+      <button onclick="App.openBraCalculatorModal()" class="px-6 py-3.5 bg-stone-900 hover:bg-rose-600 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition shrink-0 shadow-md flex items-center gap-2">
+        <i class="fa-solid fa-calculator"></i> Launch Bra Size Calculator
+      </button>
+    </div>
+  </section>
+
+  <!-- 7. MAIN FILTERABLE PRODUCT CATALOG SECTION -->
+  <section id="catalogSection" class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    
+    <!-- Section Heading & Filter Bar -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-stone-200">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-widest text-rose-600 block mb-1">Our Intimates Collection</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900 font-serif-luxury">
+          Curated For Comfort & Confidence
+        </h2>
+      </div>
+
+      <!-- Controls: Category Pills & Sort -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span id="productCountDisplay" class="text-xs text-stone-500 font-medium mr-2">Showing Items</span>
+        
+        <!-- Sorting dropdown -->
+        <select id="catalogSortSelect" class="text-xs font-semibold bg-stone-100 border border-stone-300 rounded px-3 py-2 text-stone-800 focus:outline-none focus:border-rose-500">
+          <option value="featured">Featured Intimates</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="rating">Top Customer Rated</option>
+          <option value="reviews">Most Reviewed</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Category Filter Bar (Tabs) -->
+    <div class="flex items-center gap-2 overflow-x-auto py-4 scrollbar-none border-b border-stone-100">
+      <button data-category-filter="all" class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-600 text-white transition active">
+        All Items
+      </button>
+      <button data-category-filter="bras" class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-stone-700 hover:bg-stone-100 border border-stone-200 transition">
+        Bras & Bralettes
+      </button>
+      <button data-category-filter="panties" class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-stone-700 hover:bg-stone-100 border border-stone-200 transition">
+        Seamless Panties
+      </button>
+      <button data-category-filter="bridal" class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-stone-700 hover:bg-stone-100 border border-stone-200 transition">
+        Bridal Sets
+      </button>
+      <button data-category-filter="nightwear" class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-stone-700 hover:bg-stone-100 border border-stone-200 transition">
+        Silky Sleepwear
+      </button>
+      <button data-category-filter="shapewear" class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-stone-700 hover:bg-stone-100 border border-stone-200 transition">
+        Shapewear
+      </button>
+      <button data-category-filter="accessories" class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-stone-700 hover:bg-stone-100 border border-stone-200 transition">
+        Accessories
+      </button>
+    </div>
+
+    <!-- Sub-Filter Bar (Cup Sizes & Reset) -->
+    <div class="flex items-center justify-between gap-4 py-3 text-xs text-stone-600">
+      <div class="flex items-center gap-2 overflow-x-auto">
+        <span class="font-bold text-stone-800 uppercase tracking-wider text-[11px] shrink-0">Cup Size:</span>
+        <button onclick="App.activeFilters.cup = null; App.renderProducts()" class="px-2 py-0.5 rounded border border-stone-200 text-xs font-medium hover:border-rose-500">Any</button>
+        <button onclick="App.activeFilters.cup = 'B'; App.renderProducts()" class="px-2 py-0.5 rounded border border-stone-200 text-xs font-medium hover:border-rose-500">Cup B</button>
+        <button onclick="App.activeFilters.cup = 'C'; App.renderProducts()" class="px-2 py-0.5 rounded border border-stone-200 text-xs font-medium hover:border-rose-500">Cup C</button>
+        <button onclick="App.activeFilters.cup = 'D'; App.renderProducts()" class="px-2 py-0.5 rounded border border-stone-200 text-xs font-medium hover:border-rose-500">Cup D</button>
+      </div>
+
+      <button onclick="App.resetFilters()" class="text-rose-600 hover:underline font-semibold shrink-0 text-xs">
+        <i class="fa-solid fa-rotate-left"></i> Reset All
+      </button>
+    </div>
+
+    <!-- Products Grid (Responsive 2 cols on mobile, 3 on tablet, 4 on desktop) -->
+    <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 pt-4">
+      <!-- Injected dynamically via App.renderProducts() -->
+    </div>
+  </section>
+
+  <!-- 8. 100% DISCREET PACKAGING GUARANTEE SECTION (Crucial for Pakistani Lingerie Market) -->
+  <section class="bg-stone-900 text-white py-12 px-4 sm:px-6 my-10 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="text-center max-w-2xl mx-auto space-y-2 mb-8">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[11px] font-bold uppercase tracking-widest">
+          <i class="fa-solid fa-shield-halved"></i> Privacy First Guarantee
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold font-serif-luxury">
+          Your Privacy Is Our Utmost Responsibility
+        </h2>
+        <p class="text-xs sm:text-sm text-stone-400">
+          We understand that innerwear shopping requires absolute confidentiality. Here is how your Miss Collection order arrives:
+        </p>
+      </div>
+
+      <!-- 3-Step Privacy Process -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="bg-stone-800/60 border border-stone-700/80 rounded-xl p-5 text-center space-y-3">
+          <div class="w-12 h-12 mx-auto rounded-full bg-rose-600/20 text-rose-400 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-box"></i>
+          </div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider">1. Plain Unbranded Brown Box</h4>
+          <p class="text-xs text-stone-400 leading-relaxed">
+            There is zero branding, logos, or intimate wear mentions anywhere on the exterior box. It looks like an ordinary postal parcel.
+          </p>
+        </div>
+
+        <div class="bg-stone-800/60 border border-stone-700/80 rounded-xl p-5 text-center space-y-3">
+          <div class="w-12 h-12 mx-auto rounded-full bg-rose-600/20 text-rose-400 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider">2. Tamper-Evident Safety Seal</h4>
+          <p class="text-xs text-stone-400 leading-relaxed">
+            Every order is sealed inside a secure poly-courier bag with a tamper-evident adhesive strip that cannot be opened and resealed.
+          </p>
+        </div>
+
+        <div class="bg-stone-800/60 border border-stone-700/80 rounded-xl p-5 text-center space-y-3">
+          <div class="w-12 h-12 mx-auto rounded-full bg-rose-600/20 text-rose-400 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-file-invoice"></i>
+          </div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider">3. Confidential Courier Slip</h4>
+          <p class="text-xs text-stone-400 leading-relaxed">
+            The shipping bill only mentions "Apparel Essentials" with your delivery address. Courier riders will never know the parcel contents.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. VERIFIED CUSTOMER REVIEWS (Judge.me & Ella Theme Style) -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div class="text-center max-w-xl mx-auto mb-8 space-y-2">
+      <div class="flex items-center justify-center gap-1 text-amber-500 text-sm">
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <span class="text-stone-800 font-bold ml-2">4.9 / 5.0</span>
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900 font-serif-luxury">
+        Loved by 15,000+ Pakistani Women
+      </h2>
+      <p class="text-xs text-stone-500">Real feedback from verified purchasers across Lahore, Karachi, Islamabad, and nationwide.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <div class="p-5 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex text-amber-400 text-xs">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+          <span class="text-[10px] text-emerald-700 bg-emerald-100 font-bold px-2 py-0.5 rounded-full">
+            <i class="fa-solid fa-check"></i> Verified Buyer
+          </span>
+        </div>
+        <h4 class="text-xs font-bold text-stone-900">"Finally a seamless bra that actually stays invisible!"</h4>
+        <p class="text-xs text-stone-600 leading-relaxed">
+          I ordered the Seamless Wireless Comfort Bra in Blush Pink. The fabric is so soft that you forget you're wearing a bra! Delivery was super fast in Lahore and the discreet brown packaging gave me 100% peace of mind.
+        </p>
+        <div class="pt-2 border-t border-stone-200 text-xs font-semibold text-stone-800 flex justify-between">
+          <span>Dr. Sadia Tariq</span>
+          <span class="text-stone-400 font-normal">Lahore, PK</span>
+        </div>
+      </div>
+
+      <div class="p-5 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex text-amber-400 text-xs">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+          <span class="text-[10px] text-emerald-700 bg-emerald-100 font-bold px-2 py-0.5 rounded-full">
+            <i class="fa-solid fa-check"></i> Verified Buyer
+          </span>
+        </div>
+        <h4 class="text-xs font-bold text-stone-900">"Bridal set quality exceeded international brands"</h4>
+        <p class="text-xs text-stone-600 leading-relaxed">
+          The Royal Crimson Velvet Bridal set is breathtaking! The embroidery is soft and doesn't scratch. Also used their bra size calculator and got the exact sister size 34C which fits like a glove. Highly recommended!
+        </p>
+        <div class="pt-2 border-t border-stone-200 text-xs font-semibold text-stone-800 flex justify-between">
+          <span>Mahnoor Rizwan</span>
+          <span class="text-stone-400 font-normal">Karachi, PK</span>
+        </div>
+      </div>
+
+      <div class="p-5 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex text-amber-400 text-xs">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+          <span class="text-[10px] text-emerald-700 bg-emerald-100 font-bold px-2 py-0.5 rounded-full">
+            <i class="fa-solid fa-check"></i> Verified Buyer
+          </span>
+        </div>
+        <h4 class="text-xs font-bold text-stone-900">"Tummy Tucker shaper is magical under lawn kurtis"</h4>
+        <p class="text-xs text-stone-600 leading-relaxed">
+          The 360° firm control shaper smoothed out all love handles without rolling down thanks to the steel bones. Paid via Cash on Delivery and courier arrived in 2 days in Islamabad.
+        </p>
+        <div class="pt-2 border-t border-stone-200 text-xs font-semibold text-stone-800 flex justify-between">
+          <span>Zainab Kashif</span>
+          <span class="text-stone-400 font-normal">Islamabad, PK</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 10. FOOTER SECTION (Comprehensive Shopify Style) -->
+  <footer class="bg-stone-950 text-stone-300 pt-12 pb-24 md:pb-12 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+      
+      <!-- Brand & Story -->
+      <div class="space-y-3">
+        <div class="text-xl font-bold tracking-widest text-white font-serif-luxury uppercase">
+          MISS<span class="text-rose-500">COLLECTION</span>
+        </div>
+        <p class="text-xs text-stone-400 leading-relaxed">
+          Pakistan's premier luxury intimate wear destination. Empowering women with cloud-soft comfort, flawless fit engineering, and guaranteed confidential packaging.
+        </p>
+        <div class="pt-2 flex gap-3 text-stone-400">
+          <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-rose-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-instagram text-xs"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-rose-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-facebook-f text-xs"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-rose-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-tiktok text-xs"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-[#25D366] hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-whatsapp text-xs"></i></a>
+        </div>
+      </div>
+
+      <!-- Quick Collections -->
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-widest text-white mb-3">Shop Silhouettes</h4>
+        <ul class="space-y-2 text-xs text-stone-400">
+          <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-white transition">Seamless Wireless Bras</a></li>
+          <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-white transition">Push-Up & Lace Bras</a></li>
+          <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-white transition">No-Show Laser Cut Panties</a></li>
+          <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-white transition">Bridal Trousseau Ensembles</a></li>
+          <li><a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="hover:text-white transition">Mulberry Satin Sleepwear</a></li>
+          <li><a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="hover:text-white transition">Tummy Tucker Shapers</a></li>
+        </ul>
+      </div>
+
+      <!-- Fitting & Privacy Support -->
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-widest text-white mb-3">Customer Support</h4>
+        <ul class="space-y-2 text-xs text-stone-400">
+          <li><a href="javascript:void(0)" onclick="App.openBraCalculatorModal()" class="hover:text-white transition text-rose-400 font-semibold"><i class="fa-solid fa-ruler"></i> Bra Size Calculator</a></li>
+          <li><a href="javascript:void(0)" onclick="App.openOrderTrackingModal()" class="hover:text-white transition"><i class="fa-solid fa-truck-fast"></i> Live Courier Tracking</a></li>
+          <li><a href="javascript:void(0)" onclick="alert('Orders are dispatched in unbranded plain brown boxes with confidential labels. No one can see the parcel contents.')" class="hover:text-white transition">Discreet Packaging Policy</a></li>
+          <li><a href="javascript:void(0)" onclick="alert('Due to personal hygiene, intimate apparel can be exchanged within 7 days if unworn with original tags attached.')" class="hover:text-white transition">Hygienic Exchange Policy</a></li>
+          <li><a href="javascript:void(0)" onclick="alert('Standard delivery takes 2-3 working days across Pakistan via TCS Express & Leopards Courier.')" class="hover:text-white transition">Shipping Times & Rates</a></li>
+          <li><a href="admin.html" class="hover:text-white transition text-stone-500">Store Admin Login</a></li>
+        </ul>
+      </div>
+
+      <!-- Payment & Security -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-bold uppercase tracking-widest text-white mb-2">Accepted Payments</h4>
+        <p class="text-xs text-stone-400">Cash on Delivery available nationwide across 200+ Pakistani cities.</p>
+        <div class="flex flex-wrap gap-2 text-xs pt-1">
+          <span class="px-2.5 py-1 bg-stone-900 border border-stone-800 rounded font-bold text-stone-300">Cash on Delivery</span>
+          <span class="px-2.5 py-1 bg-stone-900 border border-stone-800 rounded font-bold text-rose-400">JazzCash</span>
+          <span class="px-2.5 py-1 bg-stone-900 border border-stone-800 rounded font-bold text-emerald-400">EasyPaisa</span>
+          <span class="px-2.5 py-1 bg-stone-900 border border-stone-800 rounded font-bold text-stone-300">Visa / Mastercard</span>
+        </div>
+        <div class="pt-2 text-[11px] text-stone-500">
+          <i class="fa-solid fa-lock text-rose-400 mr-1"></i> 256-Bit SSL Encrypted & Confidential Checkout
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Copyright -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[11px] text-stone-500 gap-2">
+      <div>&copy; 2026 Miss Collection Pakistan. All Rights Reserved. Pure Elegance & Comfort.</div>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-stone-300">Privacy Policy</a>
+        <a href="#" class="hover:text-stone-300">Terms of Service</a>
+        <a href="#" class="hover:text-stone-300">Discreet Guarantee</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 11. FLOATING WHATSAPP HELPLINE BUTTON -->
+  <a 
+    href="https://wa.me/923001234567?text=Assalam-o-Alaikum%20Miss%20Collection!%20I%20need%20help%20with%20sizing%20and%20ordering." 
+    target="_blank" 
+    class="whatsapp-float group" 
+    title="Chat with Female Fitting Consultant"
+  >
+    <i class="fa-brands fa-whatsapp text-2xl"></i>
+    <span class="sr-only">WhatsApp Chat</span>
+  </a>
+
+  <!-- 12. MOBILE BOTTOM NAVIGATION BAR -->
+  <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-stone-200 py-2 px-4 z-40 flex items-center justify-around shadow-lg">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-stone-700 hover:text-rose-600 transition">
+      <i class="fa-solid fa-house text-sm"></i>
+      <span class="text-[10px] font-medium">Home</span>
+    </button>
+    <button onclick="App.filterByCategory('bras')" class="flex flex-col items-center gap-1 text-stone-700 hover:text-rose-600 transition">
+      <i class="fa-solid fa-shapes text-sm"></i>
+      <span class="text-[10px] font-medium">Catalog</span>
+    </button>
+    <button onclick="App.openBraCalculatorModal()" class="flex flex-col items-center gap-1 text-rose-600 font-bold">
+      <i class="fa-solid fa-ruler-combined text-sm"></i>
+      <span class="text-[10px]">Fit Guide</span>
+    </button>
+    <button onclick="App.openWishlistDrawer()" class="flex flex-col items-center gap-1 text-stone-700 hover:text-rose-600 relative transition">
+      <div class="relative">
+        <i class="fa-regular fa-heart text-sm"></i>
+        <span class="wishlist-count-badge hidden absolute -top-1 -right-2 w-3.5 h-3.5 bg-rose-600 text-white rounded-full text-[8px] font-bold flex items-center justify-center">0</span>
+      </div>
+      <span class="text-[10px] font-medium">Saved</span>
+    </button>
+    <button onclick="App.openCartDrawer()" class="flex flex-col items-center gap-1 text-stone-700 hover:text-rose-600 relative transition">
+      <div class="relative">
+        <i class="fa-solid fa-bag-shopping text-sm"></i>
+        <span class="cart-count-badge hidden absolute -top-1 -right-2 w-3.5 h-3.5 bg-rose-600 text-white rounded-full text-[8px] font-bold flex items-center justify-center">0</span>
+      </div>
+      <span class="text-[10px] font-medium">Bag</span>
+    </button>
+  </div>
+
+  <!-- =========================================================================
+       DRAWERS & MODALS CONTAINER
+       ========================================================================= -->
+
+  <!-- A. SLIDE-OUT CART DRAWER -->
+  <div id="cartDrawerBackdrop" class="drawer-backdrop">
+    <div class="drawer-panel drawer-right">
+      <!-- Drawer Header -->
+      <div class="p-4 border-b border-stone-200 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-bag-shopping text-rose-600 text-lg"></i>
+          <h3 class="font-bold text-sm text-stone-900 font-serif-luxury">Shopping Bag</h3>
+        </div>
+        <button onclick="App.closeAllDrawers()" class="w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-500">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Free Shipping Thermometer -->
+      <div class="p-3 bg-rose-50/60 border-b border-rose-100">
+        <div id="freeShippingThresholdText" class="text-xs text-stone-700 mb-1.5 font-medium">
+          Add <strong>Rs. 2,500</strong> for <strong>Free Discreet Shipping</strong>
+        </div>
+        <div class="shipping-progress-bg">
+          <div id="freeShippingProgressFill" class="shipping-progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Cart Items Container -->
+      <div id="cartDrawerItemsContainer" class="flex-1 overflow-y-auto p-4 space-y-3">
+        <!-- Injected dynamically via App.updateCartUI() -->
+      </div>
+
+      <!-- Drawer Footer with Promo Code & Checkout -->
+      <div class="p-4 border-t border-stone-200 bg-stone-50/70 space-y-3">
+        <!-- Coupon Input -->
+        <div class="flex gap-2">
+          <input 
+            id="cartCouponInput" 
+            type="text" 
+            placeholder="Promo code (e.g. MISS10)" 
+            class="flex-1 bg-white border border-stone-300 rounded text-xs px-3 py-2 uppercase font-medium focus:outline-none focus:border-rose-500" 
+          />
+          <button onclick="App.applyCartCoupon()" class="px-4 py-2 bg-stone-800 hover:bg-stone-900 text-white rounded text-xs font-bold uppercase transition">
+            Apply
+          </button>
+        </div>
+
+        <!-- Totals calculation -->
+        <div class="space-y-1.5 text-xs text-stone-600">
+          <div class="flex justify-between">
+            <span>Subtotal:</span>
+            <span id="cartSubtotalDisplay" class="font-bold text-stone-900">Rs. 0</span>
+          </div>
+          <div id="cartDiscountRow" class="flex justify-between text-rose-600 font-semibold hidden">
+            <span>Promo Discount:</span>
+            <span id="cartDiscountDisplay">-Rs. 0</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Confidential Delivery:</span>
+            <span id="cartShippingDisplay" class="font-bold text-stone-900">Rs. 250</span>
+          </div>
+          <div class="flex justify-between text-sm font-bold text-stone-900 pt-2 border-t border-stone-200">
+            <span>Grand Total:</span>
+            <span id="cartGrandTotalDisplay" class="text-rose-600">Rs. 0</span>
+          </div>
+        </div>
+
+        <!-- Checkout Buttons -->
+        <div class="space-y-2 pt-1">
+          <button onclick="App.openCheckoutModal()" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-md flex items-center justify-center gap-2">
+            <i class="fa-solid fa-lock"></i> Proceed to Discreet Checkout
+          </button>
+          <button onclick="App.closeAllDrawers()" class="w-full py-2 bg-white hover:bg-stone-100 text-stone-700 border border-stone-300 font-bold text-xs uppercase tracking-wider rounded transition">
+            Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B. SLIDE-OUT WISHLIST DRAWER -->
+  <div id="wishlistDrawerBackdrop" class="drawer-backdrop">
+    <div class="drawer-panel drawer-right">
+      <div class="p-4 border-b border-stone-200 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-heart text-rose-600 text-lg"></i>
+          <h3 class="font-bold text-sm text-stone-900 font-serif-luxury">My Saved Wishlist</h3>
+        </div>
+        <button onclick="App.closeAllDrawers()" class="w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-500">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div id="wishlistItemsContainer" class="flex-1 overflow-y-auto p-4 space-y-3">
+        <!-- Injected via App.updateWishlistUI() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- C. MOBILE NAVIGATION DRAWER -->
+  <div id="mobileNavDrawerBackdrop" class="drawer-backdrop">
+    <div class="drawer-panel drawer-left">
+      <div class="p-4 border-b border-stone-200 flex items-center justify-between bg-stone-950 text-white">
+        <span class="font-extrabold tracking-widest text-sm uppercase font-serif-luxury">
+          MISS<span class="text-rose-500">COLLECTION</span>
+        </span>
+        <button onclick="App.closeAllDrawers()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div class="p-4 divide-y divide-stone-100 text-xs font-bold uppercase tracking-wider text-stone-800 space-y-1">
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('all')" class="block py-3 hover:text-rose-600">All Intimates</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block py-3 hover:text-rose-600">Bras & Bralettes</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block py-3 hover:text-rose-600">Seamless Panties</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bridal')" class="block py-3 text-rose-600">Bridal Trousseau</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('nightwear')" class="block py-3 hover:text-rose-600">Silky Sleepwear</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('shapewear')" class="block py-3 hover:text-rose-600">Tummy Shapewear</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.openBraCalculatorModal()" class="block py-3 text-amber-700 flex items-center gap-2">
+          <i class="fa-solid fa-ruler-combined"></i> Bra Size Calculator
+        </a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.openOrderTrackingModal()" class="block py-3 text-stone-600 flex items-center gap-2">
+          <i class="fa-solid fa-truck-fast"></i> Track My Order
+        </a>
+        <a href="admin.html" class="block py-3 text-stone-400 font-normal">Admin Portal &rarr;</a>
+      </div>
+
+      <div class="mt-auto p-4 bg-stone-50 border-t border-stone-200 text-xs text-stone-500">
+        <div class="font-bold text-stone-800 mb-1"><i class="fa-solid fa-lock text-rose-600"></i> 100% Confidential Packing</div>
+        <p class="text-[11px]">Unbranded parcel box, zero sensitive markings outside.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- D. PRODUCT QUICK VIEW MODAL -->
+  <div id="quickViewModalBackdrop" class="modal-backdrop">
+    <div id="quickViewModalContent" class="modal-content">
+      <!-- Injected via App.openQuickView() -->
+    </div>
+  </div>
+
+  <!-- E. BRA SIZE CALCULATOR MODAL -->
+  <div id="braCalculatorModalBackdrop" class="modal-backdrop">
+    <div class="modal-content max-w-lg">
+      <div class="p-6">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-ruler-combined text-rose-600 text-lg"></i>
+            <h3 class="font-bold text-base text-stone-900 font-serif-luxury">Bra Size Calculator & Fit Guide</h3>
+          </div>
+          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <form id="braCalculatorForm" class="mt-4 space-y-4">
+          <p class="text-xs text-stone-600 leading-relaxed">
+            Grab a soft tape measure wearing an unpadded bra. Take measurements snugly in <strong>inches</strong>:
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-stone-800 uppercase mb-1">
+                1. Underbust / Ribcage (Inches)
+              </label>
+              <input 
+                id="calcBandInches" 
+                type="number" 
+                step="0.5" 
+                min="24" 
+                max="50" 
+                placeholder="e.g. 30" 
+                required 
+                class="w-full bg-stone-50 border border-stone-300 rounded text-xs px-3 py-2.5 font-bold focus:outline-none focus:border-rose-500"
+              />
+              <span class="text-[10px] text-stone-400 mt-0.5 block">Directly under your bust snugly</span>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-stone-800 uppercase mb-1">
+                2. Fullest Bust (Inches)
+              </label>
+              <input 
+                id="calcBustInches" 
+                type="number" 
+                step="0.5" 
+                min="26" 
+                max="60" 
+                placeholder="e.g. 33" 
+                required 
+                class="w-full bg-stone-50 border border-stone-300 rounded text-xs px-3 py-2.5 font-bold focus:outline-none focus:border-rose-500"
+              />
+              <span class="text-[10px] text-stone-400 mt-0.5 block">Across the nipples/fullest point</span>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-3 bg-stone-900 hover:bg-rose-600 text-white font-bold text-xs uppercase tracking-wider rounded transition shadow-md">
+            Compute My Perfect Size
+          </button>
+
+          <!-- Result Container -->
+          <div id="calculatorResultBox" class="hidden"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- F. EXPRESS PAKISTANI CHECKOUT MODAL -->
+  <div id="checkoutModalBackdrop" class="modal-backdrop">
+    <div class="modal-content max-w-2xl">
+      <div class="p-6">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-lock text-rose-600 text-lg"></i>
+            <h3 class="font-bold text-base text-stone-900 font-serif-luxury">Express Discreet Checkout</h3>
+          </div>
+          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <div id="checkoutSummaryBox" class="mt-4">
+          <!-- Summary injected dynamically -->
+        </div>
+
+        <form id="checkoutOrderForm" class="space-y-4">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-stone-800 border-b border-stone-100 pb-1">
+            Shipping & Contact Details
+          </h4>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block font-semibold text-stone-700 mb-1">Full Name *</label>
+              <input type="text" name="fullName" required placeholder="e.g. Ayesha Khan" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+            </div>
+
+            <div>
+              <label class="block font-semibold text-stone-700 mb-1">Phone Number (For Courier) *</label>
+              <input type="tel" name="phone" required placeholder="0300-1234567" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+            </div>
+
+            <div>
+              <label class="block font-semibold text-stone-700 mb-1">Email Address</label>
+              <input type="email" name="email" placeholder="name@domain.com" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+            </div>
+
+            <div>
+              <label class="block font-semibold text-stone-700 mb-1">Destination City *</label>
+              <select name="city" required class="w-full border border-stone-300 rounded px-3 py-2 bg-white focus:outline-none focus:border-rose-500">
+                <option value="Karachi">Karachi</option>
+                <option value="Lahore" selected>Lahore</option>
+                <option value="Islamabad">Islamabad</option>
+                <option value="Rawalpindi">Rawalpindi</option>
+                <option value="Faisalabad">Faisalabad</option>
+                <option value="Multan">Multan</option>
+                <option value="Peshawar">Peshawar</option>
+                <option value="Quetta">Quetta</option>
+                <option value="Sialkot">Sialkot</option>
+                <option value="Gujranwala">Gujranwala</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Abbottabad">Abbottabad</option>
+                <option value="Bahawalpur">Bahawalpur</option>
+                <option value="Sargodha">Sargodha</option>
+                <option value="Sukkur">Sukkur</option>
+                <option value="Other City">Other Pakistan City</option>
+              </select>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block font-semibold text-stone-700 mb-1">Complete Delivery Address *</label>
+              <textarea name="address" required rows="2" placeholder="House/Flat #, Street #, Sector/Area, Landmark" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500"></textarea>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block font-semibold text-stone-700 mb-1">Delivery Instructions / Confidential Notes</label>
+              <input type="text" name="notes" placeholder="e.g. Call before arrival, leave with security" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+            </div>
+          </div>
+
+          <h4 class="text-xs font-bold uppercase tracking-wider text-stone-800 border-b border-stone-100 pb-1 pt-2">
+            Select Payment Method
+          </h4>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+            <label class="p-3 border border-rose-300 bg-rose-50/50 rounded-lg flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="paymentMethod" value="Cash on Delivery (COD)" checked class="text-rose-600 focus:ring-rose-500" />
+              <div>
+                <strong class="block text-stone-900">Cash on Delivery</strong>
+                <span class="text-[10px] text-stone-500">Pay when parcel arrives</span>
+              </div>
+            </label>
+
+            <label class="p-3 border border-stone-200 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-stone-50">
+              <input type="radio" name="paymentMethod" value="JazzCash / EasyPaisa" class="text-rose-600 focus:ring-rose-500" />
+              <div>
+                <strong class="block text-stone-900">JazzCash / EasyPaisa</strong>
+                <span class="text-[10px] text-stone-500">Mobile Wallet Transfer</span>
+              </div>
+            </label>
+
+            <label class="p-3 border border-stone-200 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-stone-50">
+              <input type="radio" name="paymentMethod" value="Debit / Credit Card" class="text-rose-600 focus:ring-rose-500" />
+              <div>
+                <strong class="block text-stone-900">Card Payment</strong>
+                <span class="text-[10px] text-stone-500">Visa / Mastercard</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Discreet Packaging Pledge Checkbox -->
+          <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 flex items-start gap-2.5">
+            <input type="checkbox" id="discreetPledgeCheck" checked required class="mt-0.5 rounded text-rose-600 focus:ring-rose-500" />
+            <label for="discreetPledgeCheck" class="text-xs text-stone-700 select-none">
+              <strong>100% Confidential Delivery Guaranteed:</strong> I confirm that this order should be shipped in a plain unbranded box with no sensitive product labels on the exterior.
+            </label>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-lg flex items-center justify-center gap-2">
+            <i class="fa-solid fa-circle-check"></i> Confirm & Place Discreet Order
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- G. ORDER CONFIRMATION MODAL -->
+  <div id="orderConfirmationModalBackdrop" class="modal-backdrop">
+    <div id="orderConfirmationContent" class="modal-content max-w-lg">
+      <!-- Injected via App.showOrderConfirmationModal() -->
+    </div>
+  </div>
+
+  <!-- H. ORDER TRACKING LOOKUP MODAL -->
+  <div id="orderTrackingModalBackdrop" class="modal-backdrop">
+    <div class="modal-content max-w-md">
+      <div class="p-6">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-truck-fast text-rose-600 text-lg"></i>
+            <h3 class="font-bold text-base text-stone-900 font-serif-luxury">Live Courier Tracking</h3>
+          </div>
+          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <form id="orderTrackingForm" class="mt-4 space-y-3">
+          <p class="text-xs text-stone-600">
+            Enter your <strong>Order ID</strong> (e.g. <code>MC-78921</code>) or <strong>TCS Tracking Code</strong>:
+          </p>
+          <div class="flex gap-2">
+            <input 
+              id="trackingLookupInput" 
+              type="text" 
+              required 
+              placeholder="e.g. MC-78921" 
+              class="flex-1 border border-stone-300 rounded text-xs px-3 py-2 uppercase font-bold focus:outline-none focus:border-rose-500" 
+            />
+            <button type="submit" class="px-4 py-2 bg-stone-900 hover:bg-rose-600 text-white font-bold text-xs uppercase rounded transition">
+              Track
+            </button>
+          </div>
+
+          <div id="trackingTimelineContainer" class="hidden mt-4">
+            <!-- Timeline injected via App.lookupOrderTracking() -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="js/products.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
