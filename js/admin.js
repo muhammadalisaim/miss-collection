@@ -65,13 +65,13 @@ const AdminApp = {
     const email = form.email.value.trim();
     const password = form.password.value.trim();
 
-    if (email === "admin@misscollection.pk" && password === "MissAdmin2026") {
+    if (email === "admin@misscollection.pk" && (password === "MissAdmin2026" || password === "admin123")) {
       sessionStorage.setItem("mc_admin_session", "authenticated");
       this.isLoggedIn = true;
       this.checkAuth();
       this.refreshDashboard();
     } else {
-      alert("Invalid credentials! Please use:\nEmail: admin@misscollection.pk\nPassword: MissAdmin2026");
+      alert("Invalid credentials! Please use:\nEmail: admin@misscollection.pk\nPassword: MissAdmin2026 (or admin123)");
     }
   },
 

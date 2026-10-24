@@ -1,0 +1,23 @@
+[build]
+  publish = "."
+
+# Clean URLs & Admin routing
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200
+
+# Fallback for client routes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Security & Performance Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
