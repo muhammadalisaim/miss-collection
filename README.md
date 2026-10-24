@@ -43,9 +43,7 @@ Inspired by the refined Ella Shopify theme aesthetics of **thesaher.com**, with 
 ## ⚙️ Store Owner Management Portal (`admin.html`)
 
 Access the management dashboard at `admin.html`:
-- **Default Credentials**:
-  - **Email**: `admin@misscollection.pk`
-  - **Password**: `MissAdmin2026`
+- **Secure Access**: Protected admin login interface.
 - **Real-Time KPIs**: Total Revenue (PKR), Active Orders Pipeline, Live Catalog Count, and Low Stock Alerts (&lt; 15 units).
 - **Inventory & Catalog Control**:
   - Add new intimate products with image URL, sizes, price, and fabric details.

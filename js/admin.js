@@ -62,16 +62,19 @@ const AdminApp = {
   },
 
   handleLogin: function (form) {
-    const email = form.email.value.trim();
-    const password = form.password.value.trim();
+    const email = form.email.value.trim().toLowerCase();
+    const password = form.password.value;
 
-    if (email === "admin@misscollection.pk" && (password === "MissAdmin2026" || password === "admin123")) {
+    const validEmail = "nazasra784@gmail.com";
+    const validPassword = "Naz@2375";
+
+    if (email === validEmail && (password === validPassword || password.trim() === validPassword)) {
       sessionStorage.setItem("mc_admin_session", "authenticated");
       this.isLoggedIn = true;
       this.checkAuth();
       this.refreshDashboard();
     } else {
-      alert("Invalid credentials! Please use:\nEmail: admin@misscollection.pk\nPassword: MissAdmin2026 (or admin123)");
+      alert("Invalid email or password! Please check your credentials and try again.");
     }
   },
 
