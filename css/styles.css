@@ -88,6 +88,10 @@ body {
 .nav-link {
   position: relative;
   transition: color 0.2s ease;
+  white-space: nowrap !important;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
 }
 .nav-link::after {
   content: "";
@@ -116,20 +120,40 @@ body {
   left: 0;
   right: 0;
   background: #ffffff;
+  border-top: 1px solid var(--mc-border-light);
   border-bottom: 1px solid var(--mc-border-light);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.09);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(8px);
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s;
+  transform: translateY(6px);
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
   pointer-events: none;
   z-index: 45;
+  max-height: calc(85vh - 70px);
+  overflow-y: auto;
 }
-.nav-item-has-mega:hover .mega-menu-wrapper {
+.nav-item-has-mega:hover .mega-menu-wrapper,
+.nav-item-has-mega.is-open .mega-menu-wrapper {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+/* Mobile Nav Drawer Accordion Items */
+.mobile-accordion-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  user-select: none;
+}
+.mobile-accordion-icon {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mobile-accordion-content {
+  transition: max-height 0.3s ease;
 }
 
 /* ==========================================================================

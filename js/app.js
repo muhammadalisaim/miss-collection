@@ -108,6 +108,14 @@ const App = {
         self.closeAllModals();
         self.closeAllDrawers();
         self.closeBottomSheet();
+        self.closeMegaMenus();
+      }
+    });
+
+    // Close Mega Menus when clicking outside
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".nav-item-has-mega")) {
+        self.closeMegaMenus();
       }
     });
 
@@ -152,12 +160,10 @@ const App = {
     const header = document.querySelector(".header-sticky");
     if (!header) return;
     window.addEventListener("scroll", () => {
-      if (window.scrollY > 35) {
-        header.classList.add("header-shadow", "py-2");
-        header.classList.remove("py-3.5");
+      if (window.scrollY > 30) {
+        header.classList.add("header-shadow");
       } else {
-        header.classList.remove("header-shadow", "py-2");
-        header.classList.add("py-3.5");
+        header.classList.remove("header-shadow");
       }
     });
   },
@@ -254,8 +260,52 @@ const App = {
     `).join("");
   },
 
+  closeMegaMenus: function () {
+    document.querySelectorAll(".nav-item-has-mega").forEach(m => m.classList.remove("is-open"));
+  },
+
+  toggleMegaMenu: function (el, categoryId) {
+    const parent = el.closest(".nav-item-has-mega");
+    if (!parent) {
+      this.filterByCategory(categoryId);
+      return;
+    }
+    const isOpen = parent.classList.contains("is-open");
+    this.closeMegaMenus();
+    if (!isOpen) {
+      parent.classList.add("is-open");
+    } else {
+      this.filterByCategory(categoryId);
+    }
+  },
+
+  toggleMobileAccordion: function (id) {
+    const target = document.getElementById(id);
+    const icon = document.getElementById(id + "-icon");
+    if (!target) return;
+    const isHidden = target.classList.contains("hidden");
+
+    // Close other accordion panels
+    document.querySelectorAll(".mobile-accordion-content").forEach(el => el.classList.add("hidden"));
+    document.querySelectorAll(".mobile-accordion-icon").forEach(el => el.classList.remove("rotate-180"));
+
+    if (isHidden) {
+      target.classList.remove("hidden");
+      if (icon) icon.classList.add("rotate-180");
+    }
+  },
+
   filterByCategory: function (categoryId) {
+    this.closeMegaMenus();
     this.currentCategory = categoryId;
+
+    // Reset cup/band filters if switching to a non-bra category
+    if (categoryId !== "bras" && categoryId !== "all") {
+      this.activeFilters.cup = "all";
+      this.activeFilters.band = "all";
+    }
+
+    // Update filter pills
     document.querySelectorAll("[data-category-filter]").forEach(b => {
       const bCat = b.getAttribute("data-category-filter");
       if (bCat === categoryId) {
@@ -266,6 +316,17 @@ const App = {
         b.classList.add("bg-white", "text-stone-700");
       }
     });
+
+    // Update top desktop navigation bar active indicators
+    document.querySelectorAll(".nav-link").forEach(link => {
+      const onclick = link.getAttribute("onclick") || "";
+      if (onclick.includes(`'${categoryId}'`)) {
+        link.classList.add("active");
+      } else if (!onclick.includes("openBraCalculatorModal") && !onclick.includes("openOrderTrackingModal")) {
+        link.classList.remove("active");
+      }
+    });
+
     this.renderCategoryCircles();
     this.renderProducts();
     const catalogEl = document.getElementById("catalogSection");
