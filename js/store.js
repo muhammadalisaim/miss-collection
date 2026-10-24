@@ -11,7 +11,9 @@ const Store = {
     WISHLIST: "miss_collection_wishlist_v2",
     ORDERS: "miss_collection_orders_v2",
     COUPON: "miss_collection_active_coupon_v2",
-    REVIEWS: "miss_collection_reviews_v2"
+    REVIEWS: "miss_collection_reviews_v2",
+    NAV_ITEMS: "miss_collection_nav_items_v2",
+    BANNERS: "miss_collection_banners_v2"
   },
 
   // Available Promo Codes
@@ -421,6 +423,196 @@ const Store = {
     reviews.unshift(newRev);
     this.saveReviews(reviews);
     return newRev;
+  },
+
+  // Default Navigation Items (Fallback Seed)
+  DEFAULT_NAV_ITEMS: [
+    { id: "nav-all", title: "All Silhouettes", category: "all", targetType: "category", visible: true, order: 1, isMega: false },
+    { id: "nav-bras", title: "Bras & Bralettes", category: "bras", targetType: "category", visible: true, order: 2, isMega: true },
+    { id: "nav-panties", title: "Panties & Briefs", category: "panties", targetType: "category", visible: true, order: 3, isMega: true },
+    { id: "nav-bridal", title: "Bridal Sets", category: "bridal", targetType: "category", visible: true, order: 4, isMega: true, highlightClass: "text-rose-700" },
+    { id: "nav-nightwear", title: "Silky Sleepwear", category: "nightwear", targetType: "category", visible: true, order: 5, isMega: true },
+    { id: "nav-shapewear", title: "Shapewear", category: "shapewear", targetType: "category", visible: true, order: 6, isMega: true },
+    { id: "nav-calculator", title: "Fit Calculator", category: "calculator", targetType: "modal", action: "openBraCalculatorModal", icon: "fa-ruler-combined", visible: true, order: 7, highlightClass: "text-amber-700 font-bold" },
+    { id: "nav-tracking", title: "Track Order", category: "tracking", targetType: "modal", action: "openOrderTrackingModal", icon: "fa-truck-fast", visible: true, order: 8, highlightClass: "text-stone-500 font-semibold" }
+  ],
+
+  getNavItems: function() {
+    try {
+      const stored = localStorage.getItem(this.KEYS.NAV_ITEMS);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn("Error reading stored nav items", e);
+    }
+    this.saveNavItems(this.DEFAULT_NAV_ITEMS);
+    return this.DEFAULT_NAV_ITEMS;
+  },
+
+  saveNavItems: function(items) {
+    localStorage.setItem(this.KEYS.NAV_ITEMS, JSON.stringify(items));
+    window.dispatchEvent(new CustomEvent("nav_items_updated", { detail: items }));
+  },
+
+  addNavItem: function(itemData) {
+    const items = this.getNavItems();
+    const newItem = {
+      id: "nav-" + Date.now(),
+      title: itemData.title || "New Menu Item",
+      category: itemData.category || "all",
+      targetType: itemData.targetType || "category",
+      action: itemData.action || "",
+      icon: itemData.icon || "",
+      visible: itemData.visible !== false,
+      order: items.length + 1,
+      isMega: itemData.isMega === true,
+      highlightClass: itemData.highlightClass || ""
+    };
+    items.push(newItem);
+    this.saveNavItems(items);
+    return newItem;
+  },
+
+  updateNavItem: function(id, data) {
+    const items = this.getNavItems();
+    const index = items.findIndex(item => item.id === id);
+    if (index > -1) {
+      items[index] = { ...items[index], ...data };
+      this.saveNavItems(items);
+      return items[index];
+    }
+    return null;
+  },
+
+  deleteNavItem: function(id) {
+    let items = this.getNavItems();
+    items = items.filter(item => item.id !== id);
+    this.saveNavItems(items);
+    return items;
+  },
+
+  toggleNavVisibility: function(id) {
+    const items = this.getNavItems();
+    const item = items.find(i => i.id === id);
+    if (item) {
+      item.visible = !item.visible;
+      this.saveNavItems(items);
+      return item.visible;
+    }
+    return null;
+  },
+
+  // Default Hero Banners (Fallback Seed)
+  DEFAULT_BANNERS: [
+    {
+      id: "banner-1",
+      title: "Zero Pressure. Feather-Light Comfort",
+      subtitle: "Seamless wireless bras with buttery-soft micro-modal touch. Perfect lift, zero underwire pinch, and 100% invisible under lawn suits and kurtis.",
+      badge: "✨ Pure Comfort Collection",
+      badgeColor: "rose",
+      imageUrl: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1800&q=85",
+      btnText: "Shop Seamless Bras →",
+      btnCategory: "bras",
+      secondaryBtnText: "Find My Bra Size",
+      secondaryBtnAction: "openBraCalculatorModal",
+      active: true,
+      order: 1
+    },
+    {
+      id: "banner-2",
+      title: "Royal Velvet & Chantilly Lace",
+      subtitle: "Handcrafted luxury bridal sets, embroidered plunge corsets, and silk honeymoon nightwear delivered in luxury keepsake gift boxes.",
+      badge: "👑 Bridal Trousseau 2026",
+      badgeColor: "amber",
+      imageUrl: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=1800&q=85",
+      btnText: "Explore Bridal Edit →",
+      btnCategory: "bridal",
+      active: true,
+      order: 2
+    },
+    {
+      id: "banner-3",
+      title: "Effortless Contouring & Tummy Control",
+      subtitle: "Anti-roll spiral bone shapers designed for Pakistani formal wear and everyday kurtis. Instant waist smoothing with zero suffocation.",
+      badge: "⏳ 360° Firm Sculpting",
+      badgeColor: "emerald",
+      imageUrl: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=1800&q=85",
+      btnText: "Shop Shapewear →",
+      btnCategory: "shapewear",
+      active: true,
+      order: 3
+    }
+  ],
+
+  getBanners: function() {
+    try {
+      const stored = localStorage.getItem(this.KEYS.BANNERS);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn("Error reading stored banners", e);
+    }
+    this.saveBanners(this.DEFAULT_BANNERS);
+    return this.DEFAULT_BANNERS;
+  },
+
+  saveBanners: function(banners) {
+    localStorage.setItem(this.KEYS.BANNERS, JSON.stringify(banners));
+    window.dispatchEvent(new CustomEvent("banners_updated", { detail: banners }));
+  },
+
+  addBanner: function(bannerData) {
+    const banners = this.getBanners();
+    const newBanner = {
+      id: "banner-" + Date.now(),
+      title: bannerData.title || "Seasonal Collection",
+      subtitle: bannerData.subtitle || "",
+      badge: bannerData.badge || "Featured",
+      badgeColor: bannerData.badgeColor || "rose",
+      imageUrl: bannerData.imageUrl || "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1800&q=85",
+      btnText: bannerData.btnText || "Shop Now →",
+      btnCategory: bannerData.btnCategory || "all",
+      secondaryBtnText: bannerData.secondaryBtnText || "",
+      secondaryBtnAction: bannerData.secondaryBtnAction || "",
+      active: bannerData.active !== false,
+      order: banners.length + 1
+    };
+    banners.push(newBanner);
+    this.saveBanners(banners);
+    return newBanner;
+  },
+
+  updateBanner: function(id, data) {
+    const banners = this.getBanners();
+    const index = banners.findIndex(b => b.id === id);
+    if (index > -1) {
+      banners[index] = { ...banners[index], ...data };
+      this.saveBanners(banners);
+      return banners[index];
+    }
+    return null;
+  },
+
+  deleteBanner: function(id) {
+    let banners = this.getBanners();
+    banners = banners.filter(b => b.id !== id);
+    this.saveBanners(banners);
+    return banners;
+  },
+
+  toggleBannerStatus: function(id) {
+    const banners = this.getBanners();
+    const banner = banners.find(b => b.id === id);
+    if (banner) {
+      banner.active = !banner.active;
+      this.saveBanners(banners);
+      return banner.active;
+    }
+    return null;
   },
 
   // Price Formatter Helper

@@ -24,13 +24,14 @@ const App = {
 
   init: function () {
     this.bindEvents();
+    this.renderNavigation();
+    this.renderHeroSlider();
     this.renderCategoryCircles();
     this.renderProducts();
     this.updateCartUI();
     this.updateWishlistUI();
     this.renderReviewsSection();
     this.initStickyHeader();
-    this.initHeroSlider();
     this.initMobileFilterDrawer();
   },
 
@@ -47,6 +48,19 @@ const App = {
     window.addEventListener("coupon_applied", () => self.updateCartUI());
     window.addEventListener("coupon_removed", () => self.updateCartUI());
     window.addEventListener("reviews_updated", () => self.renderReviewsSection());
+    window.addEventListener("nav_items_updated", () => self.renderNavigation());
+    window.addEventListener("banners_updated", () => self.renderHeroSlider());
+    window.addEventListener("storage", (e) => {
+      if (typeof Store !== "undefined" && Store.KEYS) {
+        if (e.key === Store.KEYS.NAV_ITEMS) {
+          self.renderNavigation();
+        } else if (e.key === Store.KEYS.BANNERS) {
+          self.renderHeroSlider();
+        } else if (e.key === Store.KEYS.PRODUCTS) {
+          self.renderProducts();
+        }
+      }
+    });
 
     // Category Tabs / Pills
     document.querySelectorAll("[data-category-filter]").forEach(btn => {
@@ -168,8 +182,437 @@ const App = {
     });
   },
 
+  // Mega-Menu HTML Templates for Desktop Navigation
+  MEGA_MENU_TEMPLATES: {
+    bras: `
+      <div class="mega-menu-wrapper">
+        <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-4 gap-8 text-left whitespace-normal">
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Styles</h4>
+            <ul class="space-y-2 text-xs text-stone-600 font-normal">
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-rose-600 transition">Feather-Light Wireless Bras</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-rose-600 transition">Chantilly Lace Plunge Bras</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-rose-600 transition">Invisible T-Shirt Contour Bras</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-rose-600 transition">Front-Closure Comfort Bras</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-rose-600 transition">Bandeau & Strapless Support</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Shop By Cup Size</h4>
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='B'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-bold border border-stone-200 hover:border-rose-500 hover:text-rose-600 rounded">Cup B</button>
+              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='C'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-bold border border-stone-200 hover:border-rose-500 hover:text-rose-600 rounded">Cup C</button>
+              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='D'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-bold border border-stone-200 hover:border-rose-500 hover:text-rose-600 rounded">Cup D</button>
+              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='DD'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-bold border border-stone-200 hover:border-rose-500 hover:text-rose-600 rounded">Cup DD</button>
+              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='E'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-bold border border-stone-200 hover:border-rose-500 hover:text-rose-600 rounded">Cup E</button>
+              <button onclick="App.openBraCalculatorModal()" class="py-2 text-center text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 rounded">Guide</button>
+            </div>
+          </div>
+          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.openQuickView('mc-bra-01')">
+            <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" alt="Seamless Cloud Lift" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold text-rose-300">Signature Bestseller</span>
+              <h5 class="text-sm font-bold">Cloud-Soft Zero Wire T-Shirt Bra</h5>
+              <span class="text-xs font-bold text-rose-200">Rs. 2,450</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `,
+    panties: `
+      <div class="mega-menu-wrapper">
+        <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-4 gap-8 text-left whitespace-normal">
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Styles</h4>
+            <ul class="space-y-2 text-xs text-stone-600 font-normal">
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-rose-600 transition">Laser-Cut No-Show (Pack of 3)</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-rose-600 transition">Combed Cotton High-Waist Briefs</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-rose-600 transition">French Scalloped Lace Bikinis</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-rose-600 transition">Breathable Micro-Modal Boyshorts</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Value Bundles</h4>
+            <div class="bg-rose-50/70 p-4 rounded-lg border border-rose-100 space-y-2">
+              <span class="text-[10px] font-bold uppercase text-rose-600 tracking-wider">Multi-Pack Savings</span>
+              <h5 class="text-xs font-bold text-stone-900">Buy 3 Panties & Save 15%</h5>
+              <p class="text-[11px] text-stone-600 leading-snug">Automatic discount at checkout on selected comfort cotton panties.</p>
+            </div>
+          </div>
+          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.openQuickView('mc-pant-01')">
+            <img src="https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" alt="Laser Cut Panties" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold text-rose-300">100% Invisible Guarantee</span>
+              <h5 class="text-sm font-bold">Seamless Laser-Cut Cheeky Brief</h5>
+              <span class="text-xs font-bold text-rose-200">Rs. 950</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `,
+    bridal: `
+      <div class="mega-menu-wrapper">
+        <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-4 gap-8 text-left whitespace-normal">
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Trousseau Collections</h4>
+            <ul class="space-y-2 text-xs text-stone-600 font-normal">
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-rose-600 transition">Royal Crimson Satin Robe Set</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-rose-600 transition">Ivory French Lace Chemise</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-rose-600 transition">Embroidered Babydoll & G-String</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-rose-600 transition">Bridal Honeymoon 5-Piece Hamper</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Bridal Gifting</h4>
+            <div class="bg-rose-50/70 p-4 rounded-lg border border-rose-100 space-y-2">
+              <span class="text-[10px] font-bold uppercase text-rose-600 tracking-wider">Luxury Gift Box</span>
+              <h5 class="text-xs font-bold text-stone-900">Custom Trousseau Packaging</h5>
+              <p class="text-[11px] text-stone-600 leading-snug">Includes satin ribbon, scented sachets, and confidential outer carton.</p>
+            </div>
+          </div>
+          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.openQuickView('mc-bridal-01')">
+            <img src="https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80" alt="Bridal Robe" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold text-amber-300">Haute Trousseau</span>
+              <h5 class="text-sm font-bold">Royal Crimson Silk Satin Robe</h5>
+              <span class="text-xs font-bold text-rose-200">Rs. 4,950</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `,
+    nightwear: `
+      <div class="mega-menu-wrapper">
+        <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-4 gap-8 text-left whitespace-normal">
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Styles</h4>
+            <ul class="space-y-2 text-xs text-stone-600 font-normal">
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="hover:text-rose-600 transition">Pure Silk Camisole & Shorts Set</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="hover:text-rose-600 transition">Modal Cotton Button-Down Sleepshirt</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="hover:text-rose-600 transition">Satin Kimono Loungewear</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Fabric Excellence</h4>
+            <div class="bg-stone-50 p-4 rounded-lg border border-stone-200 space-y-1.5 text-xs">
+              <div class="font-bold text-stone-900"><i class="fa-solid fa-feather text-rose-500 mr-1"></i> 100% Breathable</div>
+              <p class="text-[11px] text-stone-600 leading-snug">Thermo-regulating fabric designed for Pakistan's summer nights.</p>
+            </div>
+          </div>
+          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.openQuickView('mc-night-01')">
+            <img src="https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" alt="Silk Sleepwear" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold text-rose-300">Pure Silk</span>
+              <h5 class="text-sm font-bold">Midnight Black Cami & French Shorts</h5>
+              <span class="text-xs font-bold text-rose-200">Rs. 3,250</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `,
+    shapewear: `
+      <div class="mega-menu-wrapper">
+        <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-4 gap-8 text-left whitespace-normal">
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Targeted Sculpting</h4>
+            <ul class="space-y-2 text-xs text-stone-600 font-normal">
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="hover:text-rose-600 transition">High-Waist Tummy Tamer Short</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="hover:text-rose-600 transition">Seamless Anti-Chafing Thigh Slimmer</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="hover:text-rose-600 transition">Hourglass Latex-Free Waist Cincher</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Zero Rolling Guarantee</h4>
+            <div class="bg-rose-50/70 p-4 rounded-lg border border-rose-100 space-y-1.5 text-xs">
+              <div class="font-bold text-rose-900"><i class="fa-solid fa-check-double text-rose-600 mr-1"></i> Silicone Grip Band</div>
+              <p class="text-[11px] text-stone-600 leading-snug">Stays firmly anchored all day without digging or rolling under formals.</p>
+            </div>
+          </div>
+          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.openQuickView('mc-shape-01')">
+            <img src="https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" alt="Shapewear" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold text-amber-300">Level 3 Compression</span>
+              <h5 class="text-sm font-bold">High-Waist Tummy Tamer Short</h5>
+              <span class="text-xs font-bold text-rose-200">Rs. 2,650</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  getMegaMenuHtml: function (category, title) {
+    if (this.MEGA_MENU_TEMPLATES && this.MEGA_MENU_TEMPLATES[category]) {
+      return this.MEGA_MENU_TEMPLATES[category];
+    }
+    // Generic Mega Menu for any custom added categories
+    return `
+      <div class="mega-menu-wrapper">
+        <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-3 gap-8 text-left whitespace-normal">
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">${title} Collection</h4>
+            <p class="text-xs text-stone-600 leading-relaxed mb-4">Browse our premium curated selection designed for everyday luxury and supreme all-day comfort.</p>
+            <button onclick="App.filterByCategory('${category}')" class="px-4 py-2 bg-rose-600 text-white rounded text-xs font-bold uppercase hover:bg-rose-700 transition">View All Products &rarr;</button>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Miss Collection Promise</h4>
+            <div class="bg-rose-50/70 p-4 rounded-lg border border-rose-100 space-y-2 text-xs">
+              <div class="font-bold text-stone-900"><i class="fa-solid fa-shield-halved text-rose-600 mr-1.5"></i> 100% Confidential Delivery</div>
+              <p class="text-[11px] text-stone-600">All orders are sealed inside discreet unbranded outer boxes for maximum privacy.</p>
+            </div>
+          </div>
+          <div class="relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.filterByCategory('${category}')">
+            <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" alt="${title}" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold text-rose-300">Featured Edit</span>
+              <h5 class="text-sm font-bold">${title}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  getMobileSubLinksHtml: function (category) {
+    if (category === "bras") {
+      return `
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block font-bold text-rose-600">View All Bras &rarr;</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block hover:text-stone-900">Feather-Light Wireless Bras</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block hover:text-stone-900">Chantilly Lace Plunge Bras</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block hover:text-stone-900">Invisible T-Shirt Contour Bras</a>
+        <div class="pt-1 flex items-center gap-1.5 font-bold uppercase text-[10px]">
+          <span class="text-stone-400">Cups:</span>
+          <button onclick="App.closeAllDrawers(); App.currentCategory='bras'; App.activeFilters.cup='B'; App.renderProducts();" class="px-2 py-0.5 border border-stone-200 rounded">Cup B</button>
+          <button onclick="App.closeAllDrawers(); App.currentCategory='bras'; App.activeFilters.cup='C'; App.renderProducts();" class="px-2 py-0.5 border border-stone-200 rounded">Cup C</button>
+          <button onclick="App.closeAllDrawers(); App.currentCategory='bras'; App.activeFilters.cup='D'; App.renderProducts();" class="px-2 py-0.5 border border-stone-200 rounded">Cup D</button>
+        </div>
+      `;
+    }
+    if (category === "panties") {
+      return `
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block font-bold text-rose-600">View All Panties &rarr;</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block hover:text-stone-900">Laser-Cut No-Show (Pack of 3)</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block hover:text-stone-900">Combed Cotton High-Waist Briefs</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block hover:text-stone-900">French Scalloped Lace Bikinis</a>
+      `;
+    }
+    if (category === "bridal") {
+      return `
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bridal')" class="block font-bold text-rose-600">View All Bridal Trousseau &rarr;</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bridal')" class="block hover:text-stone-900">Royal Crimson Satin Robe Set</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bridal')" class="block hover:text-stone-900">Ivory French Lace Chemise</a>
+      `;
+    }
+    if (category === "nightwear") {
+      return `
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('nightwear')" class="block font-bold text-rose-600">View All Sleepwear &rarr;</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('nightwear')" class="block hover:text-stone-900">Pure Silk Camisole & Shorts Set</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('nightwear')" class="block hover:text-stone-900">Modal Cotton Sleepshirt</a>
+      `;
+    }
+    if (category === "shapewear") {
+      return `
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('shapewear')" class="block font-bold text-rose-600">View All Shapewear &rarr;</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('shapewear')" class="block hover:text-stone-900">High-Waist Tummy Tamer Short</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('shapewear')" class="block hover:text-stone-900">Seamless Anti-Chafing Thigh Slimmer</a>
+      `;
+    }
+    return `
+      <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('${category}')" class="block font-bold text-rose-600">View All ${category} &rarr;</a>
+    `;
+  },
+
+  renderNavigation: function () {
+    const desktopContainer = document.getElementById("desktopNavContainer");
+    const mobileContainer = document.getElementById("mobileNavItemsContainer");
+
+    const navItems = (typeof Store !== "undefined" && Store.getNavItems)
+      ? Store.getNavItems().filter(item => item.visible !== false).sort((a, b) => (a.order || 0) - (b.order || 0))
+      : [];
+
+    if (!desktopContainer && !mobileContainer) return;
+
+    // 1. Desktop Navigation
+    if (desktopContainer) {
+      desktopContainer.innerHTML = navItems.map(item => {
+        const highlightClass = item.highlightClass || "";
+        const iconHtml = item.icon ? `<i class="fa-solid ${item.icon} mr-1.5"></i>` : "";
+
+        if (item.isMega) {
+          return `
+            <div class="nav-item-has-mega group py-3">
+              <a href="javascript:void(0)" onclick="App.toggleMegaMenu(this, '${item.category}')" class="nav-link flex items-center gap-1.5 ${highlightClass}">
+                ${item.title} <i class="fa-solid fa-angle-down text-[9px] text-stone-400 transition-transform group-hover:rotate-180"></i>
+              </a>
+              ${this.getMegaMenuHtml(item.category, item.title)}
+            </div>
+          `;
+        }
+
+        if (item.targetType === "modal") {
+          const actionFn = item.action || "openBraCalculatorModal";
+          return `
+            <a href="javascript:void(0)" onclick="App.${actionFn}()" class="nav-link py-3 flex items-center gap-1.5 ${highlightClass || 'text-stone-600 hover:text-stone-900'}">
+              ${iconHtml} ${item.title}
+            </a>
+          `;
+        }
+
+        if (item.targetType === "category") {
+          return `
+            <a href="javascript:void(0)" onclick="App.filterByCategory('${item.category || 'all'}')" class="nav-link py-3 ${highlightClass}">
+              ${iconHtml} ${item.title}
+            </a>
+          `;
+        }
+
+        return `
+          <a href="${item.action || 'javascript:void(0)'}" class="nav-link py-3 ${highlightClass}">
+            ${iconHtml} ${item.title}
+          </a>
+        `;
+      }).join("");
+    }
+
+    // 2. Mobile Drawer Navigation
+    if (mobileContainer) {
+      mobileContainer.innerHTML = navItems.map(item => {
+        const highlightClass = item.highlightClass || "";
+        const iconHtml = item.icon ? `<i class="fa-solid ${item.icon} mr-2"></i>` : "";
+
+        if (item.isMega) {
+          const subLinks = this.getMobileSubLinksHtml(item.category);
+          return `
+            <div class="py-2">
+              <div class="mobile-accordion-toggle py-1" onclick="App.toggleMobileAccordion('mob-${item.id}')">
+                <span class="${highlightClass}">${item.title}</span>
+                <i id="mob-${item.id}-icon" class="mobile-accordion-icon fa-solid fa-angle-down text-stone-400 text-xs"></i>
+              </div>
+              <div id="mob-${item.id}" class="mobile-accordion-content hidden pl-3 pt-2 space-y-2 text-xs font-normal normal-case text-stone-600">
+                ${subLinks}
+              </div>
+            </div>
+          `;
+        }
+
+        if (item.targetType === "modal") {
+          const actionFn = item.action || "openBraCalculatorModal";
+          return `
+            <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.${actionFn}()" class="block py-3 flex items-center ${highlightClass || 'text-stone-700'}">
+              ${iconHtml} ${item.title}
+            </a>
+          `;
+        }
+
+        if (item.targetType === "category") {
+          return `
+            <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('${item.category || 'all'}')" class="block py-3 hover:text-rose-600 ${highlightClass}">
+              ${iconHtml} ${item.title}
+            </a>
+          `;
+        }
+
+        return `
+          <a href="${item.action || 'javascript:void(0)'}" class="block py-3 hover:text-rose-600 ${highlightClass}">
+            ${iconHtml} ${item.title}
+          </a>
+        `;
+      }).join("");
+    }
+  },
+
+  getBadgeColorClasses: function (color) {
+    switch (color) {
+      case "amber":
+        return "bg-amber-500/20 text-amber-300 border border-amber-500/40";
+      case "emerald":
+        return "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+      case "purple":
+        return "bg-purple-500/20 text-purple-300 border border-purple-500/40";
+      case "rose":
+      default:
+        return "bg-rose-500/20 text-rose-300 border border-rose-500/40";
+    }
+  },
+
+  heroSliderInterval: null,
+
+  renderHeroSlider: function () {
+    const slidesContainer = document.getElementById("heroSlidesWrapper");
+    const dotsContainer = document.getElementById("heroDotsWrapper");
+    if (!slidesContainer || !dotsContainer) return;
+
+    const banners = (typeof Store !== "undefined" && Store.getBanners)
+      ? Store.getBanners().filter(b => b.active !== false).sort((a, b) => (a.order || 0) - (b.order || 0))
+      : [];
+
+    if (!banners.length) {
+      slidesContainer.innerHTML = `
+        <div class="hero-slide absolute inset-0 opacity-100 flex items-center justify-center text-center p-8">
+          <div>
+            <h2 class="text-3xl font-serif-luxury font-bold">Miss Collection Lingerie</h2>
+            <p class="text-stone-400 mt-2 text-sm">Discover luxurious undergarments designed for supreme everyday comfort.</p>
+          </div>
+        </div>
+      `;
+      dotsContainer.innerHTML = "";
+      return;
+    }
+
+    slidesContainer.innerHTML = banners.map((banner, idx) => {
+      const isFirst = idx === 0;
+      const badgeClasses = this.getBadgeColorClasses(banner.badgeColor);
+      return `
+        <div class="hero-slide absolute inset-0 ${isFirst ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} transition-opacity duration-1000 flex items-center">
+          <img 
+            src="${banner.imageUrl}" 
+            alt="${banner.title || 'Miss Collection Banner'}" 
+            class="absolute inset-0 w-full h-full object-cover object-center brightness-75 scale-105 transition-transform duration-7000 ease-out"
+          />
+          <div class="absolute inset-0 bg-gradient-to-r from-stone-950/90 via-stone-950/60 to-transparent"></div>
+          <div class="relative max-w-7xl mx-auto px-5 sm:px-12 w-full py-12">
+            <div class="max-w-xl space-y-3 sm:space-y-4">
+              ${banner.badge ? `
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${badgeClasses} text-[10px] sm:text-xs font-bold uppercase tracking-widest">
+                ${banner.badge}
+              </span>` : ''}
+              <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight font-serif-luxury leading-tight text-white">
+                ${banner.title}
+              </h1>
+              ${banner.subtitle ? `
+              <p class="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-md">
+                ${banner.subtitle}
+              </p>` : ''}
+              <div class="pt-2 flex flex-wrap gap-2.5 sm:gap-3">
+                ${banner.btnText ? `
+                <button onclick="App.filterByCategory('${banner.btnCategory || 'all'}')" class="px-5 sm:px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-lg">
+                  ${banner.btnText}
+                </button>` : ''}
+                ${banner.secondaryBtnText ? `
+                <button onclick="App.${banner.secondaryBtnAction || 'openBraCalculatorModal'}()" class="px-4 sm:px-5 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-xs border border-white/30 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition">
+                  <i class="fa-solid fa-ruler-horizontal mr-1.5"></i> ${banner.secondaryBtnText}
+                </button>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    dotsContainer.innerHTML = banners.map((banner, idx) => `
+      <button class="hero-dot ${idx === 0 ? 'w-8 bg-rose-600' : 'w-2.5 bg-white/60 hover:bg-white'} h-2 rounded-full transition-all duration-300" aria-label="Go to Slide ${idx + 1}"></button>
+    `).join("");
+
+    this.initHeroSlider();
+  },
+
   // Touch-Swipe Enabled Hero Slider
   initHeroSlider: function () {
+    if (this.heroSliderInterval) {
+      clearInterval(this.heroSliderInterval);
+      this.heroSliderInterval = null;
+    }
+
     let currentSlide = 0;
     const sliderContainer = document.getElementById("heroSliderContainer");
     const slides = document.querySelectorAll(".hero-slide");
@@ -203,7 +646,8 @@ const App = {
     });
 
     // Touch Swipe Gesture Detection for Mobile
-    if (sliderContainer) {
+    if (sliderContainer && !sliderContainer.dataset.swipeBound) {
+      sliderContainer.dataset.swipeBound = "true";
       let touchStartX = 0;
       let touchEndX = 0;
 
@@ -213,26 +657,28 @@ const App = {
 
       sliderContainer.addEventListener("touchend", function (e) {
         touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-      }, { passive: true });
-
-      function handleSwipe() {
         const threshold = 40;
+        const currentSlides = document.querySelectorAll(".hero-slide");
+        if (!currentSlides.length) return;
         if (touchEndX < touchStartX - threshold) {
           // Swipe Left -> Next
-          showSlide((currentSlide + 1) % slides.length);
+          showSlide((currentSlide + 1) % currentSlides.length);
         } else if (touchEndX > touchStartX + threshold) {
           // Swipe Right -> Prev
-          showSlide((currentSlide - 1 + slides.length) % slides.length);
+          showSlide((currentSlide - 1 + currentSlides.length) % currentSlides.length);
         }
-      }
+      }, { passive: true });
     }
 
-    // Auto Advance every 5.5s
-    setInterval(() => {
-      let next = (currentSlide + 1) % slides.length;
-      showSlide(next);
-    }, 5500);
+    // Auto Advance every 5.5s if multiple slides
+    if (slides.length > 1) {
+      this.heroSliderInterval = setInterval(() => {
+        const currentSlides = document.querySelectorAll(".hero-slide");
+        if (!currentSlides.length) return;
+        let next = (currentSlide + 1) % currentSlides.length;
+        showSlide(next);
+      }, 5500);
+    }
   },
 
   renderCategoryCircles: function () {

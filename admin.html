@@ -136,21 +136,27 @@
       </div>
 
       <!-- Tabs Navigation -->
-      <div class="flex items-center justify-between border-b border-stone-200 pb-2">
-        <div class="flex items-center gap-2">
-          <button data-admin-tab="catalog" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider bg-rose-600 text-white transition">
+      <div class="flex items-center justify-between border-b border-stone-200 pb-2 flex-wrap gap-3">
+        <div class="flex items-center gap-2 overflow-x-auto">
+          <button data-admin-tab="catalog" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider bg-rose-600 text-white transition shrink-0">
             <i class="fa-solid fa-boxes-stacked mr-1"></i> Products Catalog
           </button>
-          <button data-admin-tab="orders" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition">
+          <button data-admin-tab="orders" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
             <i class="fa-solid fa-truck-ramp-box mr-1"></i> Customer Orders
+          </button>
+          <button data-admin-tab="navigation" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
+            <i class="fa-solid fa-bars mr-1"></i> Header Menu
+          </button>
+          <button data-admin-tab="banners" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
+            <i class="fa-solid fa-panorama mr-1"></i> Hero Banners
           </button>
         </div>
 
         <div class="flex items-center gap-2">
-          <button onclick="AdminApp.openAddProductModal()" class="px-3.5 py-2 bg-stone-900 hover:bg-rose-600 text-white text-xs font-bold uppercase rounded-lg transition flex items-center gap-1.5 shadow-sm">
-            <i class="fa-solid fa-plus"></i> Add Product
+          <button id="adminMainAddBtn" onclick="AdminApp.handleContextualAdd()" class="px-3.5 py-2 bg-stone-900 hover:bg-rose-600 text-white text-xs font-bold uppercase rounded-lg transition flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-plus"></i> <span id="adminMainAddBtnText">Add Product</span>
           </button>
-          <button onclick="AdminApp.restoreFactoryDefaults()" class="px-3 py-2 border border-stone-300 hover:bg-stone-100 text-stone-600 text-xs font-bold uppercase rounded-lg transition" title="Reset Catalog to Defaults">
+          <button onclick="AdminApp.restoreFactoryDefaults()" class="px-3 py-2 border border-stone-300 hover:bg-stone-100 text-stone-600 text-xs font-bold uppercase rounded-lg transition" title="Reset Catalog, Menu & Banners to Defaults">
             <i class="fa-solid fa-rotate mr-1"></i> Reset
           </button>
         </div>
@@ -205,6 +211,54 @@
               <!-- Rendered via AdminApp.renderOrdersTable() -->
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- TAB 3: HEADER NAVIGATION MANAGER -->
+      <div id="tabContent-navigation" class="admin-tab-content hidden bg-white rounded-xl border border-stone-200 shadow-xs overflow-hidden">
+        <div class="p-4 border-b border-stone-100 flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h3 class="font-bold text-sm text-stone-900 font-serif-luxury">Header Menu & Category Navigation</h3>
+            <span class="text-xs text-stone-500">Show, hide, add, edit or remove top options in the header and mobile drawer</span>
+          </div>
+          <button onclick="AdminApp.openAddNavModal()" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold uppercase tracking-wider transition flex items-center gap-1.5 shadow-xs">
+            <i class="fa-solid fa-plus text-[10px]"></i> Add Menu Option
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-stone-50 text-[11px] uppercase font-bold text-stone-400 border-b border-stone-100">
+                <th class="p-3">Seq</th>
+                <th class="p-3">Menu Label</th>
+                <th class="p-3">Target Category / Action</th>
+                <th class="p-3">Type</th>
+                <th class="p-3">Display Status</th>
+                <th class="p-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminNavTableBody">
+              <!-- Rendered via AdminApp.renderNavigationTable() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: HERO BANNERS SLIDER MANAGER -->
+      <div id="tabContent-banners" class="admin-tab-content hidden bg-white rounded-xl border border-stone-200 shadow-xs overflow-hidden">
+        <div class="p-4 border-b border-stone-100 flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h3 class="font-bold text-sm text-stone-900 font-serif-luxury">Homepage Hero Slider Banners</h3>
+            <span class="text-xs text-stone-500">Manage promotional slides, photos, headlines, subtitles, and CTA buttons running on the homepage</span>
+          </div>
+          <button onclick="AdminApp.openAddBannerModal()" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold uppercase tracking-wider transition flex items-center gap-1.5 shadow-xs">
+            <i class="fa-solid fa-plus text-[10px]"></i> Add New Slide
+          </button>
+        </div>
+
+        <div id="adminBannersGrid" class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Rendered via AdminApp.renderBannersTable() -->
         </div>
       </div>
 
@@ -290,6 +344,182 @@
           </button>
           <button type="submit" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded font-bold uppercase tracking-wider transition">
             Save Product
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       4. ADD / EDIT NAVIGATION MENU MODAL
+       ========================================== -->
+  <div id="adminNavModal" class="hidden fixed inset-0 bg-stone-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+        <h3 id="adminNavModalTitle" class="text-base font-bold text-stone-900 font-serif-luxury">
+          Add Menu Option
+        </h3>
+        <button onclick="AdminApp.closeNavModal()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <form id="adminNavForm" onsubmit="AdminApp.handleNavFormSubmit(event)" class="mt-4 space-y-4 text-xs">
+        <input type="hidden" name="id" />
+
+        <div>
+          <label class="block font-bold text-stone-700 mb-1">Menu Label / Title *</label>
+          <input type="text" name="title" required placeholder="e.g. Clearance Sale, Bridal Sets" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500 font-semibold" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Target Action Type</label>
+            <select name="targetType" onchange="AdminApp.handleNavTypeChange(this.value)" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500">
+              <option value="category">Category Filter</option>
+              <option value="modal">Interactive Modal</option>
+            </select>
+          </div>
+
+          <div id="navCategoryFieldWrapper">
+            <label class="block font-bold text-stone-700 mb-1">Target Category</label>
+            <select name="category" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500">
+              <option value="all">All Silhouettes (all)</option>
+              <option value="bras">Bras & Bralettes (bras)</option>
+              <option value="panties">Panties & Briefs (panties)</option>
+              <option value="bridal">Bridal Sets (bridal)</option>
+              <option value="nightwear">Silky Sleepwear (nightwear)</option>
+              <option value="shapewear">Shapewear (shapewear)</option>
+              <option value="accessories">Accessories (accessories)</option>
+            </select>
+          </div>
+
+          <div id="navModalActionWrapper" class="hidden">
+            <label class="block font-bold text-stone-700 mb-1">Modal Trigger</label>
+            <select name="action" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500">
+              <option value="openBraCalculatorModal">Bra Size Fit Calculator</option>
+              <option value="openOrderTrackingModal">TCS Order Tracking</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Display Sequence Order</label>
+            <input type="number" name="order" min="1" max="50" value="1" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+          </div>
+
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Icon Class (Optional)</label>
+            <input type="text" name="icon" placeholder="e.g. fa-ruler-combined" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+          </div>
+        </div>
+
+        <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 space-y-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" name="visible" checked class="w-4 h-4 text-rose-600 rounded" />
+            <span class="font-bold text-stone-800">Visible on Storefront (Show in Header & Mobile Nav)</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" name="isMega" class="w-4 h-4 text-rose-600 rounded" />
+            <span class="text-stone-600">Enable Desktop Mega-Menu Dropdown (Recommended for main categories)</span>
+          </label>
+        </div>
+
+        <div class="pt-3 border-t border-stone-200 flex justify-end gap-2">
+          <button type="button" onclick="AdminApp.closeNavModal()" class="px-4 py-2 border border-stone-300 rounded text-stone-700 font-bold hover:bg-stone-100 transition">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded font-bold uppercase tracking-wider transition">
+            Save Menu Item
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       5. ADD / EDIT HERO BANNER MODAL
+       ========================================== -->
+  <div id="adminBannerModal" class="hidden fixed inset-0 bg-stone-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+        <h3 id="adminBannerModalTitle" class="text-base font-bold text-stone-900 font-serif-luxury">
+          Add New Banner Slide
+        </h3>
+        <button onclick="AdminApp.closeBannerModal()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <form id="adminBannerForm" onsubmit="AdminApp.handleBannerFormSubmit(event)" class="mt-4 space-y-4 text-xs">
+        <input type="hidden" name="id" />
+
+        <div>
+          <label class="block font-bold text-stone-700 mb-1">Slide Headline / Main Title *</label>
+          <input type="text" name="title" required placeholder="e.g. Zero Pressure. Feather-Light Comfort" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500 font-semibold" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Badge Ribbon Text</label>
+            <input type="text" name="badge" placeholder="e.g. ✨ Pure Comfort Collection" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+          </div>
+
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Badge Theme Color</label>
+            <select name="badgeColor" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500">
+              <option value="rose">Rose Pink</option>
+              <option value="amber">Amber Gold</option>
+              <option value="emerald">Emerald Green</option>
+              <option value="stone">Stone Gray</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-stone-700 mb-1">High-Res Banner Image URL *</label>
+          <input type="url" name="imageUrl" required placeholder="https://images.unsplash.com/..." class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+          <span class="text-[10px] text-stone-400 block mt-1">Recommended aspect ratio: 16:9 or 21:9 landscape high-definition photograph</span>
+        </div>
+
+        <div>
+          <label class="block font-bold text-stone-700 mb-1">Subtitle / Descriptive Text</label>
+          <textarea name="subtitle" rows="2" placeholder="e.g. Seamless wireless bras with buttery-soft micro-modal touch. Perfect lift..." class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Button CTA Label</label>
+            <input type="text" name="btnText" placeholder="e.g. Shop Seamless Bras →" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+          </div>
+
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Button Target Category</label>
+            <select name="btnCategory" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500">
+              <option value="bras">Bras & Bralettes</option>
+              <option value="panties">Panties & Briefs</option>
+              <option value="bridal">Bridal Sets</option>
+              <option value="nightwear">Silky Sleepwear</option>
+              <option value="shapewear">Shapewear</option>
+              <option value="all">All Silhouettes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-3 bg-stone-50 rounded-lg border border-stone-200">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" name="active" checked class="w-4 h-4 text-rose-600 rounded" />
+            <span class="font-bold text-stone-800">Active Slide (Include in Homepage Rotating Carousel)</span>
+          </label>
+        </div>
+
+        <div class="pt-3 border-t border-stone-200 flex justify-end gap-2">
+          <button type="button" onclick="AdminApp.closeBannerModal()" class="px-4 py-2 border border-stone-300 rounded text-stone-700 font-bold hover:bg-stone-100 transition">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded font-bold uppercase tracking-wider transition">
+            Save Banner Slide
           </button>
         </div>
       </form>

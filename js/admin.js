@@ -81,7 +81,10 @@ const AdminApp = {
     this.checkAuth();
   },
 
+  currentTab: "catalog",
+
   switchTab: function (tabName) {
+    this.currentTab = tabName;
     document.querySelectorAll("[data-admin-tab]").forEach(btn => {
       if (btn.getAttribute("data-admin-tab") === tabName) {
         btn.classList.add("bg-rose-600", "text-white");
@@ -95,12 +98,33 @@ const AdminApp = {
     document.querySelectorAll(".admin-tab-content").forEach(c => c.classList.add("hidden"));
     const activeContent = document.getElementById(`tabContent-${tabName}`);
     if (activeContent) activeContent.classList.remove("hidden");
+
+    // Contextual button label
+    const addBtnText = document.getElementById("adminMainAddBtnText");
+    if (addBtnText) {
+      if (tabName === "catalog") addBtnText.textContent = "Add Product";
+      else if (tabName === "navigation") addBtnText.textContent = "Add Menu Item";
+      else if (tabName === "banners") addBtnText.textContent = "Add Slide";
+      else addBtnText.textContent = "New Item";
+    }
+  },
+
+  handleContextualAdd: function () {
+    if (this.currentTab === "navigation") {
+      this.openAddNavModal();
+    } else if (this.currentTab === "banners") {
+      this.openAddBannerModal();
+    } else {
+      this.openAddProductModal();
+    }
   },
 
   refreshDashboard: function () {
     this.renderKPIs();
     this.renderProductsTable();
     this.renderOrdersTable();
+    this.renderNavigationTable();
+    this.renderBannersTable();
   },
 
   renderKPIs: function () {
@@ -360,13 +384,306 @@ const AdminApp = {
     );
   },
 
+  // ==========================================
+  // NAVIGATION MENU CMS MANAGEMENT
+  // ==========================================
+  renderNavigationTable: function () {
+    const tbody = document.getElementById("adminNavTableBody");
+    if (!tbody) return;
+
+    const items = Store.getNavItems();
+    tbody.innerHTML = items.map((item, idx) => `
+      <tr class="border-b border-stone-100 hover:bg-stone-50/50 transition">
+        <td class="p-3 text-stone-400 font-mono text-xs">#${item.order || idx + 1}</td>
+        <td class="p-3">
+          <div class="flex items-center gap-2">
+            ${item.icon ? `<i class="fa-solid ${item.icon} text-stone-500 text-xs"></i>` : ""}
+            <span class="font-bold text-xs text-stone-900">${item.title}</span>
+          </div>
+        </td>
+        <td class="p-3 text-xs text-stone-600 font-mono">
+          ${item.targetType === "modal" ? `<span class="text-amber-700 font-bold"><i class="fa-solid fa-window-maximize mr-1"></i>${item.action || "modal"}</span>` : `<span class="text-rose-600 font-bold"><i class="fa-solid fa-filter mr-1"></i>${item.category}</span>`}
+        </td>
+        <td class="p-3 text-xs">
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${item.isMega ? "bg-purple-100 text-purple-800" : "bg-stone-100 text-stone-600"}">
+            ${item.isMega ? "Mega Menu" : "Direct Link"}
+          </span>
+        </td>
+        <td class="p-3">
+          <button 
+            onclick="AdminApp.toggleNav('${item.id}')" 
+            class="px-2.5 py-1 rounded text-[10px] font-bold uppercase transition ${item.visible !== false ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200" : "bg-stone-200 text-stone-600 hover:bg-stone-300"}"
+            title="Click to toggle display on storefront"
+          >
+            ${item.visible !== false ? '<i class="fa-solid fa-eye mr-1"></i>Visible' : '<i class="fa-solid fa-eye-slash mr-1"></i>Hidden'}
+          </button>
+        </td>
+        <td class="p-3 text-right">
+          <div class="flex items-center justify-end gap-2">
+            <button onclick="AdminApp.openEditNavModal('${item.id}')" class="p-1.5 text-stone-600 hover:text-rose-600 text-xs" title="Edit Menu Item">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="AdminApp.deleteNav('${item.id}')" class="p-1.5 text-stone-400 hover:text-rose-600 text-xs" title="Delete Menu Item">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+  },
+
+  openAddNavModal: function () {
+    const modal = document.getElementById("adminNavModal");
+    const form = document.getElementById("adminNavForm");
+    if (!modal || !form) return;
+    form.reset();
+    form.id.value = "";
+    document.getElementById("adminNavModalTitle").textContent = "Add Top Menu Option";
+    this.handleNavTypeChange("category");
+    modal.classList.remove("hidden");
+  },
+
+  openEditNavModal: function (id) {
+    const modal = document.getElementById("adminNavModal");
+    const form = document.getElementById("adminNavForm");
+    if (!modal || !form) return;
+
+    const items = Store.getNavItems();
+    const item = items.find(i => i.id === id);
+    if (!item) return;
+
+    form.id.value = item.id;
+    form.title.value = item.title;
+    form.targetType.value = item.targetType || "category";
+    if (form.category) form.category.value = item.category || "all";
+    if (form.action) form.action.value = item.action || "openBraCalculatorModal";
+    form.order.value = item.order || 1;
+    form.icon.value = item.icon || "";
+    form.visible.checked = item.visible !== false;
+    form.isMega.checked = item.isMega === true;
+
+    this.handleNavTypeChange(form.targetType.value);
+    document.getElementById("adminNavModalTitle").textContent = "Edit Menu Option: " + item.title;
+    modal.classList.remove("hidden");
+  },
+
+  closeNavModal: function () {
+    const modal = document.getElementById("adminNavModal");
+    if (modal) modal.classList.add("hidden");
+  },
+
+  handleNavTypeChange: function (type) {
+    const catWrapper = document.getElementById("navCategoryFieldWrapper");
+    const modalWrapper = document.getElementById("navModalActionWrapper");
+    if (type === "modal") {
+      if (catWrapper) catWrapper.classList.add("hidden");
+      if (modalWrapper) modalWrapper.classList.remove("hidden");
+    } else {
+      if (catWrapper) catWrapper.classList.remove("hidden");
+      if (modalWrapper) modalWrapper.classList.add("hidden");
+    }
+  },
+
+  handleNavFormSubmit: function (e) {
+    e.preventDefault();
+    const form = document.getElementById("adminNavForm");
+    if (!form) return;
+
+    const id = form.id.value;
+    const title = form.title.value.trim();
+    const targetType = form.targetType.value;
+    const category = form.category ? form.category.value : "all";
+    const action = form.action ? form.action.value : "";
+    const order = parseInt(form.order.value, 10) || 1;
+    const icon = form.icon.value.trim();
+    const visible = form.visible.checked;
+    const isMega = form.isMega.checked;
+
+    if (!title) {
+      alert("Please provide a menu title!");
+      return;
+    }
+
+    if (id) {
+      Store.updateNavItem(id, {
+        title, targetType, category, action, order, icon, visible, isMega
+      });
+    } else {
+      Store.addNavItem({
+        title, targetType, category, action, order, icon, visible, isMega
+      });
+    }
+
+    this.closeNavModal();
+    this.renderNavigationTable();
+    alert("Header menu updated successfully!");
+  },
+
+  deleteNav: function (id) {
+    if (confirm("Are you sure you want to remove this navigation option from the header?")) {
+      Store.deleteNavItem(id);
+      this.renderNavigationTable();
+    }
+  },
+
+  toggleNav: function (id) {
+    Store.toggleNavVisibility(id);
+    this.renderNavigationTable();
+  },
+
+  // ==========================================
+  // HERO BANNERS CMS MANAGEMENT
+  // ==========================================
+  renderBannersTable: function () {
+    const grid = document.getElementById("adminBannersGrid");
+    if (!grid) return;
+
+    const banners = Store.getBanners();
+    grid.innerHTML = banners.map((b, idx) => `
+      <div class="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-xs flex flex-col group">
+        <div class="relative h-44 bg-stone-900 overflow-hidden">
+          <img src="${b.imageUrl}" alt="${b.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent"></div>
+          <div class="absolute top-3 left-3">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-stone-900/80 text-white border border-white/20">
+              Slide #${idx + 1}
+            </span>
+          </div>
+          <div class="absolute bottom-3 left-3 right-3 text-white">
+            <span class="text-[9px] uppercase font-bold text-rose-300 block">${b.badge || "Featured"}</span>
+            <h4 class="text-sm font-bold leading-tight truncate">${b.title}</h4>
+          </div>
+        </div>
+
+        <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+          <div>
+            <p class="text-xs text-stone-600 line-clamp-2">${b.subtitle || "No descriptive text"}</p>
+            <div class="mt-2 text-[11px] font-semibold text-stone-500 flex items-center gap-1.5">
+              <i class="fa-solid fa-arrow-pointer text-rose-500 text-xs"></i>
+              <span>Button: <strong>${b.btnText || "Shop Now"}</strong> (Target: ${b.btnCategory})</span>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
+            <button 
+              onclick="AdminApp.toggleBanner('${b.id}')" 
+              class="px-2.5 py-1 rounded text-[10px] font-bold uppercase transition ${b.active !== false ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200" : "bg-stone-200 text-stone-600 hover:bg-stone-300"}"
+            >
+              ${b.active !== false ? '<i class="fa-solid fa-play mr-1"></i>Active' : '<i class="fa-solid fa-pause mr-1"></i>Paused'}
+            </button>
+
+            <div class="flex items-center gap-2">
+              <button onclick="AdminApp.openEditBannerModal('${b.id}')" class="p-1.5 text-stone-600 hover:text-rose-600 text-xs font-semibold flex items-center gap-1" title="Edit Slide">
+                <i class="fa-solid fa-pen"></i> Edit
+              </button>
+              <button onclick="AdminApp.deleteBanner('${b.id}')" class="p-1.5 text-stone-400 hover:text-rose-600 text-xs" title="Delete Slide">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join("");
+  },
+
+  openAddBannerModal: function () {
+    const modal = document.getElementById("adminBannerModal");
+    const form = document.getElementById("adminBannerForm");
+    if (!modal || !form) return;
+    form.reset();
+    form.id.value = "";
+    document.getElementById("adminBannerModalTitle").textContent = "Add New Hero Banner Slide";
+    modal.classList.remove("hidden");
+  },
+
+  openEditBannerModal: function (id) {
+    const modal = document.getElementById("adminBannerModal");
+    const form = document.getElementById("adminBannerForm");
+    if (!modal || !form) return;
+
+    const banners = Store.getBanners();
+    const banner = banners.find(b => b.id === id);
+    if (!banner) return;
+
+    form.id.value = banner.id;
+    form.title.value = banner.title || "";
+    form.badge.value = banner.badge || "";
+    form.badgeColor.value = banner.badgeColor || "rose";
+    form.imageUrl.value = banner.imageUrl || "";
+    form.subtitle.value = banner.subtitle || "";
+    form.btnText.value = banner.btnText || "";
+    form.btnCategory.value = banner.btnCategory || "bras";
+    form.active.checked = banner.active !== false;
+
+    document.getElementById("adminBannerModalTitle").textContent = "Edit Banner Slide: " + banner.title;
+    modal.classList.remove("hidden");
+  },
+
+  closeBannerModal: function () {
+    const modal = document.getElementById("adminBannerModal");
+    if (modal) modal.classList.add("hidden");
+  },
+
+  handleBannerFormSubmit: function (e) {
+    e.preventDefault();
+    const form = document.getElementById("adminBannerForm");
+    if (!form) return;
+
+    const id = form.id.value;
+    const title = form.title.value.trim();
+    const badge = form.badge.value.trim();
+    const badgeColor = form.badgeColor.value;
+    const imageUrl = form.imageUrl.value.trim();
+    const subtitle = form.subtitle.value.trim();
+    const btnText = form.btnText.value.trim();
+    const btnCategory = form.btnCategory.value;
+    const active = form.active.checked;
+
+    if (!title || !imageUrl) {
+      alert("Please provide both a Slide Headline and Image URL!");
+      return;
+    }
+
+    if (id) {
+      Store.updateBanner(id, {
+        title, badge, badgeColor, imageUrl, subtitle, btnText, btnCategory, active
+      });
+    } else {
+      Store.addBanner({
+        title, badge, badgeColor, imageUrl, subtitle, btnText, btnCategory, active
+      });
+    }
+
+    this.closeBannerModal();
+    this.renderBannersTable();
+    alert("Hero banner saved successfully!");
+  },
+
+  deleteBanner: function (id) {
+    if (confirm("Delete this hero carousel slide?")) {
+      Store.deleteBanner(id);
+      this.renderBannersTable();
+    }
+  },
+
+  toggleBanner: function (id) {
+    Store.toggleBannerStatus(id);
+    this.renderBannersTable();
+  },
+
   restoreFactoryDefaults: function () {
-    if (confirm("Reset Miss Collection catalog to original factory defaults? All manual edits will be re-initialized.")) {
+    if (confirm("Reset Miss Collection catalog, header navigation menu, and hero banners to original factory defaults? All manual edits will be re-initialized.")) {
       if (typeof DEFAULT_PRODUCTS !== "undefined") {
         Store.saveProducts(DEFAULT_PRODUCTS);
-        this.refreshDashboard();
-        alert("Restored factory catalog successfully.");
       }
+      if (Store.DEFAULT_NAV_ITEMS) {
+        Store.saveNavItems(Store.DEFAULT_NAV_ITEMS);
+      }
+      if (Store.DEFAULT_BANNERS) {
+        Store.saveBanners(Store.DEFAULT_BANNERS);
+      }
+      this.refreshDashboard();
+      alert("Restored factory catalog, navigation, and hero banners successfully.");
     }
   }
 };
