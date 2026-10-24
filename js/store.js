@@ -1,16 +1,17 @@
 /**
  * Miss Collection - Store & State Management
- * Persistent localStorage state for Cart, Wishlist, Orders, Coupons, and Products
+ * Persistent localStorage state for Cart, Wishlist, Orders, Coupons, Reviews, and Products
  */
 
 const Store = {
   // Storage keys
   KEYS: {
-    PRODUCTS: "miss_collection_products_v1",
-    CART: "miss_collection_cart_v1",
-    WISHLIST: "miss_collection_wishlist_v1",
-    ORDERS: "miss_collection_orders_v1",
-    COUPON: "miss_collection_active_coupon_v1"
+    PRODUCTS: "miss_collection_products_v2",
+    CART: "miss_collection_cart_v2",
+    WISHLIST: "miss_collection_wishlist_v2",
+    ORDERS: "miss_collection_orders_v2",
+    COUPON: "miss_collection_active_coupon_v2",
+    REVIEWS: "miss_collection_reviews_v2"
   },
 
   // Available Promo Codes
@@ -83,6 +84,7 @@ const Store = {
         productId: product.id,
         title: product.title,
         category: product.category,
+        subCategory: product.subCategory,
         price: product.price,
         originalPrice: product.originalPrice,
         size: size,
@@ -125,6 +127,29 @@ const Store = {
 
   getCartSubtotal: function() {
     return this.getCart().reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  },
+
+  // Cross-Sells for Cart Drawer
+  getCartCrossSells: function() {
+    const cart = this.getCart();
+    const cartProductIds = cart.map(i => i.productId);
+    const allProducts = this.getProducts();
+
+    // Suggested accessory add-ons
+    const defaultAccessories = ["mc-acc-01", "mc-acc-02", "mc-acc-03"];
+    let recommendations = [];
+
+    cart.forEach(item => {
+      const prod = allProducts.find(p => p.id === item.productId);
+      if (prod && prod.crossSells) {
+        recommendations.push(...prod.crossSells);
+      }
+    });
+
+    recommendations.push(...defaultAccessories);
+    // Remove duplicates and items already in cart
+    const uniqueIds = [...new Set(recommendations)].filter(id => !cartProductIds.includes(id));
+    return uniqueIds.slice(0, 3).map(id => allProducts.find(p => p.id === id)).filter(Boolean);
   },
 
   // Coupon Engine
@@ -320,6 +345,82 @@ const Store = {
       return true;
     }
     return false;
+  },
+
+  // Customer Reviews System
+  getReviews: function() {
+    try {
+      const stored = localStorage.getItem(this.KEYS.REVIEWS);
+      if (stored) return JSON.parse(stored);
+    } catch (e) {
+      console.warn("Error reading reviews", e);
+    }
+    const seedReviews = [
+      {
+        id: "rev-1",
+        name: "Dr. Sadia Tariq",
+        city: "Lahore",
+        rating: 5,
+        date: "2 days ago",
+        title: "Finally a seamless bra that actually stays invisible!",
+        comment: "I ordered the Seamless Wireless Comfort Bra in Blush Pink. The fabric is so soft that you forget you are wearing a bra. Delivery was super fast in Lahore and the discreet brown packaging gave me 100% peace of mind.",
+        productTitle: "Feather-Light Seamless Wireless Comfort Bra",
+        verified: true
+      },
+      {
+        id: "rev-2",
+        name: "Mahnoor Rizwan",
+        city: "Karachi",
+        rating: 5,
+        date: "5 days ago",
+        title: "Bridal set quality exceeded international brands",
+        comment: "The Royal Crimson Velvet Bridal set is breathtaking! The embroidery is soft and does not scratch. Also used their bra size calculator and got the exact sister size 34C which fits like a glove. Highly recommended!",
+        productTitle: "Royal Crimson Velvet & Lace 4-Piece Bridal Lingerie Set",
+        verified: true
+      },
+      {
+        id: "rev-3",
+        name: "Zainab Kashif",
+        city: "Islamabad",
+        rating: 5,
+        date: "1 week ago",
+        title: "Tummy Tucker shaper is magical under lawn kurtis",
+        comment: "The 360° firm control shaper smoothed out all love handles without rolling down thanks to the steel bones. Paid via Cash on Delivery and courier arrived in 2 days in Islamabad.",
+        productTitle: "360° Firm Control High-Waist Tummy Tucker Shaper",
+        verified: true
+      },
+      {
+        id: "rev-4",
+        name: "Hira Usman",
+        city: "Faisalabad",
+        rating: 5,
+        date: "2 weeks ago",
+        title: "Pack of 3 seamless panties is a lifesaver",
+        comment: "No visible panty line under tight pants or white shalwars! Fabric is stretchable and breathable. Very impressed by the unbranded box delivery.",
+        productTitle: "Laser-Cut Ultra-Seamless No-Show Panties",
+        verified: true
+      }
+    ];
+    this.saveReviews(seedReviews);
+    return seedReviews;
+  },
+
+  saveReviews: function(reviews) {
+    localStorage.setItem(this.KEYS.REVIEWS, JSON.stringify(reviews));
+    window.dispatchEvent(new CustomEvent("reviews_updated", { detail: reviews }));
+  },
+
+  addReview: function(reviewData) {
+    const reviews = this.getReviews();
+    const newRev = {
+      id: "rev-" + Date.now(),
+      date: "Just now",
+      verified: true,
+      ...reviewData
+    };
+    reviews.unshift(newRev);
+    this.saveReviews(reviews);
+    return newRev;
   },
 
   // Price Formatter Helper

@@ -1,6 +1,7 @@
 /**
- * Miss Collection - Main Frontend Application Logic
- * Ella Theme Interactive Features & Lingerie E-Commerce UX
+ * Miss Collection - Advanced Frontend Application Logic
+ * Ella Theme Mobile Touch UX, Mega-Menu, Dual-Image Swap,
+ * Mobile Bottom Sheet Quick Add, In-Cart Upsells & Review Engine
  */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -12,10 +13,14 @@ const App = {
   activeFilters: {
     cup: null,
     band: null,
+    maxPrice: 8000,
+    inStockOnly: false,
+    fabric: null,
     sort: "featured",
     search: ""
   },
   activeProductForModal: null,
+  activeProductForSheet: null,
 
   init: function () {
     this.bindEvents();
@@ -23,8 +28,10 @@ const App = {
     this.renderProducts();
     this.updateCartUI();
     this.updateWishlistUI();
+    this.renderReviewsSection();
     this.initStickyHeader();
     this.initHeroSlider();
+    this.initMobileFilterDrawer();
   },
 
   bindEvents: function () {
@@ -39,19 +46,13 @@ const App = {
     window.addEventListener("products_updated", () => self.renderProducts());
     window.addEventListener("coupon_applied", () => self.updateCartUI());
     window.addEventListener("coupon_removed", () => self.updateCartUI());
+    window.addEventListener("reviews_updated", () => self.renderReviewsSection());
 
     // Category Tabs / Pills
     document.querySelectorAll("[data-category-filter]").forEach(btn => {
       btn.addEventListener("click", function () {
-        document.querySelectorAll("[data-category-filter]").forEach(b => {
-          b.classList.remove("active", "bg-rose-600", "text-white");
-          b.classList.add("bg-white", "text-stone-700");
-        });
-        this.classList.add("active", "bg-rose-600", "text-white");
-        this.classList.remove("bg-white", "text-stone-700");
-
-        self.currentCategory = this.getAttribute("data-category-filter");
-        self.renderProducts();
+        const cat = this.getAttribute("data-category-filter");
+        self.filterByCategory(cat);
       });
     });
 
@@ -82,6 +83,16 @@ const App = {
       });
     });
 
+    // Close bottom sheet
+    const sheetBackdrop = document.getElementById("mobileQuickAddSheetBackdrop");
+    if (sheetBackdrop) {
+      sheetBackdrop.addEventListener("click", function (e) {
+        if (e.target === this) {
+          self.closeBottomSheet();
+        }
+      });
+    }
+
     // Close modals on backdrop click
     document.querySelectorAll(".modal-backdrop").forEach(modal => {
       modal.addEventListener("click", function (e) {
@@ -96,6 +107,7 @@ const App = {
       if (e.key === "Escape") {
         self.closeAllModals();
         self.closeAllDrawers();
+        self.closeBottomSheet();
       }
     });
 
@@ -125,13 +137,22 @@ const App = {
         self.lookupOrderTracking();
       });
     }
+
+    // Review Form Submission
+    const reviewForm = document.getElementById("writeReviewForm");
+    if (reviewForm) {
+      reviewForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        self.handleReviewSubmission(this);
+      });
+    }
   },
 
   initStickyHeader: function () {
     const header = document.querySelector(".header-sticky");
     if (!header) return;
     window.addEventListener("scroll", () => {
-      if (window.scrollY > 40) {
+      if (window.scrollY > 35) {
         header.classList.add("header-shadow", "py-2");
         header.classList.remove("py-3.5");
       } else {
@@ -141,8 +162,10 @@ const App = {
     });
   },
 
+  // Touch-Swipe Enabled Hero Slider
   initHeroSlider: function () {
     let currentSlide = 0;
+    const sliderContainer = document.getElementById("heroSliderContainer");
     const slides = document.querySelectorAll(".hero-slide");
     const dots = document.querySelectorAll(".hero-dot");
     if (!slides.length) return;
@@ -173,6 +196,33 @@ const App = {
       dot.addEventListener("click", () => showSlide(idx));
     });
 
+    // Touch Swipe Gesture Detection for Mobile
+    if (sliderContainer) {
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      sliderContainer.addEventListener("touchstart", function (e) {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      sliderContainer.addEventListener("touchend", function (e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }, { passive: true });
+
+      function handleSwipe() {
+        const threshold = 40;
+        if (touchEndX < touchStartX - threshold) {
+          // Swipe Left -> Next
+          showSlide((currentSlide + 1) % slides.length);
+        } else if (touchEndX > touchStartX + threshold) {
+          // Swipe Right -> Prev
+          showSlide((currentSlide - 1 + slides.length) % slides.length);
+        }
+      }
+    }
+
+    // Auto Advance every 5.5s
     setInterval(() => {
       let next = (currentSlide + 1) % slides.length;
       showSlide(next);
@@ -184,13 +234,13 @@ const App = {
     if (!container) return;
 
     const categories = [
-      { id: "all", name: "All Essentials", img: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=300&q=80", count: "25+ Styles" },
+      { id: "all", name: "All Silhouettes", img: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=300&q=80", count: "22+ Designs" },
       { id: "bras", name: "Luxury Bras", img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=300&q=80", count: "Seamless & Lace" },
-      { id: "panties", name: "Cotton & Panties", img: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=300&q=80", count: "No-Show & Briefs" },
-      { id: "bridal", name: "Bridal Trousseau", img: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=300&q=80", count: "Velvet & Lace" },
-      { id: "nightwear", name: "Silky Nightwear", img: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=300&q=80", count: "Satin PJ Sets" },
+      { id: "panties", name: "Comfort Panties", img: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=300&q=80", count: "No-Show & Cotton" },
+      { id: "bridal", name: "Bridal Trousseau", img: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=300&q=80", count: "Royal Velvet" },
+      { id: "nightwear", name: "Silky Sleepwear", img: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=300&q=80", count: "Satin PJ Sets" },
       { id: "shapewear", name: "Tummy Shapewear", img: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=300&q=80", count: "Hourglass Fit" },
-      { id: "accessories", name: "Care & Pasties", img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=300&q=80", count: "Nipple Covers" }
+      { id: "accessories", name: "Intimate Care", img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=300&q=80", count: "Pasties & Bags" }
     ];
 
     container.innerHTML = categories.map(cat => `
@@ -227,6 +277,7 @@ const App = {
   renderProducts: function () {
     const grid = document.getElementById("productsGrid");
     const countEl = document.getElementById("productCountDisplay");
+    const filterBtnCount = document.getElementById("mobileFilterBtnCount");
     if (!grid) return;
 
     let products = Store.getProducts();
@@ -246,7 +297,22 @@ const App = {
       products = products.filter(p => p.bandSizes && p.bandSizes.includes(this.activeFilters.band));
     }
 
-    // 4. Search Filter
+    // 4. Max Price Filter
+    if (this.activeFilters.maxPrice) {
+      products = products.filter(p => p.price <= this.activeFilters.maxPrice);
+    }
+
+    // 5. In-Stock Only
+    if (this.activeFilters.inStockOnly) {
+      products = products.filter(p => p.inStock);
+    }
+
+    // 6. Fabric Filter
+    if (this.activeFilters.fabric) {
+      products = products.filter(p => p.fabric && p.fabric.toLowerCase().includes(this.activeFilters.fabric.toLowerCase()));
+    }
+
+    // 7. Search Filter
     if (this.activeFilters.search) {
       const q = this.activeFilters.search.toLowerCase();
       products = products.filter(p => 
@@ -257,7 +323,7 @@ const App = {
       );
     }
 
-    // 5. Sorting
+    // 8. Sorting
     if (this.activeFilters.sort === "price-low") {
       products.sort((a, b) => a.price - b.price);
     } else if (this.activeFilters.sort === "price-high") {
@@ -271,6 +337,9 @@ const App = {
     if (countEl) {
       countEl.textContent = `Showing ${products.length} Items`;
     }
+    if (filterBtnCount) {
+      filterBtnCount.textContent = `(${products.length})`;
+    }
 
     if (products.length === 0) {
       grid.innerHTML = `
@@ -278,10 +347,10 @@ const App = {
           <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 text-2xl">
             <i class="fa-solid fa-sparkles"></i>
           </div>
-          <h3 class="text-lg font-bold text-stone-800">No intimates found matching your criteria</h3>
+          <h3 class="text-base sm:text-lg font-bold text-stone-900 font-serif-luxury">No intimates found matching your criteria</h3>
           <p class="text-xs text-stone-500 mt-1 max-w-sm mx-auto">Try clearing selected filters or searching for terms like "seamless", "lace", or "cotton".</p>
-          <button onclick="App.resetFilters()" class="mt-4 px-4 py-2 bg-stone-900 text-white text-xs font-semibold rounded uppercase tracking-wider hover:bg-rose-600 transition">
-            Reset Filters
+          <button onclick="App.resetFilters()" class="mt-4 px-5 py-2.5 bg-stone-900 text-white text-xs font-bold rounded-lg uppercase tracking-wider hover:bg-rose-600 transition shadow-md">
+            Reset All Filters
           </button>
         </div>
       `;
@@ -291,6 +360,7 @@ const App = {
     grid.innerHTML = products.map(p => this.generateProductCardHTML(p)).join("");
   },
 
+  // Dual-Image Card HTML with Touch-Friendly Mobile Quick Add
   generateProductCardHTML: function (p) {
     const isWishlisted = Store.isInWishlist(p.id);
     const discountPercent = p.originalPrice ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
@@ -302,16 +372,20 @@ const App = {
       ? "bg-emerald-700 text-white"
       : "bg-stone-900 text-white";
 
+    const img1 = p.images[0];
+    const img2 = p.images[1] || p.images[0];
+
     return `
       <div class="product-card group flex flex-col justify-between" data-product-id="${p.id}">
-        <!-- Image & Badges -->
+        <!-- Image & Dual Hover Swap -->
         <div class="product-card-img-wrapper cursor-pointer" onclick="App.openQuickView('${p.id}')">
-          <img src="${p.images[0]}" alt="${p.title}" class="product-card-img" loading="lazy" />
+          <img src="${img1}" alt="${p.title}" class="product-card-img-primary" loading="lazy" />
+          <img src="${img2}" alt="${p.title} alternate view" class="product-card-img-secondary" loading="lazy" />
           
           <!-- Top Badges -->
           <div class="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
-            ${p.badge ? `<span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded ${badgeColorClass}">${p.badge}</span>` : ""}
-            ${discountPercent > 0 ? `<span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded bg-rose-700 text-white">-${discountPercent}%</span>` : ""}
+            ${p.badge ? `<span class="px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider rounded ${badgeColorClass} shadow-xs">${p.badge}</span>` : ""}
+            ${discountPercent > 0 ? `<span class="px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider rounded bg-rose-700 text-white shadow-xs">-${discountPercent}%</span>` : ""}
           </div>
 
           <!-- Wishlist Heart Button -->
@@ -321,39 +395,39 @@ const App = {
             class="wishlist-btn absolute top-2.5 right-2.5 z-10 ${isWishlisted ? "active text-white bg-rose-600" : "text-stone-600 hover:text-rose-600"}"
             title="${isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}"
           >
-            <i class="${isWishlisted ? "fa-solid" : "fa-regular"} fa-heart text-sm"></i>
+            <i class="${isWishlisted ? "fa-solid" : "fa-regular"} fa-heart text-xs sm:text-sm"></i>
           </button>
 
-          <!-- Quick Actions Bar on Hover -->
+          <!-- Desktop Quick Actions Bar on Hover -->
           <div class="product-action-bar">
             <button 
               type="button" 
               onclick="event.stopPropagation(); App.openQuickView('${p.id}')" 
-              class="flex-1 py-2 bg-stone-900/90 backdrop-blur-sm text-white text-xs font-semibold rounded hover:bg-rose-600 transition flex items-center justify-center gap-1.5 shadow-md"
+              class="flex-1 py-2 bg-stone-900/90 backdrop-blur-xs text-white text-xs font-semibold rounded hover:bg-rose-600 transition flex items-center justify-center gap-1.5 shadow-md"
             >
               <i class="fa-regular fa-eye text-xs"></i> Quick View
             </button>
             <button 
               type="button" 
-              onclick="event.stopPropagation(); App.quickAddToCart('${p.id}')" 
-              class="w-10 h-8 bg-rose-600 text-white rounded hover:bg-rose-700 transition flex items-center justify-center shadow-md"
-              title="Quick Add"
+              onclick="event.stopPropagation(); App.openMobileQuickAddSheet('${p.id}')" 
+              class="px-3 py-2 bg-rose-600 text-white rounded hover:bg-rose-700 transition flex items-center justify-center shadow-md font-semibold text-xs"
+              title="Select Size & Add"
             >
-              <i class="fa-solid fa-bag-shopping text-xs"></i>
+              <i class="fa-solid fa-bag-shopping text-xs mr-1"></i> Quick Add
             </button>
           </div>
         </div>
 
         <!-- Product Details -->
-        <div class="p-3.5 flex flex-col flex-1 justify-between">
+        <div class="p-3 sm:p-4 flex flex-col flex-1 justify-between">
           <div>
             <!-- Subcategory & Rating -->
-            <div class="flex items-center justify-between text-[11px] text-stone-500 mb-1">
-              <span class="uppercase tracking-wider font-medium text-rose-700">${p.subCategory}</span>
-              <div class="flex items-center gap-1 text-amber-500 font-semibold">
-                <i class="fa-solid fa-star text-[10px]"></i>
-                <span class="text-stone-700 text-xs">${p.rating}</span>
-                <span class="text-stone-400">(${p.reviewsCount})</span>
+            <div class="flex items-center justify-between text-[10px] sm:text-[11px] text-stone-500 mb-1">
+              <span class="uppercase tracking-wider font-semibold text-rose-700 truncate mr-1">${p.subCategory}</span>
+              <div class="flex items-center gap-1 text-amber-500 font-bold shrink-0">
+                <i class="fa-solid fa-star text-[9px] sm:text-[10px]"></i>
+                <span class="text-stone-800 text-[11px] sm:text-xs">${p.rating}</span>
+                <span class="text-stone-400 font-normal">(${p.reviewsCount})</span>
               </div>
             </div>
 
@@ -368,24 +442,108 @@ const App = {
                 ${p.colors.slice(0, 4).map(c => `
                   <span class="swatch-circle" style="background-color: ${c.hex};" title="${c.name}"></span>
                 `).join("")}
-                ${p.colors.length > 4 ? `<span class="text-[10px] text-stone-500">+${p.colors.length - 4}</span>` : ""}
+                ${p.colors.length > 4 ? `<span class="text-[10px] text-stone-500 font-medium">+${p.colors.length - 4}</span>` : ""}
               </div>
             ` : ""}
           </div>
 
           <!-- Price & Discreet packaging guarantee badge -->
           <div class="pt-2 border-t border-stone-100 flex items-center justify-between mt-auto">
-            <div>
-              <span class="text-sm sm:text-base font-bold text-stone-900">${Store.formatPKR(p.price)}</span>
-              ${p.originalPrice ? `<span class="text-xs text-stone-400 line-through ml-1.5">${Store.formatPKR(p.originalPrice)}</span>` : ""}
+            <div class="flex items-baseline flex-wrap gap-1">
+              <span class="text-xs sm:text-sm md:text-base font-bold text-stone-900">${Store.formatPKR(p.price)}</span>
+              ${p.originalPrice ? `<span class="text-[10px] sm:text-xs text-stone-400 line-through">${Store.formatPKR(p.originalPrice)}</span>` : ""}
             </div>
-            <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-rose-800 bg-rose-100/90 px-1.5 py-0.5 rounded border border-rose-300">
+            <span class="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-rose-800 bg-rose-100/90 px-1.5 py-0.5 rounded border border-rose-300">
               <i class="fa-solid fa-shield-halved text-[9px] text-rose-700"></i> Discreet
             </span>
           </div>
+
+          <!-- Mobile 1-Tap Quick Add Button -->
+          <button 
+            type="button" 
+            onclick="event.stopPropagation(); App.openMobileQuickAddSheet('${p.id}')"
+            class="mobile-quick-add-btn mt-2.5 w-full py-1.5 bg-stone-900 hover:bg-rose-600 text-white rounded text-[11px] font-bold uppercase tracking-wider transition items-center justify-center gap-1.5 shadow-xs"
+          >
+            <i class="fa-solid fa-plus text-[10px]"></i> Quick Add Size
+          </button>
         </div>
       </div>
     `;
+  },
+
+  // Mobile Quick-Add Bottom Sheet (Frictionless Size Selection)
+  openMobileQuickAddSheet: function (productId) {
+    const p = Store.getProductById(productId);
+    if (!p) return;
+
+    this.activeProductForSheet = p;
+    const sheetContent = document.getElementById("mobileQuickAddSheetContent");
+    const sheetBackdrop = document.getElementById("mobileQuickAddSheetBackdrop");
+    if (!sheetContent || !sheetBackdrop) return;
+
+    sheetContent.innerHTML = `
+      <div class="p-4 sm:p-5">
+        <!-- Header -->
+        <div class="flex gap-3 pb-3 border-b border-stone-100">
+          <img src="${p.images[0]}" alt="${p.title}" class="w-16 h-20 object-cover rounded bg-stone-50 shrink-0" />
+          <div class="flex-1 min-w-0">
+            <span class="text-[10px] uppercase font-bold text-rose-600 tracking-wider">${p.subCategory}</span>
+            <h4 class="text-xs sm:text-sm font-bold text-stone-900 line-clamp-1">${p.title}</h4>
+            <div class="text-xs font-extrabold text-stone-900 mt-0.5">${Store.formatPKR(p.price)}</div>
+            <span class="inline-flex items-center gap-1 text-[10px] text-emerald-700 font-semibold mt-1">
+              <i class="fa-solid fa-circle-check text-emerald-600"></i> In Stock (${p.stockCount} units)
+            </span>
+          </div>
+          <button onclick="App.closeBottomSheet()" class="w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400 shrink-0">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <!-- Size Selection Chips -->
+        <div class="py-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase text-stone-800 tracking-wider">Tap Your Size to Add:</span>
+            <button onclick="App.closeBottomSheet(); App.openBraCalculatorModal();" class="text-xs text-rose-600 font-bold hover:underline flex items-center gap-1">
+              <i class="fa-solid fa-ruler-combined"></i> Size Guide
+            </button>
+          </div>
+
+          <div class="grid grid-cols-4 gap-2">
+            ${(p.sizes || ["Standard"]).map(s => `
+              <button 
+                type="button" 
+                onclick="App.quickAddFromSheet('${s}')"
+                class="py-2.5 px-2 bg-stone-50 hover:bg-rose-600 hover:text-white border border-stone-200 rounded-lg text-xs font-bold text-stone-800 transition active:scale-95 flex items-center justify-center"
+              >
+                ${s}
+              </button>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="p-2.5 bg-rose-50/60 rounded-lg border border-rose-100 flex items-center gap-2 text-[11px] text-rose-800 font-medium">
+          <i class="fa-solid fa-lock text-rose-600"></i>
+          100% Discreet Packaging: Plain brown parcel, zero product labels.
+        </div>
+      </div>
+    `;
+
+    sheetBackdrop.classList.add("open");
+  },
+
+  quickAddFromSheet: function (selectedSize) {
+    if (!this.activeProductForSheet) return;
+    const p = this.activeProductForSheet;
+    const color = p.colors ? p.colors[0].name : "Standard";
+    Store.addToCart(p, selectedSize, color, 1);
+    this.closeBottomSheet();
+    this.showToast(`Added ${p.title} (${selectedSize}) to bag! 🛍️`);
+    this.openCartDrawer();
+  },
+
+  closeBottomSheet: function () {
+    const sheetBackdrop = document.getElementById("mobileQuickAddSheetBackdrop");
+    if (sheetBackdrop) sheetBackdrop.classList.remove("open");
   },
 
   // Predictive Live Search
@@ -462,6 +620,9 @@ const App = {
     this.activeFilters = {
       cup: null,
       band: null,
+      maxPrice: 8000,
+      inStockOnly: false,
+      fabric: null,
       sort: "featured",
       search: ""
     };
@@ -470,6 +631,26 @@ const App = {
     document.querySelectorAll(".site-search-input").forEach(i => i.value = "");
     this.renderCategoryCircles();
     this.renderProducts();
+    this.closeAllDrawers();
+  },
+
+  // Mobile Filter & Sort Drawer
+  initMobileFilterDrawer: function () {
+    const slider = document.getElementById("mobilePriceRangeSlider");
+    const label = document.getElementById("mobilePriceRangeValue");
+    if (slider && label) {
+      slider.addEventListener("input", (e) => {
+        this.activeFilters.maxPrice = parseInt(e.target.value);
+        label.textContent = Store.formatPKR(e.target.value);
+        this.renderProducts();
+      });
+    }
+  },
+
+  openFilterDrawer: function () {
+    this.closeAllDrawers();
+    const drawer = document.getElementById("filterDrawerBackdrop");
+    if (drawer) drawer.classList.add("open");
   },
 
   // Quick View Modal
@@ -481,7 +662,6 @@ const App = {
     let selectedSize = p.sizes ? p.sizes[0] : "Standard";
     let selectedColor = p.colors ? p.colors[0].name : "Standard";
     let selectedImage = (p.colors && p.colors[0].image) || p.images[0];
-    let qty = 1;
 
     const modalContent = document.getElementById("quickViewModalContent");
     if (!modalContent) return;
@@ -497,7 +677,7 @@ const App = {
         <div class="space-y-3">
           <div class="aspect-[3/4] rounded-lg overflow-hidden bg-stone-50 border border-stone-200 relative">
             <img id="modalMainImage" src="${selectedImage}" alt="${p.title}" class="w-full h-full object-cover" />
-            <span class="absolute bottom-3 left-3 bg-white/90 backdrop-blur-xs text-[11px] font-semibold text-stone-800 px-2.5 py-1 rounded-md shadow-xs flex items-center gap-1.5">
+            <span class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-xs text-[11px] font-semibold text-stone-800 px-2.5 py-1 rounded-md shadow-xs flex items-center gap-1.5 border border-stone-200">
               <i class="fa-solid fa-lock text-rose-600"></i> 100% Discreet Packaging
             </span>
           </div>
@@ -520,7 +700,6 @@ const App = {
         <!-- Product Information & Options -->
         <div class="flex flex-col justify-between">
           <div>
-            <!-- Category and Rating -->
             <div class="flex items-center justify-between text-xs mb-1">
               <span class="text-rose-700 font-bold tracking-wider uppercase">${p.subCategory}</span>
               <div class="flex items-center gap-1 text-amber-500 font-bold">
@@ -530,13 +709,12 @@ const App = {
               </div>
             </div>
 
-            <!-- Title -->
             <h2 class="text-lg sm:text-xl font-bold text-stone-900 leading-snug mb-2 font-serif-luxury">
               ${p.title}
             </h2>
 
             <!-- Pricing -->
-            <div class="flex items-baseline gap-3 mb-4">
+            <div class="flex items-baseline gap-3 mb-3">
               <span class="text-xl sm:text-2xl font-bold text-stone-900">${Store.formatPKR(p.price)}</span>
               ${p.originalPrice ? `
                 <span class="text-sm text-stone-400 line-through">${Store.formatPKR(p.originalPrice)}</span>
@@ -598,12 +776,10 @@ const App = {
               </div>
             ` : ""}
 
-            <!-- Description -->
             <p class="text-xs text-stone-600 leading-relaxed mb-3">
               ${p.description}
             </p>
 
-            <!-- Fabric Info -->
             <div class="text-[11px] text-stone-500 mb-4 bg-stone-50 p-2.5 rounded border border-stone-100">
               <strong>Fabric & Care:</strong> ${p.fabric}. Hand wash cold, line dry in shade.
             </div>
@@ -611,7 +787,6 @@ const App = {
 
           <!-- Actions -->
           <div class="space-y-2.5 pt-3 border-t border-stone-100">
-            <!-- Quantity & Add to Cart -->
             <div class="flex items-center gap-3">
               <div class="flex items-center border border-stone-300 rounded h-11 bg-white">
                 <button type="button" onclick="App.stepModalQty(-1)" class="w-10 h-full text-stone-600 hover:text-stone-900 transition flex items-center justify-center font-bold">
@@ -632,7 +807,6 @@ const App = {
               </button>
             </div>
 
-            <!-- 1-Click WhatsApp Order Button -->
             <button 
               type="button" 
               onclick="App.orderViaWhatsApp(App.activeProductForModal)"
@@ -687,15 +861,7 @@ const App = {
 
     Store.addToCart(this.activeProductForModal, size, color, qty);
     this.closeAllModals();
-    this.openCartDrawer();
-  },
-
-  quickAddToCart: function (productId) {
-    const p = Store.getProductById(productId);
-    if (!p) return;
-    const size = p.sizes ? p.sizes[0] : "Standard";
-    const color = p.colors ? p.colors[0].name : "Standard";
-    Store.addToCart(p, size, color, 1);
+    this.showToast(`Added ${this.activeProductForModal.title} to bag! 🛍️`);
     this.openCartDrawer();
   },
 
@@ -736,7 +902,7 @@ const App = {
 
     wishlistContainer.innerHTML = wishlistedProducts.map(p => `
       <div class="flex items-center gap-3 p-3 bg-white border border-stone-200 rounded-lg">
-        <img src="${p.images[0]}" alt="${p.title}" class="w-16 h-20 object-cover rounded bg-stone-50" />
+        <img src="${p.images[0]}" alt="${p.title}" class="w-16 h-20 object-cover rounded bg-stone-50 shrink-0" />
         <div class="flex-1 min-w-0">
           <h4 class="text-xs font-bold text-stone-900 truncate">${p.title}</h4>
           <span class="text-[11px] text-rose-600 font-semibold">${p.subCategory}</span>
@@ -744,7 +910,7 @@ const App = {
         </div>
         <div class="flex flex-col gap-1.5 shrink-0">
           <button 
-            onclick="App.quickAddToCart('${p.id}'); Store.toggleWishlist('${p.id}');" 
+            onclick="App.openMobileQuickAddSheet('${p.id}'); Store.toggleWishlist('${p.id}');" 
             class="px-2.5 py-1.5 bg-rose-600 text-white rounded text-[10px] font-bold uppercase hover:bg-rose-700 transition"
           >
             Move to Bag
@@ -760,13 +926,12 @@ const App = {
     `).join("");
   },
 
-  // Cart Drawer UI & Calculations
+  // Cart Drawer UI & In-Cart Smart Upsells
   updateCartUI: function () {
     const cart = Store.getCart();
     const totals = Store.getCartTotals();
     const cartCount = Store.getCartCount();
 
-    // Update floating badges
     document.querySelectorAll(".cart-count-badge").forEach(b => {
       b.textContent = cartCount;
       b.classList.toggle("hidden", cartCount === 0);
@@ -780,14 +945,15 @@ const App = {
     const grandTotalEl = document.getElementById("cartGrandTotalDisplay");
     const shippingProgressFill = document.getElementById("freeShippingProgressFill");
     const shippingThresholdText = document.getElementById("freeShippingThresholdText");
+    const upsellSection = document.getElementById("cartUpsellSection");
 
     // Free shipping thermometer
     if (shippingProgressFill && shippingThresholdText) {
       shippingProgressFill.style.width = `${totals.freeShippingProgress}%`;
       if (totals.isFreeShipping) {
         shippingThresholdText.innerHTML = `
-          <span class="text-emerald-700 font-bold">
-            <i class="fa-solid fa-circle-check"></i> Congratulations! You qualified for Free Discreet Shipping!
+          <span class="text-emerald-700 font-bold flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i> You unlocked FREE Discreet Shipping across Pakistan!
           </span>
         `;
       } else {
@@ -807,6 +973,40 @@ const App = {
         discountEl.textContent = `-${Store.formatPKR(totals.discount)}`;
       } else {
         discountRow.classList.add("hidden");
+      }
+    }
+
+    // In-Cart Upsell Recommendations ("Frequently Bought Together")
+    if (upsellSection) {
+      const upsellItems = Store.getCartCrossSells();
+      if (upsellItems.length > 0 && cart.length > 0) {
+        upsellSection.innerHTML = `
+          <div class="mt-4 pt-3 border-t border-stone-200">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-500 block mb-2">
+              Frequently Bought Together
+            </span>
+            <div class="space-y-2">
+              ${upsellItems.map(item => `
+                <div class="cart-upsell-item">
+                  <img src="${item.images[0]}" alt="${item.title}" class="w-10 h-12 object-cover rounded bg-stone-100 shrink-0" />
+                  <div class="flex-1 min-w-0 text-left">
+                    <h5 class="text-xs font-bold text-stone-900 truncate">${item.title}</h5>
+                    <span class="text-xs font-semibold text-rose-600">${Store.formatPKR(item.price)}</span>
+                  </div>
+                  <button 
+                    onclick="Store.addToCart(Store.getProductById('${item.id}'), 'Standard', 'Standard', 1); App.showToast('Added ${item.title}!');" 
+                    class="px-2.5 py-1 bg-stone-900 hover:bg-rose-600 text-white rounded text-[10px] font-bold uppercase shrink-0 transition"
+                  >
+                    + Add
+                  </button>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+        upsellSection.classList.remove("hidden");
+      } else {
+        upsellSection.classList.add("hidden");
       }
     }
 
@@ -877,7 +1077,7 @@ const App = {
     }
   },
 
-  // Bra Size Calculator
+  // Interactive Bra Size Calculator
   openBraCalculatorModal: function () {
     this.closeAllModals();
     const modal = document.getElementById("braCalculatorModalBackdrop");
@@ -905,7 +1105,6 @@ const App = {
     }
 
     // Standard UK/US/Pakistani Bra Calculation
-    // 1. Calculate Band Size
     let calculatedBand = Math.round(underbust);
     if (calculatedBand % 2 === 0) {
       calculatedBand += 4;
@@ -913,7 +1112,6 @@ const App = {
       calculatedBand += 5;
     }
 
-    // 2. Calculate Cup Size (Bust - Band Difference)
     const diff = Math.round(bust - underbust);
     let calculatedCup = "B";
     if (diff <= 1) calculatedCup = "A";
@@ -927,20 +1125,26 @@ const App = {
     const sisterLarger = `${calculatedBand + 2}${calculatedCup === "D" ? "C" : calculatedCup === "C" ? "B" : "A"}`;
 
     resultBox.innerHTML = `
-      <div class="p-4 bg-rose-50 border border-rose-200 rounded-lg text-center">
-        <span class="text-xs font-bold text-rose-600 uppercase tracking-widest block mb-1">Your Perfect Recommended Fit</span>
-        <div class="text-3xl font-extrabold text-stone-900 font-serif-luxury">${recommendedSize}</div>
-        <p class="text-xs text-stone-600 mt-1">Based on underbust ${underbust}" and bust ${bust}".</p>
+      <div class="p-4 bg-rose-50/80 border border-rose-200 rounded-xl text-center space-y-2">
+        <span class="text-[10px] font-bold text-rose-600 uppercase tracking-widest block">Your Certified Size</span>
+        <div class="text-3xl sm:text-4xl font-extrabold text-stone-900 font-serif-luxury">${recommendedSize}</div>
+        <p class="text-xs text-stone-600">Underbust: ${underbust}" &bull; Bust: ${bust}"</p>
 
-        <div class="mt-3 pt-3 border-t border-rose-200/60 flex items-center justify-around text-xs text-stone-600">
-          <div>Sister Size (Tighter): <strong class="text-stone-900">${sisterSmaller}</strong></div>
-          <div>Sister Size (Looser): <strong class="text-stone-900">${sisterLarger}</strong></div>
+        <div class="mt-3 pt-3 border-t border-rose-200/80 grid grid-cols-2 gap-2 text-xs text-stone-700">
+          <div class="p-2 bg-white rounded border border-rose-100">
+            <span class="text-[10px] text-stone-400 block uppercase">Tighter Sister Size</span>
+            <strong class="text-stone-900">${sisterSmaller}</strong>
+          </div>
+          <div class="p-2 bg-white rounded border border-rose-100">
+            <span class="text-[10px] text-stone-400 block uppercase">Looser Sister Size</span>
+            <strong class="text-stone-900">${sisterLarger}</strong>
+          </div>
         </div>
 
         <button 
           type="button" 
           onclick="App.filterByCalculatedSize('${calculatedBand}', '${calculatedCup}')"
-          class="mt-4 w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded transition shadow-sm"
+          class="mt-4 w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-md"
         >
           Browse Bras in My Size (${recommendedSize}) &rarr;
         </button>
@@ -960,7 +1164,65 @@ const App = {
     if (catalogEl) {
       catalogEl.scrollIntoView({ behavior: "smooth" });
     }
-    this.showToast(`Showing bras available in size ${band}${cup}!`);
+    this.showToast(`Showing bras available in size ${band}${cup}! ✨`);
+  },
+
+  // Customer Reviews & Interactive Histogram
+  renderReviewsSection: function () {
+    const reviews = Store.getReviews();
+    const container = document.getElementById("customerReviewsGrid");
+    const countDisplay = document.getElementById("reviewsCountDisplay");
+    if (!container) return;
+
+    if (countDisplay) countDisplay.textContent = `${reviews.length} Verified Reviews`;
+
+    container.innerHTML = reviews.map(r => `
+      <div class="p-5 bg-stone-50 rounded-xl border border-stone-200 space-y-3 flex flex-col justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex text-amber-400 text-xs">
+              ${Array.from({ length: 5 }, (_, i) => `<i class="fa-solid fa-star ${i < r.rating ? "text-amber-400" : "text-stone-200"}"></i>`).join("")}
+            </div>
+            ${r.verified ? `
+              <span class="text-[10px] text-emerald-700 bg-emerald-100 font-bold px-2 py-0.5 rounded-full">
+                <i class="fa-solid fa-check"></i> Verified Buyer
+              </span>
+            ` : ""}
+          </div>
+          <h4 class="text-xs sm:text-sm font-bold text-stone-900">"${r.title}"</h4>
+          <p class="text-xs text-stone-600 leading-relaxed">${r.comment}</p>
+        </div>
+
+        <div class="pt-2 border-t border-stone-200 text-xs font-semibold text-stone-800 flex justify-between items-center">
+          <div>
+            <span>${r.name}</span>
+            <span class="text-stone-400 font-normal block text-[11px]">${r.city}, PK &bull; ${r.date}</span>
+          </div>
+          <span class="text-[10px] text-rose-600 font-medium truncate max-w-[120px]">${r.productTitle}</span>
+        </div>
+      </div>
+    `).join("");
+  },
+
+  openWriteReviewModal: function () {
+    const modal = document.getElementById("writeReviewModalBackdrop");
+    if (modal) modal.classList.add("open");
+  },
+
+  handleReviewSubmission: function (form) {
+    const formData = new FormData(form);
+    const newRev = {
+      name: formData.get("reviewerName") || "Anonymous Customer",
+      city: formData.get("reviewerCity") || "Lahore",
+      rating: parseInt(formData.get("rating")) || 5,
+      title: formData.get("reviewTitle") || "Amazing Fit & Quality",
+      comment: formData.get("reviewComment") || "",
+      productTitle: formData.get("productTitle") || "Seamless Wireless Bra"
+    };
+
+    Store.addReview(newRev);
+    this.closeAllModals();
+    this.showToast("Thank you for your feedback! Review published. ⭐");
   },
 
   // Checkout Flow
@@ -977,14 +1239,14 @@ const App = {
 
     if (summaryBox) {
       summaryBox.innerHTML = `
-        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200 mb-4 text-xs space-y-2">
+        <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 mb-4 text-xs space-y-2">
           <div class="font-bold text-stone-900 text-sm mb-2 border-b border-stone-200 pb-1.5 flex justify-between">
             <span>Order Summary (${Store.getCartCount()} Items)</span>
-            <span class="text-rose-600">Discreet Packing</span>
+            <span class="text-rose-600 flex items-center gap-1 font-semibold"><i class="fa-solid fa-lock"></i> Discreet Packing</span>
           </div>
           ${cart.map(i => `
             <div class="flex justify-between text-stone-600">
-              <span class="truncate max-w-[200px]">${i.quantity}x ${i.title} (${i.size})</span>
+              <span class="truncate max-w-[220px]">${i.quantity}x ${i.title} (${i.size})</span>
               <span class="font-semibold text-stone-900">${Store.formatPKR(i.price * i.quantity)}</span>
             </div>
           `).join("")}
@@ -1000,12 +1262,12 @@ const App = {
               </div>
             ` : ""}
             <div class="flex justify-between text-stone-600">
-              <span>Shipping (TCS Express):</span>
+              <span>Shipping (TCS Express Discreet):</span>
               <span class="font-semibold text-stone-900">${totals.shipping === 0 ? "FREE" : Store.formatPKR(totals.shipping)}</span>
             </div>
-            <div class="flex justify-between text-sm font-bold text-stone-900 pt-1 border-t border-stone-200">
+            <div class="flex justify-between text-sm font-bold text-stone-900 pt-1.5 border-t border-stone-200">
               <span>Total Payable:</span>
-              <span class="text-rose-600">${Store.formatPKR(totals.total)}</span>
+              <span class="text-rose-600 text-base">${Store.formatPKR(totals.total)}</span>
             </div>
           </div>
         </div>
@@ -1055,27 +1317,27 @@ const App = {
         </div>
         <span class="text-xs font-bold uppercase tracking-widest text-emerald-600">Order Placed Successfully!</span>
         <h2 class="text-xl sm:text-2xl font-bold text-stone-900 font-serif-luxury mt-1">Thank You, ${order.customer.fullName}!</h2>
-        <p class="text-xs text-stone-500 mt-1">We have received your order and our logistics team has queued it for confidential packaging.</p>
+        <p class="text-xs text-stone-500 mt-1">Your confidential order has been received and queued for dispatch.</p>
 
         <!-- Order Details Card -->
-        <div class="my-5 p-4 bg-stone-50 border border-stone-200 rounded-lg text-left text-xs space-y-2">
+        <div class="my-5 p-4 bg-stone-50 border border-stone-200 rounded-xl text-left text-xs space-y-2">
           <div class="flex justify-between items-center border-b border-stone-200 pb-2">
             <div>
               <span class="text-stone-400 block text-[10px] uppercase">Order Reference</span>
               <strong class="text-sm font-bold text-rose-600">${order.orderId}</strong>
             </div>
             <div>
-              <span class="text-stone-400 block text-[10px] uppercase">Tracking Number</span>
+              <span class="text-stone-400 block text-[10px] uppercase">TCS Tracking Code</span>
               <strong class="text-sm font-bold text-stone-800">${order.trackingCode}</strong>
             </div>
           </div>
           <div class="grid grid-cols-2 gap-2 pt-1 text-stone-700">
             <div><strong>Recipient:</strong> ${order.customer.fullName}</div>
             <div><strong>City:</strong> ${order.customer.city}</div>
-            <div><strong>Contact:</strong> ${order.customer.phone}</div>
+            <div><strong>Phone:</strong> ${order.customer.phone}</div>
             <div><strong>Payment:</strong> ${order.paymentMethod}</div>
           </div>
-          <div class="p-2 bg-emerald-50 text-emerald-800 rounded text-[11px] font-medium border border-emerald-200 flex items-center gap-2">
+          <div class="p-2.5 bg-emerald-50 text-emerald-800 rounded-lg text-[11px] font-medium border border-emerald-200 flex items-center gap-2">
             <i class="fa-solid fa-shield-halved text-emerald-600"></i>
             100% Confidential Delivery Guarantee: The parcel exterior has NO intimate wear labels.
           </div>
@@ -1086,16 +1348,23 @@ const App = {
           <button 
             type="button" 
             onclick="App.closeAllModals(); App.openTrackingModalWithCode('${order.orderId}')" 
-            class="flex-1 py-3 bg-stone-900 hover:bg-rose-600 text-white font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-2"
+            class="flex-1 py-3 bg-stone-900 hover:bg-rose-600 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-2 shadow-md"
           >
             <i class="fa-solid fa-truck-fast"></i> Track Live Courier
           </button>
           <button 
             type="button" 
-            onclick="App.closeAllModals()" 
-            class="px-5 py-3 border border-stone-300 hover:bg-stone-100 text-stone-700 font-bold text-xs uppercase rounded transition"
+            onclick="window.print()" 
+            class="px-4 py-3 bg-white border border-stone-300 hover:bg-stone-100 text-stone-700 font-bold text-xs uppercase rounded-lg transition"
           >
-            Continue Shopping
+            <i class="fa-solid fa-print mr-1"></i> Print Receipt
+          </button>
+          <button 
+            type="button" 
+            onclick="App.closeAllModals()" 
+            class="px-4 py-3 border border-stone-300 hover:bg-stone-100 text-stone-700 font-bold text-xs uppercase rounded-lg transition"
+          >
+            Continue
           </button>
         </div>
       </div>
@@ -1152,7 +1421,7 @@ const App = {
     ];
 
     container.innerHTML = `
-      <div class="p-4 bg-white border border-stone-200 rounded-lg space-y-4 text-xs">
+      <div class="p-4 bg-white border border-stone-200 rounded-xl space-y-4 text-xs">
         <div class="flex items-center justify-between border-b border-stone-100 pb-2">
           <div>
             <span class="text-stone-400 block text-[10px]">ORDER ID</span>
@@ -1166,7 +1435,6 @@ const App = {
           </div>
         </div>
 
-        <!-- Timeline steps -->
         <div class="relative pl-6 space-y-4 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-200">
           ${steps.map(s => `
             <div class="relative flex items-start gap-3">
@@ -1189,10 +1457,10 @@ const App = {
     container.classList.remove("hidden");
   },
 
-  // WhatsApp Order Assistant
+  // WhatsApp 1-Click Order Assistant
   orderViaWhatsApp: function (product) {
     if (!product) return;
-    const phone = "923001234567"; // Brand helpline WhatsApp
+    const phone = "923001234567";
     const msg = encodeURIComponent(
       `Assalam-o-Alaikum Miss Collection!
 
@@ -1201,7 +1469,7 @@ I want to order:
 • Price: ${Store.formatPKR(product.price)}
 • Code: ${product.id}
 
-Please confirm delivery and discreet packaging details.`
+Please confirm availability and discreet delivery details.`
     );
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
   },
@@ -1243,10 +1511,10 @@ Please confirm delivery and discreet packaging details.`
     if (!toast) {
       toast = document.createElement("div");
       toast.id = "appToastNotification";
-      toast.className = "fixed bottom-5 left-1/2 -translate-x-1/2 bg-stone-900/90 text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg z-50 transition-all duration-300 opacity-0 pointer-events-none";
+      toast.className = "fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 bg-stone-900/95 text-white text-xs font-semibold px-5 py-3 rounded-full shadow-xl z-50 transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2 border border-white/10";
       document.body.appendChild(toast);
     }
-    toast.textContent = message;
+    toast.innerHTML = `<i class="fa-solid fa-sparkles text-rose-400"></i> ${message}`;
     toast.classList.remove("opacity-0", "pointer-events-none");
     toast.classList.add("opacity-100");
 
@@ -1254,7 +1522,7 @@ Please confirm delivery and discreet packaging details.`
     this._toastTimeout = setTimeout(() => {
       toast.classList.add("opacity-0", "pointer-events-none");
       toast.classList.remove("opacity-100");
-    }, 2500);
+    }, 2800);
   }
 };
 

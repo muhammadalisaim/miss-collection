@@ -1,6 +1,7 @@
 /**
  * Miss Collection - Master Product Catalog
  * Authentic Pakistani Ladies' Undergarments, Bridal Sets, Loungewear & Shapewear
+ * With Dual-Angle Photography for Image Hover Swap & In-Cart Cross-Sells
  */
 
 const DEFAULT_PRODUCTS = [
@@ -31,9 +32,9 @@ const DEFAULT_PRODUCTS = [
     bandSizes: ["32", "34", "36", "38", "40"],
     images: [
       "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-acc-01", "mc-acc-02"]
   },
   {
     id: "mc-bra-02",
@@ -62,7 +63,8 @@ const DEFAULT_PRODUCTS = [
     images: [
       "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
-    ]
+    ],
+    crossSells: ["mc-panty-03", "mc-acc-02"]
   },
   {
     id: "mc-bra-03",
@@ -91,7 +93,8 @@ const DEFAULT_PRODUCTS = [
     images: [
       "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
-    ]
+    ],
+    crossSells: ["mc-acc-02", "mc-acc-03"]
   },
   {
     id: "mc-bra-04",
@@ -119,7 +122,8 @@ const DEFAULT_PRODUCTS = [
     images: [
       "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
-    ]
+    ],
+    crossSells: ["mc-acc-02", "mc-acc-03"]
   },
   {
     id: "mc-bra-05",
@@ -148,7 +152,8 @@ const DEFAULT_PRODUCTS = [
     images: [
       "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80"
-    ]
+    ],
+    crossSells: ["mc-panty-02", "mc-acc-03"]
   },
   {
     id: "mc-bra-06",
@@ -174,8 +179,10 @@ const DEFAULT_PRODUCTS = [
     cupSizes: ["B", "C"],
     bandSizes: ["32", "34", "36", "38"],
     images: [
-      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-acc-01", "mc-acc-03"]
   },
 
   // --- PANTIES ---
@@ -202,7 +209,8 @@ const DEFAULT_PRODUCTS = [
     images: [
       "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
-    ]
+    ],
+    crossSells: ["mc-bra-01", "mc-acc-03"]
   },
   {
     id: "mc-panty-02",
@@ -225,8 +233,10 @@ const DEFAULT_PRODUCTS = [
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-bra-05", "mc-acc-03"]
   },
   {
     id: "mc-panty-03",
@@ -250,8 +260,10 @@ const DEFAULT_PRODUCTS = [
     ],
     sizes: ["S", "M", "L", "XL"],
     images: [
-      "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-bra-02", "mc-acc-01"]
   },
   {
     id: "mc-panty-04",
@@ -275,8 +287,10 @@ const DEFAULT_PRODUCTS = [
     ],
     sizes: ["M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-shape-03", "mc-acc-03"]
   },
 
   // --- BRIDAL & LUXURY SETS ---
@@ -306,7 +320,8 @@ const DEFAULT_PRODUCTS = [
     images: [
       "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
-    ]
+    ],
+    crossSells: ["mc-bridal-02", "mc-acc-01"]
   },
   {
     id: "mc-bridal-02",
@@ -330,8 +345,10 @@ const DEFAULT_PRODUCTS = [
     ],
     sizes: ["S", "M", "L", "XL"],
     images: [
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-bridal-01", "mc-acc-01"]
   },
   {
     id: "mc-bridal-03",
@@ -355,8 +372,10 @@ const DEFAULT_PRODUCTS = [
     ],
     sizes: ["S", "M", "L", "XL"],
     images: [
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-acc-01", "mc-night-03"]
   },
 
   // --- SLEEPWEAR & NIGHTWEAR ---
@@ -385,7 +404,8 @@ const DEFAULT_PRODUCTS = [
     images: [
       "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
-    ]
+    ],
+    crossSells: ["mc-night-03", "mc-acc-01"]
   },
   {
     id: "mc-night-02",
@@ -409,8 +429,10 @@ const DEFAULT_PRODUCTS = [
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-acc-03", "mc-panty-01"]
   },
   {
     id: "mc-night-03",
@@ -434,8 +456,10 @@ const DEFAULT_PRODUCTS = [
     ],
     sizes: ["S", "M", "L", "XL"],
     images: [
-      "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-night-01", "mc-acc-01"]
   },
 
   // --- SHAPEWEAR ---
@@ -463,7 +487,8 @@ const DEFAULT_PRODUCTS = [
     images: [
       "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
-    ]
+    ],
+    crossSells: ["mc-shape-02", "mc-acc-01"]
   },
   {
     id: "mc-shape-02",
@@ -487,8 +512,10 @@ const DEFAULT_PRODUCTS = [
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-bra-03", "mc-acc-01"]
   },
   {
     id: "mc-shape-03",
@@ -512,8 +539,10 @@ const DEFAULT_PRODUCTS = [
     ],
     sizes: ["M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-panty-04", "mc-acc-03"]
   },
 
   // --- ACCESSORIES ---
@@ -536,10 +565,12 @@ const DEFAULT_PRODUCTS = [
     colors: [
       { name: "Skin Tone", hex: "#deb89d", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" }
     ],
-    sizes: ["One Size (Fits All)"],
+    sizes: ["One Size"],
     images: [
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-acc-02", "mc-acc-03"]
   },
   {
     id: "mc-acc-02",
@@ -562,8 +593,10 @@ const DEFAULT_PRODUCTS = [
     ],
     sizes: ["3-Hook Standard"],
     images: [
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-acc-01", "mc-acc-03"]
   },
   {
     id: "mc-acc-03",
@@ -584,10 +617,12 @@ const DEFAULT_PRODUCTS = [
     colors: [
       { name: "Clean White", hex: "#ffffff", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" }
     ],
-    sizes: ["Pack of 2 (Medium + Large)"],
+    sizes: ["Pack of 2"],
     images: [
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
-    ]
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+    ],
+    crossSells: ["mc-acc-01", "mc-acc-02"]
   }
 ];
 
