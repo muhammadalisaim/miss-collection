@@ -434,11 +434,11 @@ const Store = {
     { id: "nav-all", title: "All Silhouettes", category: "all", targetType: "category", visible: true, order: 1, isMega: false },
     { id: "nav-bras", title: "Bras & Bralettes", category: "bras", targetType: "category", visible: true, order: 2, isMega: true },
     { id: "nav-panties", title: "Panties & Briefs", category: "panties", targetType: "category", visible: true, order: 3, isMega: true },
-    { id: "nav-bridal", title: "Bridal Sets", category: "bridal", targetType: "category", visible: true, order: 4, isMega: true, highlightClass: "text-rose-700" },
+    { id: "nav-bridal", title: "Bridal Sets", category: "bridal", targetType: "category", visible: true, order: 4, isMega: true, highlightClass: "text-[#D4AF37]" },
     { id: "nav-nightwear", title: "Silky Sleepwear", category: "nightwear", targetType: "category", visible: true, order: 5, isMega: true },
     { id: "nav-shapewear", title: "Shapewear", category: "shapewear", targetType: "category", visible: true, order: 6, isMega: true },
-    { id: "nav-calculator", title: "Fit Calculator", category: "calculator", targetType: "modal", action: "openBraCalculatorModal", icon: "fa-ruler-combined", visible: true, order: 7, highlightClass: "text-amber-700 font-bold" },
-    { id: "nav-tracking", title: "Track Order", category: "tracking", targetType: "modal", action: "openOrderTrackingModal", icon: "fa-truck-fast", visible: true, order: 8, highlightClass: "text-stone-500 font-semibold" }
+    { id: "nav-calculator", title: "Fit Calculator", category: "calculator", targetType: "modal", action: "openBraCalculatorModal", icon: "fa-ruler-combined", visible: true, order: 7, highlightClass: "text-[#F3E5AB] font-semibold" },
+    { id: "nav-tracking", title: "Track Order", category: "tracking", targetType: "modal", action: "openOrderTrackingModal", icon: "fa-truck-fast", visible: true, order: 8, highlightClass: "text-stone-400 font-normal" }
   ],
 
   getNavItems: function() {
@@ -509,42 +509,47 @@ const Store = {
   },
 
   // Default Hero Banners (Fallback Seed)
+  // Default Hero Banners (High-Fashion Haute Couture Seed)
   DEFAULT_BANNERS: [
     {
       id: "banner-1",
-      title: "Zero Pressure. Feather-Light Comfort",
-      subtitle: "Seamless wireless bras with buttery-soft micro-modal touch. Perfect lift, zero underwire pinch, and 100% invisible under lawn suits and kurtis.",
-      badge: "✨ Pure Comfort Collection",
-      badgeColor: "rose",
+      title: "The Art of Invisible Support",
+      subtitle: "Cloud-soft wireless micro-modal intimates engineered for flawless invisible contours under luxury lawn suits and kurtis.",
+      badge: "HAUTE EDIT • ZERO-WIRE COMFORT",
+      badgeColor: "amber",
       imageUrl: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1800&q=85",
-      btnText: "Shop Seamless Bras →",
+      btnText: "Explore Seamless Bras",
       btnCategory: "bras",
-      secondaryBtnText: "Find My Bra Size",
+      secondaryBtnText: "Fit Calculator",
       secondaryBtnAction: "openBraCalculatorModal",
       active: true,
       order: 1
     },
     {
       id: "banner-2",
-      title: "Royal Velvet & Chantilly Lace",
-      subtitle: "Handcrafted luxury bridal sets, embroidered plunge corsets, and silk honeymoon nightwear delivered in luxury keepsake gift boxes.",
-      badge: "👑 Bridal Trousseau 2026",
-      badgeColor: "amber",
+      title: "Imperial Velvet & Chantilly Lace",
+      subtitle: "Handcrafted luxury bridal trousseau ensembles, embroidered corsets, and silk nightwear shipped in confidential keepsake boxes.",
+      badge: "BRIDAL TROUSSEAU 2026",
+      badgeColor: "rose",
       imageUrl: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=1800&q=85",
-      btnText: "Explore Bridal Edit →",
+      btnText: "Discover Bridal Edit",
       btnCategory: "bridal",
+      secondaryBtnText: "WhatsApp VIP Concierge",
+      secondaryBtnAction: "openWhatsAppConcierge",
       active: true,
       order: 2
     },
     {
       id: "banner-3",
-      title: "Effortless Contouring & Tummy Control",
-      subtitle: "Anti-roll spiral bone shapers designed for Pakistani formal wear and everyday kurtis. Instant waist smoothing with zero suffocation.",
-      badge: "⏳ 360° Firm Sculpting",
-      badgeColor: "emerald",
-      imageUrl: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=1800&q=85",
-      btnText: "Shop Shapewear →",
-      btnCategory: "shapewear",
+      title: "Mulberry Silk & Satin Nightwear",
+      subtitle: "Sensual silk slip dresses, loungewear sets, and robes crafted for quiet nighttime indulgence and breathable grace.",
+      badge: "PURE SILK LOUNGEWEAR",
+      badgeColor: "amber",
+      imageUrl: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=1800&q=85",
+      btnText: "Shop Sleepwear Sets",
+      btnCategory: "nightwear",
+      secondaryBtnText: "Fit Consultation",
+      secondaryBtnAction: "openBraCalculatorModal",
       active: true,
       order: 3
     }

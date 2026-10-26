@@ -1,44 +1,47 @@
 /* ==========================================================================
-   Miss Collection — Midnight Noir Haute Couture Storefront
-   Black Luxury Aesthetic with Ambient Sparkle Micro-Animations
-   Reverse-Engineered Fashion Architecture + High-Contrast Gold Accents
+   Miss Collection — Haute Couture Lingerie Storefront
+   Midnight Noir Luxury Aesthetic with Ambient Champagne Stardust
+   Vogue-Grade Editorial Layout, Aristocratic Serif & Gold Accents
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap");
 
 :root {
   /* Midnight Noir Color Palette */
-  --noir-bg: #0A0908;
-  --noir-surface: #121110;
-  --noir-surface-card: #181716;
-  --noir-surface-elevated: #22201E;
-  --noir-border: rgba(255, 255, 255, 0.08);
-  --noir-border-strong: rgba(255, 255, 255, 0.16);
-  --noir-border-gold: rgba(212, 175, 55, 0.3);
+  --noir-bg: #060504;
+  --noir-surface: #0E0D0C;
+  --noir-surface-card: #141312;
+  --noir-surface-elevated: #1C1B19;
+  --noir-border: rgba(255, 255, 255, 0.07);
+  --noir-border-strong: rgba(255, 255, 255, 0.14);
+  --noir-border-gold: rgba(212, 175, 55, 0.28);
+  --noir-border-gold-bright: rgba(212, 175, 55, 0.65);
   
   --noir-text-primary: #F7F5F0;
-  --noir-text-secondary: #A8A5A0;
-  --noir-text-muted: #6B6864;
+  --noir-text-secondary: #B0ADA8;
+  --noir-text-muted: #73706A;
   
   /* Brand Accents */
   --noir-gold: #D4AF37;
+  --noir-gold-champagne: #F3E5AB;
   --noir-gold-hover: #E6C275;
-  --noir-gold-light: rgba(212, 175, 55, 0.12);
+  --noir-gold-light: rgba(212, 175, 55, 0.10);
   --noir-rose: #E07A8B;
   --noir-red: #D92D20;
   --noir-emerald: #1B8A5A;
   --noir-whatsapp: #25D366;
 
   /* Typography */
-  --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-editorial: "Cormorant Garamond", Georgia, serif;
+  --font-serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
 
   /* Deep High-End Shadows */
-  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.6);
-  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.7);
-  --shadow-drawer: -10px 0 40px rgba(0, 0, 0, 0.85);
-  --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.2);
+  --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.7);
+  --shadow-card: 0 12px 35px rgba(0, 0, 0, 0.85);
+  --shadow-drawer: -15px 0 50px rgba(0, 0, 0, 0.95);
+  --shadow-gold: 0 0 25px rgba(212, 175, 55, 0.22);
 }
 
 html {
@@ -61,8 +64,71 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-sans);
 }
 
+.font-serif-luxury {
+  font-family: var(--font-serif);
+}
+
 .font-editorial {
   font-family: var(--font-editorial);
+}
+
+.tracking-couture {
+  letter-spacing: 0.28em;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFF8E7 0%, #D4AF37 55%, #A67C1E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-btn-luxury {
+  background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #9C7715 100%);
+  color: #060504;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  padding: 13px 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.28);
+}
+.gold-btn-luxury:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.5);
+  filter: brightness(1.05);
+}
+
+.frosted-btn-luxury {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  padding: 13px 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+.frosted-btn-luxury:hover {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: #D4AF37;
+  color: #F3E5AB;
+  transform: translateY(-2px);
 }
 
 /* ==========================================================================
@@ -342,12 +408,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border: 1px solid var(--noir-border);
   border-radius: 4px;
   overflow: hidden;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.35s ease;
 }
 .product-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--noir-border-gold);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 15px rgba(212, 175, 55, 0.15);
+  transform: translateY(-5px);
+  border-color: var(--noir-border-gold-bright);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.9), 0 0 25px rgba(212, 175, 55, 0.16);
 }
 
 /* Reflective Shimmer Sheen on Card Hover */
@@ -356,30 +422,38 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   position: absolute;
   top: 0;
   left: -120%;
-  width: 60%;
+  width: 50%;
   height: 100%;
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(212, 175, 55, 0.08),
-    rgba(255, 255, 255, 0.18),
-    rgba(212, 175, 55, 0.08),
+    rgba(212, 175, 55, 0.06),
+    rgba(255, 255, 255, 0.22),
+    rgba(212, 175, 55, 0.06),
     transparent
   );
-  transform: skewX(-22deg);
+  transform: skewX(-25deg);
   pointer-events: none;
   z-index: 12;
 }
 .product-card:hover::before {
-  animation: shimmerSweep 1s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: shimmerSweep 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-card-img-wrapper {
   position: relative;
   aspect-ratio: 3 / 4;
   overflow: hidden;
-  background-color: #121110;
+  background-color: #0E0D0C;
   cursor: pointer;
+}
+.product-card-img-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 70%, rgba(6, 5, 4, 0.45) 100%);
+  pointer-events: none;
+  z-index: 6;
 }
 
 /* Dual-Image Look Swap */
@@ -391,7 +465,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  transition: opacity 0.4s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.45s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .product-card-img-secondary {
   opacity: 0;
@@ -416,27 +490,30 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 /* Floating Pill Badges */
 .badge-pill-khaadi {
   font-family: var(--font-sans);
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 3px 8px;
+  padding: 3.5px 9px;
   border-radius: 2px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .badge-pill-khaadi.ochre {
-  background-color: var(--noir-gold);
-  color: #0A0908;
+  background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 100%);
+  color: #060504;
   font-weight: 800;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
 }
 .badge-pill-khaadi.sale {
-  background-color: var(--noir-red);
+  background: rgba(217, 45, 32, 0.92);
   color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 .badge-pill-khaadi.dark {
-  background-color: rgba(10, 9, 8, 0.9);
-  color: #FFFFFF;
-  border: 1px solid var(--noir-border);
+  background: rgba(6, 5, 4, 0.85);
+  color: #E6C275;
+  border: 1px solid rgba(212, 175, 55, 0.35);
 }
 
 /* Wishlist Icon Button */
@@ -444,19 +521,21 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(10, 9, 8, 0.75);
+  background: rgba(6, 5, 4, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
   transition: all 0.2s ease;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--noir-border);
 }
 .wishlist-btn-khaadi:hover {
   background: var(--noir-gold);
-  color: #0A0908;
+  color: #060504;
   border-color: var(--noir-gold);
+  transform: scale(1.08);
 }
 .wishlist-btn-khaadi.active {
   background: var(--noir-red);
@@ -470,19 +549,19 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(18, 17, 16, 0.94);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 8px 6px;
+  background: rgba(14, 13, 12, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 10px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 6px;
   flex-wrap: wrap;
   transform: translateY(100%);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 20;
-  border-top: 1px solid var(--noir-border);
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
 }
 .product-card:hover .product-size-chips-bar {
   transform: translateY(0);
@@ -491,21 +570,22 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 3px 8px;
-  border: 1px solid var(--noir-border-strong);
-  background: rgba(255, 255, 255, 0.06);
-  color: #FFFFFF;
+  letter-spacing: 0.06em;
+  padding: 4px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #F7F5F0;
   border-radius: 2px;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
   user-select: none;
 }
 .quick-size-chip:hover {
   background: var(--noir-gold);
   border-color: var(--noir-gold);
-  color: #0A0908;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+  color: #060504;
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.45);
 }
 
 @media (max-width: 768px) {

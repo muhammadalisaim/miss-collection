@@ -183,7 +183,7 @@ const App = {
     });
   },
 
-  // Ambient Haute Sparkle Canvas Particle Engine
+  // Ambient Haute Stardust Particle Engine - Subtle Champagne Gold Shimmer
   initAmbientSparkles: function () {
     const canvas = document.getElementById("ambientSparklesCanvas");
     if (!canvas) return;
@@ -193,86 +193,90 @@ const App = {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
+    let mouseX = -1000;
+    let mouseY = -1000;
+
     window.addEventListener("resize", () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     });
 
+    window.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    window.addEventListener("mouseleave", () => {
+      mouseX = -1000;
+      mouseY = -1000;
+    });
+
     const particles = [];
-    const count = Math.min(38, Math.max(22, Math.floor(width / 38)));
+    const count = Math.min(50, Math.max(25, Math.floor(width / 32)));
 
     for (let i = 0; i < count; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        size: Math.random() * 2.2 + 0.8,
-        speedX: (Math.random() - 0.5) * 0.35,
-        speedY: -Math.random() * 0.45 - 0.1,
-        alpha: Math.random() * 0.7 + 0.2,
-        twinkleSpeed: Math.random() * 0.02 + 0.01,
-        isStar: Math.random() > 0.4
+        baseRadius: Math.random() * 1.6 + 0.6,
+        speedX: (Math.random() - 0.5) * 0.25,
+        speedY: -Math.random() * 0.35 - 0.08,
+        baseAlpha: Math.random() * 0.45 + 0.25,
+        alpha: 0.3,
+        twinkleSpeed: Math.random() * 0.018 + 0.008,
+        phase: Math.random() * Math.PI * 2,
+        isWarmAmber: Math.random() > 0.65
       });
-    }
-
-    function drawSparkleStar(cx, cy, spikes, outerRadius, innerRadius, color) {
-      let rot = (Math.PI / 2) * 3;
-      let x = cx;
-      let y = cy;
-      const step = Math.PI / spikes;
-
-      ctx.beginPath();
-      ctx.moveTo(cx, cy - outerRadius);
-      for (let i = 0; i < spikes; i++) {
-        x = cx + Math.cos(rot) * outerRadius;
-        y = cy + Math.sin(rot) * outerRadius;
-        ctx.lineTo(x, y);
-        rot += step;
-
-        x = cx + Math.cos(rot) * innerRadius;
-        y = cy + Math.sin(rot) * innerRadius;
-        ctx.lineTo(x, y);
-        rot += step;
-      }
-      ctx.lineTo(cx, cy - outerRadius);
-      ctx.closePath();
-      ctx.fillStyle = color;
-      ctx.shadowBlur = 6;
-      ctx.shadowColor = "rgba(212, 175, 55, 0.6)";
-      ctx.fill();
-      ctx.shadowBlur = 0;
     }
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
 
       particles.forEach(p => {
-        p.alpha += p.twinkleSpeed;
-        if (p.alpha > 0.95 || p.alpha < 0.15) {
-          p.twinkleSpeed = -p.twinkleSpeed;
-        }
+        p.phase += p.twinkleSpeed;
+        p.alpha = p.baseAlpha + Math.sin(p.phase) * (p.baseAlpha * 0.7);
+        p.alpha = Math.max(0.08, Math.min(0.85, p.alpha));
 
-        p.x += p.speedX;
+        p.x += p.speedX + Math.sin(p.phase * 0.5) * 0.15;
         p.y += p.speedY;
 
-        if (p.y < -10) {
-          p.y = height + 10;
+        // Gentle cursor deflection
+        const dx = p.x - mouseX;
+        const dy = p.y - mouseY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 110 && dist > 0) {
+          const force = ((110 - dist) / 110) * 0.8;
+          p.x += (dx / dist) * force;
+          p.y += (dy / dist) * force;
+        }
+
+        // Screen wrap
+        if (p.y < -15) {
+          p.y = height + 15;
           p.x = Math.random() * width;
         }
-        if (p.x < -10) p.x = width + 10;
-        if (p.x > width + 10) p.x = -10;
+        if (p.x < -15) p.x = width + 15;
+        if (p.x > width + 15) p.x = -15;
 
-        const goldColor = `rgba(212, 175, 55, ${Math.max(0, Math.min(1, p.alpha))})`;
-        if (p.isStar) {
-          drawSparkleStar(p.x, p.y, 4, p.size * 2.2, p.size * 0.7, goldColor);
+        // Radial gradient: luminous core fading into champagne gold halo
+        const currentRadius = p.baseRadius * (0.85 + 0.3 * Math.sin(p.phase));
+        const glowRadius = currentRadius * 3.2;
+
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowRadius);
+        if (p.isWarmAmber) {
+          grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha * 0.95})`);
+          grad.addColorStop(0.35, `rgba(230, 194, 117, ${p.alpha * 0.75})`);
+          grad.addColorStop(1, "rgba(212, 175, 55, 0)");
         } else {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fillStyle = goldColor;
-          ctx.shadowBlur = 5;
-          ctx.shadowColor = "rgba(212, 175, 55, 0.5)";
-          ctx.fill();
-          ctx.shadowBlur = 0;
+          grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha})`);
+          grad.addColorStop(0.4, `rgba(243, 229, 171, ${p.alpha * 0.7})`);
+          grad.addColorStop(1, "rgba(243, 229, 171, 0)");
         }
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, glowRadius, 0, Math.PI * 2);
+        ctx.fill();
       });
 
       requestAnimationFrame(animate);
@@ -287,32 +291,32 @@ const App = {
       <div class="mega-menu-wrapper">
         <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-4 gap-8 text-left whitespace-normal">
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Styles</h4>
-            <ul class="space-y-2 text-xs text-stone-600 font-normal">
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-rose-600 transition">Feather-Light Wireless Bras</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-rose-600 transition">Chantilly Lace Plunge Bras</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-rose-600 transition">Invisible T-Shirt Contour Bras</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-rose-600 transition">Front-Closure Comfort Bras</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-rose-600 transition">Bandeau & Strapless Support</a></li>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Styles</h4>
+            <ul class="space-y-2 text-xs text-stone-300 font-light">
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-[#D4AF37] transition">Feather-Light Wireless Bras</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-[#D4AF37] transition">Chantilly Lace Plunge Bras</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-[#D4AF37] transition">Invisible T-Shirt Contour Bras</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-[#D4AF37] transition">Front-Closure Comfort Bras</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bras')" class="hover:text-[#D4AF37] transition">Bandeau & Strapless Support</a></li>
             </ul>
           </div>
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Shop By Cup Size</h4>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Shop By Cup Size</h4>
             <div class="grid grid-cols-3 gap-2">
-              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='B'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-bold border border-stone-200 hover:border-rose-500 hover:text-rose-600 rounded">Cup B</button>
-              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='C'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-bold border border-stone-200 hover:border-rose-500 hover:text-rose-600 rounded">Cup C</button>
-              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='D'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-bold border border-stone-200 hover:border-rose-500 hover:text-rose-600 rounded">Cup D</button>
-              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='DD'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-bold border border-stone-200 hover:border-rose-500 hover:text-rose-600 rounded">Cup DD</button>
-              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='E'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-bold border border-stone-200 hover:border-rose-500 hover:text-rose-600 rounded">Cup E</button>
-              <button onclick="App.openBraCalculatorModal()" class="py-2 text-center text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 rounded">Guide</button>
+              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='B'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-semibold border border-white/10 bg-white/5 hover:border-[#D4AF37] hover:text-[#D4AF37] text-stone-200 rounded">Cup B</button>
+              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='C'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-semibold border border-white/10 bg-white/5 hover:border-[#D4AF37] hover:text-[#D4AF37] text-stone-200 rounded">Cup C</button>
+              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='D'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-semibold border border-white/10 bg-white/5 hover:border-[#D4AF37] hover:text-[#D4AF37] text-stone-200 rounded">Cup D</button>
+              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='DD'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-semibold border border-white/10 bg-white/5 hover:border-[#D4AF37] hover:text-[#D4AF37] text-stone-200 rounded">Cup DD</button>
+              <button onclick="App.currentCategory='bras'; App.activeFilters.cup='E'; App.renderProducts(); App.closeMegaMenus();" class="py-2 text-center text-xs font-semibold border border-white/10 bg-white/5 hover:border-[#D4AF37] hover:text-[#D4AF37] text-stone-200 rounded">Cup E</button>
+              <button onclick="App.openBraCalculatorModal()" class="py-2 text-center text-xs font-bold bg-[#D4AF37]/15 text-[#F3E5AB] border border-[#D4AF37]/40 rounded hover:bg-[#D4AF37]/25 transition">Guide</button>
             </div>
           </div>
-          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.openQuickView('mc-bra-01')">
+          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.openQuickView('mc-bra-01')">
             <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" alt="Seamless Cloud Lift" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
-              <span class="text-[9px] uppercase font-bold text-rose-300">Signature Bestseller</span>
-              <h5 class="text-sm font-bold">Cloud-Soft Zero Wire T-Shirt Bra</h5>
-              <span class="text-xs font-bold text-rose-200">Rs. 2,450</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">Signature Bestseller</span>
+              <h5 class="text-sm font-semibold text-white">Cloud-Soft Zero Wire T-Shirt Bra</h5>
+              <span class="text-xs font-bold text-[#F3E5AB]">Rs. 2,450</span>
             </div>
           </div>
         </div>
@@ -322,28 +326,28 @@ const App = {
       <div class="mega-menu-wrapper">
         <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-4 gap-8 text-left whitespace-normal">
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Styles</h4>
-            <ul class="space-y-2 text-xs text-stone-600 font-normal">
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-rose-600 transition">Laser-Cut No-Show (Pack of 3)</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-rose-600 transition">Combed Cotton High-Waist Briefs</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-rose-600 transition">French Scalloped Lace Bikinis</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-rose-600 transition">Breathable Micro-Modal Boyshorts</a></li>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Styles</h4>
+            <ul class="space-y-2 text-xs text-stone-300 font-light">
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-[#D4AF37] transition">Laser-Cut No-Show (Pack of 3)</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-[#D4AF37] transition">Combed Cotton High-Waist Briefs</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-[#D4AF37] transition">French Scalloped Lace Bikinis</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('panties')" class="hover:text-[#D4AF37] transition">Breathable Micro-Modal Boyshorts</a></li>
             </ul>
           </div>
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Value Bundles</h4>
-            <div class="bg-rose-50/70 p-4 rounded-lg border border-rose-100 space-y-2">
-              <span class="text-[10px] font-bold uppercase text-rose-600 tracking-wider">Multi-Pack Savings</span>
-              <h5 class="text-xs font-bold text-stone-900">Buy 3 Panties & Save 15%</h5>
-              <p class="text-[11px] text-stone-600 leading-snug">Automatic discount at checkout on selected comfort cotton panties.</p>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Value Bundles</h4>
+            <div class="bg-[#181716] p-4 rounded-lg border border-[#D4AF37]/25 space-y-2">
+              <span class="text-[10px] font-bold uppercase text-[#D4AF37] tracking-wider">Multi-Pack Savings</span>
+              <h5 class="text-xs font-bold text-white">Buy 3 Panties & Save 15%</h5>
+              <p class="text-[11px] text-stone-400 font-light leading-snug">Automatic discount at checkout on selected comfort cotton panties.</p>
             </div>
           </div>
-          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.openQuickView('mc-pant-01')">
+          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.openQuickView('mc-pant-01')">
             <img src="https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" alt="Laser Cut Panties" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
-              <span class="text-[9px] uppercase font-bold text-rose-300">100% Invisible Guarantee</span>
-              <h5 class="text-sm font-bold">Seamless Laser-Cut Cheeky Brief</h5>
-              <span class="text-xs font-bold text-rose-200">Rs. 950</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">100% Invisible Guarantee</span>
+              <h5 class="text-sm font-semibold text-white">Seamless Laser-Cut Cheeky Brief</h5>
+              <span class="text-xs font-bold text-[#F3E5AB]">Rs. 950</span>
             </div>
           </div>
         </div>
@@ -353,28 +357,28 @@ const App = {
       <div class="mega-menu-wrapper">
         <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-4 gap-8 text-left whitespace-normal">
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Trousseau Collections</h4>
-            <ul class="space-y-2 text-xs text-stone-600 font-normal">
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-rose-600 transition">Royal Crimson Satin Robe Set</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-rose-600 transition">Ivory French Lace Chemise</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-rose-600 transition">Embroidered Babydoll & G-String</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-rose-600 transition">Bridal Honeymoon 5-Piece Hamper</a></li>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Trousseau Collections</h4>
+            <ul class="space-y-2 text-xs text-stone-300 font-light">
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-[#D4AF37] transition">Royal Crimson Satin Robe Set</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-[#D4AF37] transition">Ivory French Lace Chemise</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-[#D4AF37] transition">Embroidered Babydoll & G-String</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('bridal')" class="hover:text-[#D4AF37] transition">Bridal Honeymoon 5-Piece Hamper</a></li>
             </ul>
           </div>
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Bridal Gifting</h4>
-            <div class="bg-rose-50/70 p-4 rounded-lg border border-rose-100 space-y-2">
-              <span class="text-[10px] font-bold uppercase text-rose-600 tracking-wider">Luxury Gift Box</span>
-              <h5 class="text-xs font-bold text-stone-900">Custom Trousseau Packaging</h5>
-              <p class="text-[11px] text-stone-600 leading-snug">Includes satin ribbon, scented sachets, and confidential outer carton.</p>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Bridal Gifting</h4>
+            <div class="bg-[#181716] p-4 rounded-lg border border-[#D4AF37]/25 space-y-2">
+              <span class="text-[10px] font-bold uppercase text-[#D4AF37] tracking-wider">Luxury Gift Box</span>
+              <h5 class="text-xs font-bold text-white">Custom Trousseau Packaging</h5>
+              <p class="text-[11px] text-stone-400 font-light leading-snug">Includes satin ribbon, scented sachets, and confidential outer carton.</p>
             </div>
           </div>
-          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.openQuickView('mc-bridal-01')">
+          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.openQuickView('mc-bridal-01')">
             <img src="https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80" alt="Bridal Robe" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
-              <span class="text-[9px] uppercase font-bold text-amber-300">Haute Trousseau</span>
-              <h5 class="text-sm font-bold">Royal Crimson Silk Satin Robe</h5>
-              <span class="text-xs font-bold text-rose-200">Rs. 4,950</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">Haute Trousseau</span>
+              <h5 class="text-sm font-semibold text-white">Royal Crimson Silk Satin Robe</h5>
+              <span class="text-xs font-bold text-[#F3E5AB]">Rs. 4,950</span>
             </div>
           </div>
         </div>
@@ -384,26 +388,26 @@ const App = {
       <div class="mega-menu-wrapper">
         <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-4 gap-8 text-left whitespace-normal">
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Styles</h4>
-            <ul class="space-y-2 text-xs text-stone-600 font-normal">
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="hover:text-rose-600 transition">Pure Silk Camisole & Shorts Set</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="hover:text-rose-600 transition">Modal Cotton Button-Down Sleepshirt</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="hover:text-rose-600 transition">Satin Kimono Loungewear</a></li>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Styles</h4>
+            <ul class="space-y-2 text-xs text-stone-300 font-light">
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="hover:text-[#D4AF37] transition">Pure Silk Camisole & Shorts Set</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="hover:text-[#D4AF37] transition">Modal Cotton Button-Down Sleepshirt</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('nightwear')" class="hover:text-[#D4AF37] transition">Satin Kimono Loungewear</a></li>
             </ul>
           </div>
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Fabric Excellence</h4>
-            <div class="bg-stone-50 p-4 rounded-lg border border-stone-200 space-y-1.5 text-xs">
-              <div class="font-bold text-stone-900"><i class="fa-solid fa-feather text-rose-500 mr-1"></i> 100% Breathable</div>
-              <p class="text-[11px] text-stone-600 leading-snug">Thermo-regulating fabric designed for Pakistan's summer nights.</p>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Fabric Excellence</h4>
+            <div class="bg-[#181716] p-4 rounded-lg border border-white/10 space-y-1.5 text-xs">
+              <div class="font-semibold text-white"><i class="fa-solid fa-feather text-[#D4AF37] mr-1.5"></i> 100% Breathable</div>
+              <p class="text-[11px] text-stone-400 font-light leading-snug">Thermo-regulating fabric designed for Pakistan's climate.</p>
             </div>
           </div>
-          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.openQuickView('mc-night-01')">
+          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.openQuickView('mc-night-01')">
             <img src="https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" alt="Silk Sleepwear" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
-              <span class="text-[9px] uppercase font-bold text-rose-300">Pure Silk</span>
-              <h5 class="text-sm font-bold">Midnight Black Cami & French Shorts</h5>
-              <span class="text-xs font-bold text-rose-200">Rs. 3,250</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">Pure Silk</span>
+              <h5 class="text-sm font-semibold text-white">Midnight Black Cami & French Shorts</h5>
+              <span class="text-xs font-bold text-[#F3E5AB]">Rs. 3,250</span>
             </div>
           </div>
         </div>
@@ -413,26 +417,26 @@ const App = {
       <div class="mega-menu-wrapper">
         <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-4 gap-8 text-left whitespace-normal">
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Targeted Sculpting</h4>
-            <ul class="space-y-2 text-xs text-stone-600 font-normal">
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="hover:text-rose-600 transition">High-Waist Tummy Tamer Short</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="hover:text-rose-600 transition">Seamless Anti-Chafing Thigh Slimmer</a></li>
-              <li><a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="hover:text-rose-600 transition">Hourglass Latex-Free Waist Cincher</a></li>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Targeted Sculpting</h4>
+            <ul class="space-y-2 text-xs text-stone-300 font-light">
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="hover:text-[#D4AF37] transition">High-Waist Tummy Tamer Short</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="hover:text-[#D4AF37] transition">Seamless Anti-Chafing Thigh Slimmer</a></li>
+              <li><a href="javascript:void(0)" onclick="App.filterByCategory('shapewear')" class="hover:text-[#D4AF37] transition">Hourglass Latex-Free Waist Cincher</a></li>
             </ul>
           </div>
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Zero Rolling Guarantee</h4>
-            <div class="bg-rose-50/70 p-4 rounded-lg border border-rose-100 space-y-1.5 text-xs">
-              <div class="font-bold text-rose-900"><i class="fa-solid fa-check-double text-rose-600 mr-1"></i> Silicone Grip Band</div>
-              <p class="text-[11px] text-stone-600 leading-snug">Stays firmly anchored all day without digging or rolling under formals.</p>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Zero Rolling Guarantee</h4>
+            <div class="bg-[#181716] p-4 rounded-lg border border-[#D4AF37]/25 space-y-1.5 text-xs">
+              <div class="font-semibold text-white"><i class="fa-solid fa-check-double text-[#D4AF37] mr-1.5"></i> Silicone Grip Band</div>
+              <p class="text-[11px] text-stone-400 font-light leading-snug">Stays firmly anchored all day without digging or rolling under formals.</p>
             </div>
           </div>
-          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.openQuickView('mc-shape-01')">
+          <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.openQuickView('mc-shape-01')">
             <img src="https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" alt="Shapewear" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
-              <span class="text-[9px] uppercase font-bold text-amber-300">Level 3 Compression</span>
-              <h5 class="text-sm font-bold">High-Waist Tummy Tamer Short</h5>
-              <span class="text-xs font-bold text-rose-200">Rs. 2,650</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">Level 3 Compression</span>
+              <h5 class="text-sm font-semibold text-white">High-Waist Tummy Tamer Short</h5>
+              <span class="text-xs font-bold text-[#F3E5AB]">Rs. 2,650</span>
             </div>
           </div>
         </div>
@@ -449,22 +453,22 @@ const App = {
       <div class="mega-menu-wrapper">
         <div class="max-w-7xl mx-auto px-8 py-7 grid grid-cols-3 gap-8 text-left whitespace-normal">
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">${title} Collection</h4>
-            <p class="text-xs text-stone-600 leading-relaxed mb-4">Browse our premium curated selection designed for everyday luxury and supreme all-day comfort.</p>
-            <button onclick="App.filterByCategory('${category}')" class="px-4 py-2 bg-rose-600 text-white rounded text-xs font-bold uppercase hover:bg-rose-700 transition">View All Products &rarr;</button>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">${title} Collection</h4>
+            <p class="text-xs text-stone-300 font-light leading-relaxed mb-4">Browse our premium curated selection designed for everyday luxury and supreme all-day comfort.</p>
+            <button onclick="App.filterByCategory('${category}')" class="px-4 py-2 bg-[#D4AF37] text-stone-950 rounded text-xs font-bold uppercase tracking-wider hover:bg-[#F3E5AB] transition">View All Products &rarr;</button>
           </div>
           <div>
-            <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest border-b border-rose-200 pb-2 mb-3">Miss Collection Promise</h4>
-            <div class="bg-rose-50/70 p-4 rounded-lg border border-rose-100 space-y-2 text-xs">
-              <div class="font-bold text-stone-900"><i class="fa-solid fa-shield-halved text-rose-600 mr-1.5"></i> 100% Confidential Delivery</div>
-              <p class="text-[11px] text-stone-600">All orders are sealed inside discreet unbranded outer boxes for maximum privacy.</p>
+            <h4 class="text-xs font-semibold text-white uppercase tracking-[0.2em] border-b border-[#D4AF37]/30 pb-2 mb-3 font-serif-luxury">Miss Collection Promise</h4>
+            <div class="bg-[#181716] p-4 rounded-lg border border-[#D4AF37]/25 space-y-2 text-xs">
+              <div class="font-semibold text-white"><i class="fa-solid fa-shield-halved text-[#D4AF37] mr-1.5"></i> 100% Confidential Delivery</div>
+              <p class="text-[11px] text-stone-400 font-light">All orders are sealed inside discreet unbranded outer boxes for maximum privacy.</p>
             </div>
           </div>
-          <div class="relative rounded-lg overflow-hidden group/card cursor-pointer" onclick="App.filterByCategory('${category}')">
+          <div class="relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.filterByCategory('${category}')">
             <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" alt="${title}" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
-              <span class="text-[9px] uppercase font-bold text-rose-300">Featured Edit</span>
-              <h5 class="text-sm font-bold">${title}</h5>
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">Featured Edit</span>
+              <h5 class="text-sm font-semibold text-white">${title}</h5>
             </div>
           </div>
         </div>
@@ -475,49 +479,49 @@ const App = {
   getMobileSubLinksHtml: function (category) {
     if (category === "bras") {
       return `
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block font-bold text-rose-600">View All Bras &rarr;</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block hover:text-stone-900">Feather-Light Wireless Bras</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block hover:text-stone-900">Chantilly Lace Plunge Bras</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block hover:text-stone-900">Invisible T-Shirt Contour Bras</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block font-semibold text-[#D4AF37] uppercase tracking-wider text-[11px]">View All Bras &rarr;</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block text-stone-300 hover:text-white">Feather-Light Wireless Bras</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block text-stone-300 hover:text-white">Chantilly Lace Plunge Bras</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bras')" class="block text-stone-300 hover:text-white">Invisible T-Shirt Contour Bras</a>
         <div class="pt-1 flex items-center gap-1.5 font-bold uppercase text-[10px]">
           <span class="text-stone-400">Cups:</span>
-          <button onclick="App.closeAllDrawers(); App.currentCategory='bras'; App.activeFilters.cup='B'; App.renderProducts();" class="px-2 py-0.5 border border-stone-200 rounded">Cup B</button>
-          <button onclick="App.closeAllDrawers(); App.currentCategory='bras'; App.activeFilters.cup='C'; App.renderProducts();" class="px-2 py-0.5 border border-stone-200 rounded">Cup C</button>
-          <button onclick="App.closeAllDrawers(); App.currentCategory='bras'; App.activeFilters.cup='D'; App.renderProducts();" class="px-2 py-0.5 border border-stone-200 rounded">Cup D</button>
+          <button onclick="App.closeAllDrawers(); App.currentCategory='bras'; App.activeFilters.cup='B'; App.renderProducts();" class="px-2 py-0.5 border border-white/10 bg-white/5 rounded text-stone-200">Cup B</button>
+          <button onclick="App.closeAllDrawers(); App.currentCategory='bras'; App.activeFilters.cup='C'; App.renderProducts();" class="px-2 py-0.5 border border-white/10 bg-white/5 rounded text-stone-200">Cup C</button>
+          <button onclick="App.closeAllDrawers(); App.currentCategory='bras'; App.activeFilters.cup='D'; App.renderProducts();" class="px-2 py-0.5 border border-white/10 bg-white/5 rounded text-stone-200">Cup D</button>
         </div>
       `;
     }
     if (category === "panties") {
       return `
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block font-bold text-rose-600">View All Panties &rarr;</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block hover:text-stone-900">Laser-Cut No-Show (Pack of 3)</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block hover:text-stone-900">Combed Cotton High-Waist Briefs</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block hover:text-stone-900">French Scalloped Lace Bikinis</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block font-semibold text-[#D4AF37] uppercase tracking-wider text-[11px]">View All Panties &rarr;</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block text-stone-300 hover:text-white">Laser-Cut No-Show (Pack of 3)</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block text-stone-300 hover:text-white">Combed Cotton High-Waist Briefs</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('panties')" class="block text-stone-300 hover:text-white">French Scalloped Lace Bikinis</a>
       `;
     }
     if (category === "bridal") {
       return `
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bridal')" class="block font-bold text-rose-600">View All Bridal Trousseau &rarr;</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bridal')" class="block hover:text-stone-900">Royal Crimson Satin Robe Set</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bridal')" class="block hover:text-stone-900">Ivory French Lace Chemise</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bridal')" class="block font-semibold text-[#D4AF37] uppercase tracking-wider text-[11px]">View All Bridal Trousseau &rarr;</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bridal')" class="block text-stone-300 hover:text-white">Royal Crimson Satin Robe Set</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('bridal')" class="block text-stone-300 hover:text-white">Ivory French Lace Chemise</a>
       `;
     }
     if (category === "nightwear") {
       return `
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('nightwear')" class="block font-bold text-rose-600">View All Sleepwear &rarr;</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('nightwear')" class="block hover:text-stone-900">Pure Silk Camisole & Shorts Set</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('nightwear')" class="block hover:text-stone-900">Modal Cotton Sleepshirt</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('nightwear')" class="block font-semibold text-[#D4AF37] uppercase tracking-wider text-[11px]">View All Sleepwear &rarr;</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('nightwear')" class="block text-stone-300 hover:text-white">Pure Silk Camisole & Shorts Set</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('nightwear')" class="block text-stone-300 hover:text-white">Modal Cotton Sleepshirt</a>
       `;
     }
     if (category === "shapewear") {
       return `
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('shapewear')" class="block font-bold text-rose-600">View All Shapewear &rarr;</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('shapewear')" class="block hover:text-stone-900">High-Waist Tummy Tamer Short</a>
-        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('shapewear')" class="block hover:text-stone-900">Seamless Anti-Chafing Thigh Slimmer</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('shapewear')" class="block font-semibold text-[#D4AF37] uppercase tracking-wider text-[11px]">View All Shapewear &rarr;</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('shapewear')" class="block text-stone-300 hover:text-white">High-Waist Tummy Tamer Short</a>
+        <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('shapewear')" class="block text-stone-300 hover:text-white">Seamless Anti-Chafing Thigh Slimmer</a>
       `;
     }
     return `
-      <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('${category}')" class="block font-bold text-rose-600">View All ${category} &rarr;</a>
+      <a href="javascript:void(0)" onclick="App.closeAllDrawers(); App.filterByCategory('${category}')" class="block font-semibold text-[#D4AF37] uppercase tracking-wider text-[11px]">View All ${category} &rarr;</a>
     `;
   },
 
@@ -672,24 +676,26 @@ const App = {
           <div class="relative max-w-7xl mx-auto px-5 sm:px-12 w-full py-12">
             <div class="max-w-xl space-y-3 sm:space-y-4">
               ${banner.badge ? `
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${badgeClasses} text-[10px] sm:text-xs font-bold uppercase tracking-widest">
+              <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 text-[#F3E5AB] text-[10px] sm:text-xs font-semibold uppercase tracking-[0.25em] backdrop-blur-md">
                 ${banner.badge}
               </span>` : ''}
-              <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight font-serif-luxury leading-tight text-white">
+              <h1 class="text-3xl sm:text-5xl md:text-6xl font-normal tracking-tight font-serif-luxury leading-[1.1] text-white">
                 ${banner.title}
               </h1>
               ${banner.subtitle ? `
-              <p class="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-md">
+              <p class="text-xs sm:text-sm md:text-base text-stone-300 font-light leading-relaxed max-w-lg tracking-wide">
                 ${banner.subtitle}
               </p>` : ''}
-              <div class="pt-2 flex flex-wrap gap-2.5 sm:gap-3">
+              <div class="pt-3 flex flex-wrap gap-3 sm:gap-4 items-center">
                 ${banner.btnText ? `
-                <button onclick="App.filterByCategory('${banner.btnCategory || 'all'}')" class="px-6 py-3.5 bg-white text-stone-950 hover:bg-[#B4640A] hover:text-white font-bold text-xs uppercase tracking-widest rounded-none transition shadow-lg">
-                  ${banner.btnText}
+                <button onclick="App.filterByCategory('${banner.btnCategory || 'all'}')" class="gold-btn-luxury text-stone-950 font-bold text-xs uppercase tracking-[0.2em] px-7 py-3.5 rounded-sm transition-all duration-300 shadow-xl inline-flex items-center gap-2 group">
+                  <span>${banner.btnText}</span>
+                  <i class="fa-solid fa-arrow-right-long text-[11px] transition-transform group-hover:translate-x-1"></i>
                 </button>` : ''}
                 ${banner.secondaryBtnText ? `
-                <button onclick="App.${banner.secondaryBtnAction || 'openBraCalculatorModal'}()" class="px-5 py-3.5 bg-transparent hover:bg-white/10 border border-white/60 text-white font-bold text-xs uppercase tracking-widest rounded-none transition">
-                  <i class="fa-solid fa-ruler-horizontal mr-1.5"></i> ${banner.secondaryBtnText}
+                <button onclick="App.${banner.secondaryBtnAction || 'openBraCalculatorModal'}()" class="frosted-btn-luxury text-white hover:text-[#D4AF37] font-semibold text-xs uppercase tracking-[0.18em] px-6 py-3.5 rounded-sm transition-all duration-300 inline-flex items-center gap-2">
+                  <i class="fa-solid fa-ruler-horizontal text-[#D4AF37]/80"></i>
+                  <span>${banner.secondaryBtnText}</span>
                 </button>` : ''}
               </div>
             </div>
@@ -699,7 +705,7 @@ const App = {
     }).join("");
 
     dotsContainer.innerHTML = banners.map((banner, idx) => `
-      <button class="hero-dot ${idx === 0 ? 'w-8 bg-[#B4640A]' : 'w-2.5 bg-white/50 hover:bg-white'} h-1 rounded-full transition-all duration-300" aria-label="Go to Slide ${idx + 1}"></button>
+      <button class="hero-dot ${idx === 0 ? 'w-8 bg-[#D4AF37]' : 'w-2.5 bg-white/40 hover:bg-white'} h-1 rounded-full transition-all duration-300" aria-label="Go to Slide ${idx + 1}"></button>
     `).join("");
 
     this.initHeroSlider();
@@ -2134,7 +2140,17 @@ const App = {
     if (!product) return;
     const phone = (typeof Store !== "undefined" && Store.WHATSAPP_NUMBER) ? Store.WHATSAPP_NUMBER : "923266131394";
     const msg = encodeURIComponent(
-      `🌸 Assalam-o-Alaikum Miss Collection!\n\nMujhe yeh product book/purchase karna hai:\n• Product: ${product.title}\n• Price: ${Store.formatPKR(product.price)}\n• Code: ${product.id}\n\nKindly availability confirm karein aur discreet delivery TCS se dispatch karein. Shukriya! ✨`
+      `Assalam-o-Alaikum Miss Collection!\n\nMujhe yeh product book/purchase karna hai:\n• Product: ${product.title}\n• Price: ${Store.formatPKR(product.price)}\n• Code: ${product.id}\n\nKindly availability confirm karein aur discreet private packaging ke sath dispatch karein. Shukriya!`
+    );
+    window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+  },
+
+  // VIP WhatsApp Haute Concierge
+  openWhatsAppConcierge: function (topic) {
+    const phone = (typeof Store !== "undefined" && Store.WHATSAPP_NUMBER) ? Store.WHATSAPP_NUMBER : "923266131394";
+    const subject = topic || "VIP Order & Fitting Consultation";
+    const msg = encodeURIComponent(
+      `Assalam-o-Alaikum Miss Collection Haute Concierge!\n\nSubject: ${subject}\nMujhe customized size guidance, private fitting advice, aur direct order booking mein assistance chahiye. Please guide karein.`
     );
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
   },
