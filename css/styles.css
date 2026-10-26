@@ -1,43 +1,44 @@
 /* ==========================================================================
-   Miss Collection — High-Fashion Retail Storefront
-   Reverse-Engineered from pk.khaadi.com (Khaadi Pakistan)
-   Design System: Stark Monochrome, Warm Ochre Accents, Clean Grotesque Sans
+   Miss Collection — Midnight Noir Haute Couture Storefront
+   Black Luxury Aesthetic with Ambient Sparkle Micro-Animations
+   Reverse-Engineered Fashion Architecture + High-Contrast Gold Accents
    ========================================================================== */
 
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
 
 :root {
-  /* Khaadi Signature Color Palette */
-  --kh-black: #1A1817;
-  --kh-charcoal: #2D2B2A;
-  --kh-dark-muted: #555452;
-  --kh-text-secondary: #706F6E;
-  --kh-text-muted: #8E8D8A;
+  /* Midnight Noir Color Palette */
+  --noir-bg: #0A0908;
+  --noir-surface: #121110;
+  --noir-surface-card: #181716;
+  --noir-surface-elevated: #22201E;
+  --noir-border: rgba(255, 255, 255, 0.08);
+  --noir-border-strong: rgba(255, 255, 255, 0.16);
+  --noir-border-gold: rgba(212, 175, 55, 0.3);
   
-  --kh-white: #FFFFFF;
-  --kh-stone: #FAF9F8;
-  --kh-stone-light: #F5F5F5;
-  --kh-border-subtle: #E8E7E5;
-  --kh-border-strong: #DCDAD7;
+  --noir-text-primary: #F7F5F0;
+  --noir-text-secondary: #A8A5A0;
+  --noir-text-muted: #6B6864;
   
-  /* Khaadi Brand Accents */
-  --kh-ochre: #B4640A;
-  --kh-ochre-hover: #965207;
-  --kh-ochre-light: #FBF4EC;
-  --kh-red: #D92D20;
-  --kh-emerald: #1B8A5A;
-  --kh-whatsapp: #25D366;
+  /* Brand Accents */
+  --noir-gold: #D4AF37;
+  --noir-gold-hover: #E6C275;
+  --noir-gold-light: rgba(212, 175, 55, 0.12);
+  --noir-rose: #E07A8B;
+  --noir-red: #D92D20;
+  --noir-emerald: #1B8A5A;
+  --noir-whatsapp: #25D366;
 
   /* Typography */
   --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-editorial: "Cormorant Garamond", Georgia, serif;
 
-  /* High-end Shadows */
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
-  --shadow-drawer: -8px 0 32px rgba(0, 0, 0, 0.16);
-  --shadow-float: 0 10px 30px rgba(0, 0, 0, 0.12);
+  /* Deep High-End Shadows */
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.6);
+  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.7);
+  --shadow-drawer: -10px 0 40px rgba(0, 0, 0, 0.85);
+  --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.2);
 }
 
 html {
@@ -48,11 +49,12 @@ html {
 
 body {
   font-family: var(--font-body);
-  color: var(--kh-black);
-  background-color: #FFFFFF;
+  color: var(--noir-text-primary);
+  background-color: var(--noir-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  position: relative;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
@@ -63,46 +65,124 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-editorial);
 }
 
-/* Subtle Minimalist Scrollbar */
+/* ==========================================================================
+   AMBIENT SPARKLES CANVAS & MICRO-ANIMATIONS
+   ========================================================================== */
+#ambientSparklesCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.85) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.25) rotate(45deg);
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.85));
+  }
+}
+
+@keyframes floatGlitter {
+  0% {
+    transform: translateY(0) scale(0.9);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-80px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmerSweep {
+  0% {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(220%) skewX(-20deg);
+  }
+}
+
+@keyframes goldGlowPulse {
+  0%, 100% {
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 18px rgba(212, 175, 55, 0.75), 0 0 25px rgba(212, 175, 55, 0.4);
+  }
+}
+
+.sparkle-icon {
+  display: inline-block;
+  color: var(--noir-gold);
+  animation: twinkle 3s infinite ease-in-out;
+}
+
+.gold-glow {
+  color: var(--noir-gold);
+  animation: goldGlowPulse 4s infinite ease-in-out;
+}
+
+/* Custom Obsidian Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--kh-stone);
+  background: #0A0908;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D1CFCD;
+  background: #2A2826;
   border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--kh-black);
+  background: var(--noir-gold);
 }
 
 /* ==========================================================================
-   TOP ANNOUNCEMENT BAR (Khaadi High-Fashion Ticker)
+   TOP ANNOUNCEMENT BAR (Midnight Noir Strip)
    ========================================================================== */
 .announcement-ticker {
-  background-color: var(--kh-black);
-  color: #FFFFFF;
+  background: #050505;
+  color: #F7F5F0;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  border-bottom: 1px solid var(--noir-border);
+  position: relative;
+  z-index: 40;
 }
 
 /* ==========================================================================
-   STICKY HEADER (Khaadi Minimalist Centered Layout)
+   STICKY HEADER (Translucent Obsidian Glass)
    ========================================================================== */
 .header-sticky {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--kh-border-subtle);
+  background: rgba(10, 9, 8, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--noir-border);
   transition: all 0.25s ease;
+}
+.header-sticky.header-shadow {
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(212, 175, 55, 0.15);
 }
 
 .header-brand-logo {
@@ -110,24 +190,26 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   font-weight: 800;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--kh-black);
+  color: #FFFFFF;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   transition: opacity 0.2s ease;
 }
 .header-brand-logo:hover {
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
-/* Search Bar (Khaadi Sleek Pill) */
+/* Search Bar (Smoked Glass Pill) */
 .khaadi-search-box {
-  background-color: var(--kh-stone);
-  border: 1px solid var(--kh-border-subtle);
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--noir-border);
   border-radius: 9999px;
+  color: #FFFFFF;
   transition: all 0.2s ease;
 }
 .khaadi-search-box:focus-within {
-  background-color: #FFFFFF;
-  border-color: var(--kh-black);
-  box-shadow: 0 0 0 1px var(--kh-black);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--noir-gold);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
 }
 
 /* Sticky Navigation Category Links */
@@ -138,14 +220,14 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--kh-black);
-  padding: 12px 14px;
+  color: #D4D2CD;
+  padding: 13px 14px;
   display: inline-flex;
   align-items: center;
   transition: color 0.2s ease;
 }
 .nav-category-link:hover {
-  color: var(--kh-ochre);
+  color: var(--noir-gold);
 }
 .nav-category-link::after {
   content: "";
@@ -154,10 +236,11 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   left: 14px;
   right: 14px;
   height: 2px;
-  background-color: var(--kh-black);
+  background-color: var(--noir-gold);
   transform: scaleX(0);
   transform-origin: center;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
 }
 .nav-category-link:hover::after,
 .nav-category-link.active::after {
@@ -165,7 +248,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 /* ==========================================================================
-   MEGA MENU (Khaadi Luxury Flyout)
+   MEGA MENU (Dark Glass Flyout)
    ========================================================================== */
 .nav-item-has-mega {
   position: static;
@@ -175,10 +258,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   top: 100%;
   left: 0;
   right: 0;
-  background: #FFFFFF;
-  border-top: 1px solid var(--kh-border-subtle);
-  border-bottom: 1px solid var(--kh-border-subtle);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.1);
+  background: rgba(14, 13, 12, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--noir-border);
+  border-bottom: 1px solid var(--noir-border);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
   opacity: 0;
   visibility: hidden;
   transform: translateY(6px);
@@ -213,14 +298,20 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 /* ==========================================================================
-   ASYMMETRIC EDITORIAL CAMPAIGN LOOKBOOK (Khaadi Hallmark)
+   ASYMMETRIC EDITORIAL CAMPAIGN LOOKBOOK (Dark Luxe)
    ========================================================================== */
 .lookbook-tile {
   position: relative;
   overflow: hidden;
   border-radius: 4px;
   cursor: pointer;
-  background-color: var(--kh-stone);
+  background-color: var(--noir-surface);
+  border: 1px solid var(--noir-border);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.lookbook-tile:hover {
+  border-color: var(--noir-border-gold);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.15);
 }
 .lookbook-tile img {
   width: 100%;
@@ -229,12 +320,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .lookbook-tile:hover img {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 .lookbook-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.7) 100%);
+  background: linear-gradient(180deg, rgba(10, 9, 8, 0.1) 0%, rgba(10, 9, 8, 0.85) 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -243,21 +334,51 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 /* ==========================================================================
-   PRODUCT CARDS (Khaadi 3:4 Vertical Fashion Portrait)
+   PRODUCT CARDS (3:4 Vertical Fashion Portrait with Shimmer Sheen)
    ========================================================================== */
 .product-card {
   position: relative;
-  background-color: #FFFFFF;
-  border-radius: 0px;
+  background-color: var(--noir-surface-card);
+  border: 1px solid var(--noir-border);
+  border-radius: 4px;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--noir-border-gold);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+/* Reflective Shimmer Sheen on Card Hover */
+.product-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.08),
+    rgba(255, 255, 255, 0.18),
+    rgba(212, 175, 55, 0.08),
+    transparent
+  );
+  transform: skewX(-22deg);
+  pointer-events: none;
+  z-index: 12;
+}
+.product-card:hover::before {
+  animation: shimmerSweep 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-card-img-wrapper {
   position: relative;
   aspect-ratio: 3 / 4;
   overflow: hidden;
-  background-color: var(--kh-stone);
+  background-color: #121110;
   cursor: pointer;
 }
 
@@ -280,7 +401,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 .product-card:hover .product-card-img-secondary {
   opacity: 1;
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 @media (hover: none) {
@@ -292,7 +413,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   }
 }
 
-/* Floating Pill Badges (Top Left) */
+/* Floating Pill Badges */
 .badge-pill-khaadi {
   font-family: var(--font-sans);
   font-size: 9.5px;
@@ -303,16 +424,19 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border-radius: 2px;
 }
 .badge-pill-khaadi.ochre {
-  background-color: var(--kh-ochre);
-  color: #FFFFFF;
+  background-color: var(--noir-gold);
+  color: #0A0908;
+  font-weight: 800;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 .badge-pill-khaadi.sale {
-  background-color: var(--kh-red);
+  background-color: var(--noir-red);
   color: #FFFFFF;
 }
 .badge-pill-khaadi.dark {
-  background-color: var(--kh-black);
+  background-color: rgba(10, 9, 8, 0.9);
   color: #FFFFFF;
+  border: 1px solid var(--noir-border);
 }
 
 /* Wishlist Icon Button */
@@ -320,32 +444,35 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(10, 9, 8, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--kh-black);
+  color: #FFFFFF;
   transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--noir-border);
 }
 .wishlist-btn-khaadi:hover {
-  background: var(--kh-black);
-  color: #FFFFFF;
+  background: var(--noir-gold);
+  color: #0A0908;
+  border-color: var(--noir-gold);
 }
 .wishlist-btn-khaadi.active {
-  background: var(--kh-black);
+  background: var(--noir-red);
   color: #FFFFFF;
+  border-color: var(--noir-red);
 }
 
-/* Desktop Hover Quick-Size Chips Bar (Khaadi Hallmark) */
+/* Desktop Hover Quick-Size Chips Bar */
 .product-size-chips-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(18, 17, 16, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 8px 6px;
   display: flex;
   align-items: center;
@@ -355,7 +482,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   transform: translateY(100%);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 20;
-  border-top: 1px solid var(--kh-border-subtle);
+  border-top: 1px solid var(--noir-border);
 }
 .product-card:hover .product-size-chips-bar {
   transform: translateY(0);
@@ -365,18 +492,20 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  padding: 3px 7px;
-  border: 1px solid var(--kh-black);
-  background: #FFFFFF;
-  color: var(--kh-black);
+  padding: 3px 8px;
+  border: 1px solid var(--noir-border-strong);
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
   border-radius: 2px;
   transition: all 0.15s ease;
   cursor: pointer;
   user-select: none;
 }
 .quick-size-chip:hover {
-  background: var(--kh-black);
-  color: #FFFFFF;
+  background: var(--noir-gold);
+  border-color: var(--noir-gold);
+  color: #0A0908;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
 }
 
 @media (max-width: 768px) {
@@ -385,75 +514,79 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   }
 }
 
-/* Product Card Information Typography */
+/* Product Card Details Typography */
 .card-fabric-line {
   font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--kh-text-secondary);
+  color: var(--noir-gold);
 }
 .card-title-line {
   font-family: var(--font-sans);
   font-size: 12.5px;
   font-weight: 600;
-  color: var(--kh-black);
+  color: var(--noir-text-primary);
   line-height: 1.35;
   transition: color 0.2s ease;
 }
 .product-card:hover .card-title-line {
-  color: var(--kh-ochre);
+  color: var(--noir-gold-hover);
 }
 .card-price-primary {
   font-family: var(--font-sans);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 800;
-  color: var(--kh-black);
+  color: #FFFFFF;
   font-variant-numeric: tabular-nums;
 }
 .card-price-original {
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 500;
-  color: var(--kh-text-muted);
+  color: var(--noir-text-muted);
   text-decoration: line-through;
   font-variant-numeric: tabular-nums;
 }
 
-/* Category Filter Pills (Khaadi Horizontal Strip) */
+/* Category Filter Pills (Smoked Glass Strip) */
 .filter-pill-khaadi {
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 8px 16px;
-  border: 1px solid var(--kh-border-subtle);
-  background: #FFFFFF;
-  color: var(--kh-black);
+  padding: 8px 18px;
+  border: 1px solid var(--noir-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--noir-text-secondary);
   border-radius: 9999px;
   transition: all 0.2s ease;
   white-space: nowrap;
 }
 .filter-pill-khaadi:hover {
-  border-color: var(--kh-black);
+  border-color: var(--noir-gold);
+  color: #FFFFFF;
+  background: rgba(212, 175, 55, 0.08);
 }
 .filter-pill-khaadi.active {
-  background-color: var(--kh-black);
-  border-color: var(--kh-black);
-  color: #FFFFFF;
+  background-color: var(--noir-gold);
+  border-color: var(--noir-gold);
+  color: #0A0908;
+  font-weight: 800;
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
 }
 
 /* ==========================================================================
-   SLIDING SHOPPING BAG DRAWER (Khaadi Design)
+   SLIDING SHOPPING BAG DRAWER (Obsidian Luxe Panel)
    ========================================================================== */
 .drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(26, 24, 23, 0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(4, 3, 3, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 50;
   opacity: 0;
   pointer-events: none;
@@ -470,11 +603,13 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   bottom: 0;
   width: 100%;
   max-width: 440px;
-  background: #FFFFFF;
+  background: #100F0E;
+  border-left: 1px solid var(--noir-border);
   box-shadow: var(--shadow-drawer);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
+  color: #FFFFFF;
 }
 .drawer-right {
   right: 0;
@@ -489,29 +624,30 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   transform: translateX(0);
 }
 
-/* Free Shipping Thermometer */
+/* Free Shipping Thermometer (Gold Shimmer) */
 .free-shipping-thermometer {
-  background-color: var(--kh-stone);
-  border-bottom: 1px solid var(--kh-border-subtle);
+  background-color: #161514;
+  border-bottom: 1px solid var(--noir-border);
   padding: 12px 16px;
 }
 .shipping-progress-bg {
-  background: #E8E6E3;
+  background: rgba(255, 255, 255, 0.08);
   height: 5px;
   border-radius: 999px;
   overflow: hidden;
   position: relative;
 }
 .shipping-progress-fill {
-  background: linear-gradient(90deg, var(--kh-ochre), #D97706);
+  background: linear-gradient(90deg, var(--noir-gold), #F59E0B);
   height: 100%;
   border-radius: 999px;
   transition: width 0.4s ease;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 /* WhatsApp 1-Click Order Button */
 .btn-whatsapp-booking {
-  background-color: var(--kh-emerald);
+  background-color: var(--noir-emerald);
   color: #FFFFFF;
   font-family: var(--font-sans);
   font-size: 12px;
@@ -525,12 +661,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   justify-content: center;
   gap: 8px;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(27, 138, 90, 0.25);
+  box-shadow: 0 4px 16px rgba(27, 138, 90, 0.35);
 }
 .btn-whatsapp-booking:hover {
   background-color: #156E47;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(27, 138, 90, 0.35);
+  box-shadow: 0 6px 22px rgba(27, 138, 90, 0.55);
 }
 
 /* Floating WhatsApp Quick Action Button */
@@ -546,22 +682,22 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
   z-index: 35;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .whatsapp-float:hover {
   transform: scale(1.08);
-  box-shadow: 0 8px 26px rgba(37, 211, 102, 0.55);
+  box-shadow: 0 8px 28px rgba(37, 211, 102, 0.65);
 }
 
 /* Mobile Quick Add Bottom Sheet */
 .bottom-sheet-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(26, 24, 23, 0.65);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(4, 3, 3, 0.8);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   z-index: 60;
   opacity: 0;
   pointer-events: none;
@@ -576,9 +712,10 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   left: 0;
   right: 0;
   bottom: 0;
-  background: #FFFFFF;
+  background: #141312;
+  border-top: 1px solid var(--noir-border);
   border-radius: 16px 16px 0 0;
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -10px 45px rgba(0, 0, 0, 0.9);
   z-index: 61;
   transform: translateY(100%);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -593,7 +730,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .sheet-drag-handle {
   width: 36px;
   height: 4px;
-  background: #D5D3D1;
+  background: #3A3835;
   border-radius: 999px;
   margin: 12px auto 6px auto;
 }
@@ -602,9 +739,9 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(26, 24, 23, 0.7);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  background: rgba(4, 3, 3, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 60;
   opacity: 0;
   pointer-events: none;
@@ -619,16 +756,18 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   pointer-events: auto;
 }
 .modal-content {
-  background: #FFFFFF;
+  background: #141312;
+  border: 1px solid var(--noir-border);
   border-radius: 4px;
   max-width: 820px;
   width: 100%;
   max-height: 90vh;
   max-height: 90dvh;
   overflow-y: auto;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(212, 175, 55, 0.1);
   transform: scale(0.97);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #FFFFFF;
 }
 .modal-backdrop.open .modal-content {
   transform: scale(1);
@@ -639,7 +778,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  border: 1px solid rgba(0,0,0,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
   display: inline-block;
 }
 
@@ -649,15 +788,16 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%) translateY(100px);
-  background: var(--kh-black);
-  color: #FFFFFF;
+  background: #1C1B19;
+  border: 1px solid var(--noir-gold);
+  color: #F7F5F0;
   padding: 12px 24px;
   border-radius: 4px;
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.3);
   z-index: 100;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;

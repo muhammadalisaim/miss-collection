@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
-  <title>Miss Collection | High-Fashion Luxury Intimates Pakistan</title>
+  <title>Miss Collection | Midnight Noir Haute Couture Pakistan</title>
   <meta name="description" content="Shop luxury ladies undergarments in Pakistan. Seamless bras, breathable cotton panties, bridal trousseau, silky sleepwear & shapewear. 100% Discreet Packaging & Cash on Delivery nationwide." />
   
   <!-- Tailwind CSS CDN -->
@@ -15,18 +15,21 @@
   <!-- Custom Luxury Stylesheet -->
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="bg-white text-stone-900 antialiased selection:bg-[#B4640A] selection:text-white pb-20 md:pb-0">
+<body class="bg-[#0A0908] text-[#F7F5F0] antialiased selection:bg-[#D4AF37] selection:text-black pb-20 md:pb-0 relative min-h-screen">
+
+  <!-- Ambient Luxury Sparkles Canvas (Floating Diamond Particle Dust) -->
+  <canvas id="ambientSparklesCanvas"></canvas>
 
   <!-- =========================================================================
-       1. TOP ANNOUNCEMENT TICKER (Khaadi Minimalist Fashion Strip)
+       1. TOP ANNOUNCEMENT TICKER (Midnight Noir Strip with Sparkles)
        ========================================================================= -->
   <div class="announcement-ticker py-2 px-3 sm:px-6 relative z-40">
     <div class="max-w-7xl mx-auto flex items-center justify-between text-[11px]">
       
       <!-- Announcement Message -->
       <div class="flex items-center gap-2 overflow-hidden">
-        <span class="px-2 py-0.5 rounded bg-[#B4640A]/20 text-[#D97706] font-extrabold uppercase tracking-widest text-[9px] border border-[#B4640A]/30 shrink-0">
-          <i class="fa-solid fa-truck-fast"></i> Complimentary Delivery
+        <span class="px-2.5 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-extrabold uppercase tracking-widest text-[9px] border border-[#D4AF37]/40 shrink-0 flex items-center gap-1 shadow-xs">
+          <i class="fa-solid fa-sparkles sparkle-icon"></i> Complimentary Delivery
         </span>
         <span class="text-stone-300 truncate font-medium">
           Free Shipping across Pakistan on orders above PKR 2,500 &bull; 100% Plain Unbranded Confidential Box
@@ -49,7 +52,7 @@
   </div>
 
   <!-- =========================================================================
-       2. STICKY HEADER & LUXURY NAVIGATION (Khaadi Centered Layout)
+       2. STICKY HEADER & LUXURY NAVIGATION (Translucent Obsidian Glass)
        ========================================================================= -->
   <header class="header-sticky">
     <!-- TIER 1: MAIN LOGO & ACTIONS BAR -->
@@ -58,30 +61,31 @@
       <!-- Left: Mobile Hamburger & Desktop Search -->
       <div class="flex items-center gap-3">
         <!-- Mobile Hamburger Button -->
-        <button onclick="App.openMobileNav()" class="lg:hidden p-2 text-stone-900 hover:text-[#B4640A] transition" aria-label="Open Navigation Menu">
+        <button onclick="App.openMobileNav()" class="lg:hidden p-2 text-stone-300 hover:text-[#D4AF37] transition" aria-label="Open Navigation Menu">
           <i class="fa-solid fa-bars-staggered text-lg"></i>
         </button>
 
-        <!-- Desktop Search Box (Khaadi Sleek Pill) -->
+        <!-- Desktop Search Box (Smoked Glass Pill) -->
         <div class="relative hidden md:block w-48 lg:w-60 xl:w-72">
           <input 
             type="text" 
             placeholder="Search collections, sizes..." 
-            class="site-search-input khaadi-search-box w-full text-xs py-2 pl-9 pr-3 text-stone-800 placeholder-stone-400 focus:outline-none"
+            class="site-search-input khaadi-search-box w-full text-xs py-2 pl-9 pr-3 text-stone-200 placeholder-stone-500 focus:outline-none"
           />
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-stone-400 text-xs"></i>
           
           <!-- Dropdown Autocomplete Container -->
-          <div id="predictiveSearchResults" class="hidden absolute top-full left-0 w-80 mt-2 bg-white rounded shadow-2xl border border-stone-200 overflow-hidden z-50"></div>
+          <div id="predictiveSearchResults" class="hidden absolute top-full left-0 w-80 mt-2 bg-[#141312] rounded shadow-2xl border border-white/10 overflow-hidden z-50 text-white"></div>
         </div>
       </div>
 
-      <!-- Center: Luxury Brand Mark (Khaadi Stark Typography) -->
+      <!-- Center: Luxury Brand Mark (Obsidian Typography + Diamond Sparkle) -->
       <a href="index.html" class="flex flex-col items-center text-center select-none group">
-        <span class="header-brand-logo text-xl sm:text-2xl md:text-3xl text-stone-950">
-          MISS COLLECTION
+        <span class="header-brand-logo text-xl sm:text-2xl md:text-3xl text-white flex items-center gap-2">
+          <span>MISS COLLECTION</span>
+          <i class="fa-solid fa-sparkles text-xs text-[#D4AF37] sparkle-icon hidden sm:inline"></i>
         </span>
-        <span class="text-[8px] sm:text-[9px] tracking-[0.28em] text-stone-500 uppercase font-semibold mt-0.5">
+        <span class="text-[8px] sm:text-[9px] tracking-[0.28em] text-[#A8A5A0] uppercase font-semibold mt-0.5">
           Haute Lingerie &bull; Intimates &bull; Pakistan
         </span>
       </a>
@@ -90,57 +94,57 @@
       <div class="flex items-center gap-1.5 sm:gap-3">
         
         <!-- Mobile Search Trigger -->
-        <button onclick="document.getElementById('mobileSearchOverlay').classList.toggle('hidden')" class="md:hidden p-2 text-stone-800 hover:text-[#B4640A] transition" aria-label="Search">
+        <button onclick="document.getElementById('mobileSearchOverlay').classList.toggle('hidden')" class="md:hidden p-2 text-stone-300 hover:text-[#D4AF37] transition" aria-label="Search">
           <i class="fa-solid fa-magnifying-glass text-lg"></i>
         </button>
 
         <!-- Wishlist Button -->
-        <button onclick="App.openWishlistDrawer()" class="p-2 text-stone-800 hover:text-[#B4640A] relative transition" title="Wishlist">
+        <button onclick="App.openWishlistDrawer()" class="p-2 text-stone-300 hover:text-[#D4AF37] relative transition" title="Wishlist">
           <i class="fa-regular fa-heart text-lg"></i>
-          <span class="wishlist-count-badge hidden absolute top-0.5 right-0.5 w-4 h-4 bg-stone-900 text-white rounded-full text-[9px] font-bold flex items-center justify-center">0</span>
+          <span class="wishlist-count-badge hidden absolute top-0.5 right-0.5 w-4 h-4 bg-[#D4AF37] text-black font-extrabold rounded-full text-[9px] flex items-center justify-center">0</span>
         </button>
 
         <!-- Shopping Bag Trigger -->
-        <button onclick="App.openCartDrawer()" class="p-2 text-stone-800 hover:text-[#B4640A] relative transition flex items-center gap-1.5" title="Shopping Bag">
+        <button onclick="App.openCartDrawer()" class="p-2 text-stone-300 hover:text-[#D4AF37] relative transition flex items-center gap-1.5" title="Shopping Bag">
           <div class="relative">
             <i class="fa-solid fa-bag-shopping text-lg"></i>
-            <span class="cart-count-badge hidden absolute -top-1 -right-1 w-4 h-4 bg-[#B4640A] text-white rounded-full text-[9px] font-bold flex items-center justify-center">0</span>
+            <span class="cart-count-badge hidden absolute -top-1 -right-1 w-4 h-4 bg-[#D4AF37] text-black font-extrabold rounded-full text-[9px] flex items-center justify-center">0</span>
           </div>
-          <span class="hidden sm:inline text-xs font-bold uppercase tracking-wider text-stone-900">Bag</span>
+          <span class="hidden sm:inline text-xs font-bold uppercase tracking-wider text-white">Bag</span>
         </button>
       </div>
     </div>
 
-    <!-- TIER 2: DEDICATED STICKY CATEGORY NAVIGATION ROW -->
-    <div class="hidden lg:block bg-white border-t border-stone-100">
+    <!-- TIER 2: DEDICATED STICKY CATEGORY NAVIGATION ROW (Dark Obsidian Glass) -->
+    <div class="hidden lg:block bg-[#0A0908]/95 border-t border-white/5">
       <nav id="desktopNavContainer" class="max-w-7xl mx-auto px-4 flex items-center justify-center gap-4 text-xs font-bold uppercase tracking-wider whitespace-nowrap">
         <!-- Rendered dynamically via App.renderNavigation() -->
       </nav>
     </div>
 
     <!-- Mobile Search Expandable Overlay -->
-    <div id="mobileSearchOverlay" class="hidden md:hidden px-4 py-3 border-t border-stone-200 bg-white">
+    <div id="mobileSearchOverlay" class="hidden md:hidden px-4 py-3 border-t border-white/10 bg-[#121110]">
       <div class="relative">
         <input 
           type="text" 
           placeholder="Search intimates, sizes, categories..." 
-          class="site-search-input w-full bg-stone-100 text-xs py-2.5 pl-8 pr-3 rounded-full border border-stone-200 focus:outline-none focus:border-stone-900"
+          class="site-search-input w-full bg-[#1A1918] text-xs py-2.5 pl-8 pr-3 rounded-full border border-white/10 text-white placeholder-stone-400 focus:outline-none focus:border-[#D4AF37]"
         />
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-stone-400 text-xs"></i>
       </div>
-      <div class="flex items-center gap-2 mt-2 overflow-x-auto text-[10px] text-stone-600 scrollbar-none">
-        <span class="font-bold uppercase text-stone-400 shrink-0">Popular:</span>
-        <button onclick="App.applySearchFilter('seamless'); document.getElementById('mobileSearchOverlay').classList.add('hidden');" class="px-2.5 py-0.5 bg-stone-100 rounded-full shrink-0">#SeamlessBra</button>
-        <button onclick="App.applySearchFilter('bridal'); document.getElementById('mobileSearchOverlay').classList.add('hidden');" class="px-2.5 py-0.5 bg-stone-100 rounded-full shrink-0">#BridalSet</button>
-        <button onclick="App.applySearchFilter('cotton'); document.getElementById('mobileSearchOverlay').classList.add('hidden');" class="px-2.5 py-0.5 bg-stone-100 rounded-full shrink-0">#CottonPanties</button>
+      <div class="flex items-center gap-2 mt-2 overflow-x-auto text-[10px] text-stone-400 scrollbar-none">
+        <span class="font-bold uppercase text-stone-500 shrink-0">Popular:</span>
+        <button onclick="App.applySearchFilter('seamless'); document.getElementById('mobileSearchOverlay').classList.add('hidden');" class="px-2.5 py-0.5 bg-white/5 rounded-full shrink-0 hover:bg-white/10 text-stone-300">#SeamlessBra</button>
+        <button onclick="App.applySearchFilter('bridal'); document.getElementById('mobileSearchOverlay').classList.add('hidden');" class="px-2.5 py-0.5 bg-white/5 rounded-full shrink-0 hover:bg-white/10 text-stone-300">#BridalSet</button>
+        <button onclick="App.applySearchFilter('cotton'); document.getElementById('mobileSearchOverlay').classList.add('hidden');" class="px-2.5 py-0.5 bg-white/5 rounded-full shrink-0 hover:bg-white/10 text-stone-300">#CottonPanties</button>
       </div>
     </div>
   </header>
 
   <!-- =========================================================================
-       3. HERO SLIDER BANNER (Touch-Swipe Enabled)
+       3. HERO SLIDER BANNER (Touch-Swipe Enabled with Shimmering Particles)
        ========================================================================= -->
-  <section id="heroSliderContainer" class="relative bg-stone-950 text-white overflow-hidden min-h-[380px] sm:min-h-[460px] md:min-h-[540px] flex items-center select-none cursor-grab active:cursor-grabbing">
+  <section id="heroSliderContainer" class="relative bg-black text-white overflow-hidden min-h-[380px] sm:min-h-[460px] md:min-h-[540px] flex items-center select-none cursor-grab active:cursor-grabbing border-b border-white/5">
     <!-- Dynamic Slides Container -->
     <div id="heroSlidesWrapper" class="absolute inset-0"></div>
     <!-- Dynamic Slider Navigation Dots -->
@@ -148,48 +152,48 @@
   </section>
 
   <!-- =========================================================================
-       4. PRIVACY-FIRST VALUE PROPOSITION (Core Pakistani Lingerie Pillar)
+       4. PRIVACY-FIRST VALUE PROPOSITION (Dark Velvet Panels)
        ========================================================================= -->
-  <section class="bg-stone-50 border-y border-stone-200/80 py-4 px-4 sm:px-6">
+  <section class="bg-[#121110] border-y border-white/5 py-4 px-4 sm:px-6 relative z-10">
     <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
       
-      <div class="flex items-center gap-3 p-2">
-        <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 text-base">
+      <div class="flex items-center gap-3 p-2 bg-[#181716] rounded border border-white/5">
+        <div class="w-10 h-10 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] flex items-center justify-center shrink-0 text-base">
           <i class="fa-solid fa-user-shield"></i>
         </div>
         <div>
-          <h4 class="text-xs font-bold text-stone-900 uppercase">100% Discreet Box</h4>
-          <p class="text-[11px] text-stone-500">Unbranded brown box, sealed</p>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">100% Discreet Box</h4>
+          <p class="text-[11px] text-stone-400">Plain brown box, zero sensitive marks</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-3 p-2">
-        <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 text-base">
+      <div class="flex items-center gap-3 p-2 bg-[#181716] rounded border border-white/5">
+        <div class="w-10 h-10 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] flex items-center justify-center shrink-0 text-base">
           <i class="fa-solid fa-money-bill-wave"></i>
         </div>
         <div>
-          <h4 class="text-xs font-bold text-stone-900 uppercase">Cash on Delivery</h4>
-          <p class="text-[11px] text-stone-500">Nationwide doorstep payment</p>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Cash on Delivery</h4>
+          <p class="text-[11px] text-stone-400">Nationwide doorstep payment</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-3 p-2">
-        <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 text-base">
+      <div class="flex items-center gap-3 p-2 bg-[#181716] rounded border border-white/5">
+        <div class="w-10 h-10 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] flex items-center justify-center shrink-0 text-base">
           <i class="fa-solid fa-rotate-left"></i>
         </div>
         <div>
-          <h4 class="text-xs font-bold text-stone-900 uppercase">7-Day Fit Exchange</h4>
-          <p class="text-[11px] text-stone-500">Hygienic size swap policy</p>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">7-Day Fit Exchange</h4>
+          <p class="text-[11px] text-stone-400">Hygienic size swap policy</p>
         </div>
       </div>
 
-      <a href="https://wa.me/923266131394?text=Assalam-o-Alaikum%20Miss%20Collection!%20Mujhe%20fitting%20aur%20order%20ke%20hawale%20se%20help%20chahiye." target="_blank" class="flex items-center gap-3 p-2 hover:bg-stone-100/60 rounded-lg transition">
-        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 text-base">
+      <a href="https://wa.me/923266131394?text=Assalam-o-Alaikum%20Miss%20Collection!%20Mujhe%20fitting%20aur%20order%20ke%20hawale%20se%20help%20chahiye." target="_blank" class="flex items-center gap-3 p-2 bg-[#181716] rounded border border-emerald-500/20 hover:border-emerald-500/40 transition">
+        <div class="w-10 h-10 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 text-base">
           <i class="fa-brands fa-whatsapp text-lg"></i>
         </div>
         <div>
-          <h4 class="text-xs font-bold text-stone-900 uppercase">Female Fit Advisors</h4>
-          <p class="text-[11px] text-emerald-700 font-semibold">+92 326 6131394</p>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Female Fit Advisors</h4>
+          <p class="text-[11px] text-emerald-400 font-semibold">+92 326 6131394</p>
         </div>
       </a>
 
@@ -197,13 +201,13 @@
   </section>
 
   <!-- =========================================================================
-       5. ASYMMETRIC EDITORIAL CAMPAIGN LOOKBOOK (Khaadi Hallmark)
+       5. ASYMMETRIC EDITORIAL CAMPAIGN LOOKBOOK (Khaadi Hallmark - Dark Luxe)
        ========================================================================= -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
     <div class="text-center mb-8">
-      <span class="text-[11px] font-bold uppercase tracking-[0.22em] text-[#B4640A] block mb-1">Curated Seasonal Edits</span>
-      <h3 class="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-stone-900 font-heading">
-        The Lookbook Edit
+      <span class="text-[11px] font-bold uppercase tracking-[0.22em] text-[#D4AF37] block mb-1">Curated Seasonal Edits</span>
+      <h3 class="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-white font-heading">
+        The Lookbook Edit <span class="sparkle-icon">✨</span>
       </h3>
     </div>
     
@@ -212,10 +216,10 @@
       <div class="md:col-span-7 lookbook-tile min-h-[380px] sm:min-h-[460px]" onclick="App.filterByCategory('bras')">
         <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85" alt="The Basics Edit" loading="lazy" />
         <div class="lookbook-overlay">
-          <span class="text-xs font-bold uppercase tracking-widest text-amber-300 mb-1">Signature Silhouette</span>
+          <span class="text-xs font-bold uppercase tracking-widest text-[#D4AF37] mb-1">Signature Silhouette</span>
           <h4 class="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-white mb-2">The Basics: Zero-Wire Comfort</h4>
-          <p class="text-xs sm:text-sm text-stone-200 max-w-md mb-4 hidden sm:block">Buttery micro-modal fabric engineered for cloud-like invisible support under Pakistani lawn suits & kurtis.</p>
-          <span class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white border-b border-white pb-1 w-fit hover:border-amber-400 hover:text-amber-300 transition">
+          <p class="text-xs sm:text-sm text-stone-300 max-w-md mb-4 hidden sm:block">Buttery micro-modal fabric engineered for cloud-like invisible support under Pakistani lawn suits & kurtis.</p>
+          <span class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white border-b border-[#D4AF37] pb-1 w-fit hover:text-[#D4AF37] transition">
             Shop Seamless Bras &rarr;
           </span>
         </div>
@@ -227,9 +231,9 @@
         <div class="lookbook-tile min-h-[180px] sm:min-h-[215px]" onclick="App.filterByCategory('bridal')">
           <img src="https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=85" alt="Bridal Trousseau" loading="lazy" />
           <div class="lookbook-overlay p-4 sm:p-5">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-amber-300 mb-0.5">Haute Trousseau</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37] mb-0.5">Haute Trousseau</span>
             <h5 class="text-lg sm:text-xl font-bold uppercase text-white mb-1">Luxury Bridal Edit</h5>
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase text-white hover:text-amber-300 transition">
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase text-white hover:text-[#D4AF37] transition">
               Explore Trousseau &rarr;
             </span>
           </div>
@@ -239,9 +243,9 @@
         <div class="lookbook-tile min-h-[180px] sm:min-h-[215px]" onclick="App.filterByCategory('nightwear')">
           <img src="https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=85" alt="Silky Sleepwear" loading="lazy" />
           <div class="lookbook-overlay p-4 sm:p-5">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-amber-300 mb-0.5">Special Price</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37] mb-0.5">Special Price</span>
             <h5 class="text-lg sm:text-xl font-bold uppercase text-white mb-1">Satin Nightwear & Sets</h5>
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase text-white hover:text-amber-300 transition">
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase text-white hover:text-[#D4AF37] transition">
               Shop Loungewear &rarr;
             </span>
           </div>
@@ -255,8 +259,8 @@
        ========================================================================= -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-xs font-bold uppercase tracking-widest text-stone-500 font-heading">Shop By Silhouette</h3>
-      <span class="text-xs text-[#B4640A] font-bold cursor-pointer hover:underline uppercase tracking-wider" onclick="App.filterByCategory('all')">
+      <h3 class="text-xs font-bold uppercase tracking-widest text-stone-400 font-heading">Shop By Silhouette</h3>
+      <span class="text-xs text-[#D4AF37] font-bold cursor-pointer hover:underline uppercase tracking-wider" onclick="App.filterByCategory('all')">
         View All &rarr;
       </span>
     </div>
@@ -271,27 +275,27 @@
   <section id="catalogSection" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
     
     <!-- Heading & Mobile Filter Button -->
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 border-b border-stone-200">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 border-b border-white/10">
       <div>
-        <span class="text-xs font-bold uppercase tracking-[0.2em] text-[#B4640A] block mb-1">Couture & Essentials</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900 font-heading uppercase tracking-tight">
-          The Intimates Collection
+        <span class="text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] block mb-1">Couture & Essentials</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading uppercase tracking-tight">
+          The Intimates Collection <span class="sparkle-icon">✨</span>
         </h2>
       </div>
 
       <div class="flex items-center justify-between sm:justify-end gap-3">
-        <span id="productCountDisplay" class="text-xs text-stone-500 font-medium">Showing Items</span>
+        <span id="productCountDisplay" class="text-xs text-stone-400 font-medium">Showing Items</span>
         
         <!-- Mobile Filter Button Trigger -->
         <button 
           onclick="App.openFilterDrawer()" 
-          class="sm:hidden px-3.5 py-2 bg-stone-900 text-white text-xs font-bold rounded flex items-center gap-1.5 shadow-sm uppercase tracking-wider"
+          class="sm:hidden px-3.5 py-2 bg-[#181716] border border-white/10 text-white text-xs font-bold rounded flex items-center gap-1.5 shadow-sm uppercase tracking-wider hover:border-[#D4AF37]/50"
         >
-          <i class="fa-solid fa-sliders"></i> Filters <span id="mobileFilterBtnCount" class="text-amber-400 font-normal"></span>
+          <i class="fa-solid fa-sliders text-[#D4AF37]"></i> Filters <span id="mobileFilterBtnCount" class="text-[#D4AF37] font-normal"></span>
         </button>
 
         <!-- Sorting dropdown (Khaadi style) -->
-        <select id="catalogSortSelect" class="text-xs font-semibold bg-stone-100 border border-stone-200 rounded px-3 py-2 text-stone-800 focus:outline-none focus:border-stone-900">
+        <select id="catalogSortSelect" class="text-xs font-semibold bg-[#181716] border border-white/10 rounded px-3 py-2 text-stone-200 focus:outline-none focus:border-[#D4AF37]">
           <option value="featured">Featured Intimates</option>
           <option value="price-low">Price: Low to High</option>
           <option value="price-high">Price: High to Low</option>
@@ -302,7 +306,7 @@
     </div>
 
     <!-- Category Filter Tabs (Khaadi Horizontal Pill Strip) -->
-    <div class="flex items-center gap-2 overflow-x-auto py-4 scrollbar-none border-b border-stone-100">
+    <div class="flex items-center gap-2 overflow-x-auto py-4 scrollbar-none border-b border-white/10">
       <button data-category-filter="all" class="filter-pill-khaadi active shrink-0">
         All Styles
       </button>
@@ -327,16 +331,16 @@
     </div>
 
     <!-- Sub-Filter Bar (Cup Sizes & Reset) -->
-    <div class="hidden sm:flex items-center justify-between gap-4 py-3 text-xs text-stone-600">
+    <div class="hidden sm:flex items-center justify-between gap-4 py-3 text-xs text-stone-400">
       <div class="flex items-center gap-2 overflow-x-auto">
-        <span class="font-bold text-stone-900 uppercase tracking-wider text-[11px] shrink-0 font-heading">Cup Size:</span>
-        <button onclick="App.activeFilters.cup = null; App.renderProducts()" class="px-2.5 py-1 rounded border border-stone-200 text-xs font-semibold hover:border-stone-900">Any</button>
-        <button onclick="App.activeFilters.cup = 'B'; App.renderProducts()" class="px-2.5 py-1 rounded border border-stone-200 text-xs font-semibold hover:border-stone-900">Cup B</button>
-        <button onclick="App.activeFilters.cup = 'C'; App.renderProducts()" class="px-2.5 py-1 rounded border border-stone-200 text-xs font-semibold hover:border-stone-900">Cup C</button>
-        <button onclick="App.activeFilters.cup = 'D'; App.renderProducts()" class="px-2.5 py-1 rounded border border-stone-200 text-xs font-semibold hover:border-stone-900">Cup D</button>
+        <span class="font-bold text-white uppercase tracking-wider text-[11px] shrink-0 font-heading">Cup Size:</span>
+        <button onclick="App.activeFilters.cup = null; App.renderProducts()" class="px-2.5 py-1 rounded border border-white/10 bg-[#181716] text-stone-300 text-xs font-semibold hover:border-[#D4AF37] hover:text-white">Any</button>
+        <button onclick="App.activeFilters.cup = 'B'; App.renderProducts()" class="px-2.5 py-1 rounded border border-white/10 bg-[#181716] text-stone-300 text-xs font-semibold hover:border-[#D4AF37] hover:text-white">Cup B</button>
+        <button onclick="App.activeFilters.cup = 'C'; App.renderProducts()" class="px-2.5 py-1 rounded border border-white/10 bg-[#181716] text-stone-300 text-xs font-semibold hover:border-[#D4AF37] hover:text-white">Cup C</button>
+        <button onclick="App.activeFilters.cup = 'D'; App.renderProducts()" class="px-2.5 py-1 rounded border border-white/10 bg-[#181716] text-stone-300 text-xs font-semibold hover:border-[#D4AF37] hover:text-white">Cup D</button>
       </div>
 
-      <button onclick="App.resetFilters()" class="text-[#B4640A] hover:underline font-bold shrink-0 text-xs uppercase tracking-wider">
+      <button onclick="App.resetFilters()" class="text-[#D4AF37] hover:underline font-bold shrink-0 text-xs uppercase tracking-wider">
         <i class="fa-solid fa-rotate-left"></i> Reset All Filters
       </button>
     </div>
@@ -351,13 +355,13 @@
        8. DISCREET PACKAGING VISUAL COMPARISON (Other Stores vs Miss Collection)
        ========================================================================= -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-    <div class="bg-stone-900 text-white rounded-2xl p-6 sm:p-10 border border-stone-800 space-y-6">
+    <div class="bg-[#121110] text-white rounded-2xl p-6 sm:p-10 border border-[#D4AF37]/30 space-y-6 shadow-2xl relative overflow-hidden">
       <div class="text-center max-w-2xl mx-auto space-y-2">
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[10px] sm:text-xs font-bold uppercase tracking-widest">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30 text-[10px] sm:text-xs font-bold uppercase tracking-widest">
           <i class="fa-solid fa-shield-halved"></i> Privacy Assurance
         </span>
         <h2 class="text-2xl sm:text-3xl font-extrabold font-serif-luxury">
-          The Miss Collection Packaging Promise
+          The Miss Collection Packaging Promise <span class="sparkle-icon">✨</span>
         </h2>
         <p class="text-xs sm:text-sm text-stone-400">
           We guarantee that nobody, including your family members, roommates, or the courier delivery rider, will ever know what is inside your parcel.
@@ -366,7 +370,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
         <!-- Other Stores -->
-        <div class="p-5 bg-stone-800/40 rounded-xl border border-red-500/20 space-y-2 text-xs">
+        <div class="p-5 bg-[#181716] rounded-xl border border-red-500/20 space-y-2 text-xs">
           <div class="flex items-center gap-2 text-red-400 font-bold uppercase tracking-wider">
             <i class="fa-solid fa-circle-xmark"></i> Typical Innerwear Stores
           </div>
@@ -378,8 +382,8 @@
         </div>
 
         <!-- Miss Collection -->
-        <div class="p-5 bg-stone-800/80 rounded-xl border border-emerald-500/30 space-y-2 text-xs">
-          <div class="flex items-center gap-2 text-emerald-400 font-bold uppercase tracking-wider">
+        <div class="p-5 bg-[#181716] rounded-xl border border-[#D4AF37]/40 space-y-2 text-xs shadow-lg">
+          <div class="flex items-center gap-2 text-[#D4AF37] font-bold uppercase tracking-wider">
             <i class="fa-solid fa-circle-check"></i> Miss Collection Guarantee
           </div>
           <ul class="space-y-1.5 text-stone-300 pt-1 font-medium">
@@ -396,20 +400,20 @@
        9. VERIFIED CUSTOMER REVIEWS & RATING HISTOGRAM
        ========================================================================= -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8 pb-6 border-b border-stone-200">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8 pb-6 border-b border-white/10">
       
       <!-- Overall Rating Summary -->
       <div class="flex items-center gap-4">
-        <div class="text-center p-3 sm:p-4 bg-stone-50 border border-stone-200 rounded-xl shrink-0">
-          <div class="text-3xl sm:text-4xl font-extrabold text-stone-900 font-serif-luxury">4.9</div>
-          <div class="flex text-amber-500 text-xs justify-center mt-1">
+        <div class="text-center p-3 sm:p-4 bg-[#181716] border border-white/10 rounded-xl shrink-0">
+          <div class="text-3xl sm:text-4xl font-extrabold text-[#D4AF37] font-serif-luxury">4.9</div>
+          <div class="flex text-[#D4AF37] text-xs justify-center mt-1">
             <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
           </div>
-          <span class="text-[10px] text-stone-500 block mt-1" id="reviewsCountDisplay">15,000+ Reviews</span>
+          <span class="text-[10px] text-stone-400 block mt-1" id="reviewsCountDisplay">15,000+ Reviews</span>
         </div>
 
         <!-- Rating Histogram Bars -->
-        <div class="space-y-1 text-[11px] text-stone-600 min-w-[200px]">
+        <div class="space-y-1 text-[11px] text-stone-300 min-w-[200px]">
           <div class="flex items-center gap-2">
             <span>5★</span>
             <div class="review-bar-bg flex-1"><div class="review-bar-fill" style="width: 88%;"></div></div>
@@ -429,7 +433,7 @@
       </div>
 
       <!-- Action Button -->
-      <button onclick="App.openWriteReviewModal()" class="px-5 py-2.5 bg-stone-900 hover:bg-rose-600 text-white rounded-lg text-xs font-bold uppercase tracking-wider transition shadow-sm">
+      <button onclick="App.openWriteReviewModal()" class="px-5 py-2.5 bg-[#D4AF37] hover:bg-[#c49f2e] text-[#0A0908] rounded-lg text-xs font-extrabold uppercase tracking-wider transition shadow-lg">
         <i class="fa-solid fa-pen-nib mr-1.5"></i> Write a Review
       </button>
     </div>
@@ -443,21 +447,21 @@
   <!-- =========================================================================
        10. FOOTER
        ========================================================================= -->
-  <footer class="bg-stone-950 text-stone-300 pt-12 pb-24 md:pb-12 border-t border-white/10">
+  <footer class="bg-[#070606] text-stone-300 pt-12 pb-24 md:pb-12 border-t border-[#D4AF37]/20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
       
       <!-- Brand & Mission -->
       <div class="space-y-3">
         <div class="text-xl font-bold tracking-widest text-white font-serif-luxury uppercase">
-          MISS<span class="text-rose-500">COLLECTION</span>
+          MISS<span class="text-[#D4AF37]">COLLECTION</span> <span class="sparkle-icon text-sm">✨</span>
         </div>
         <p class="text-xs text-stone-400 leading-relaxed">
           Pakistan's premier luxury intimate wear destination. Empowering women with cloud-soft comfort, flawless fit engineering, and guaranteed confidential packaging.
         </p>
         <div class="pt-2 flex gap-3 text-stone-400">
-          <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-rose-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-instagram text-xs"></i></a>
-          <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-rose-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-facebook-f text-xs"></i></a>
-          <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-rose-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-tiktok text-xs"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-[#D4AF37] hover:text-black flex items-center justify-center transition"><i class="fa-brands fa-instagram text-xs"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-[#D4AF37] hover:text-black flex items-center justify-center transition"><i class="fa-brands fa-facebook-f text-xs"></i></a>
+          <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-[#D4AF37] hover:text-black flex items-center justify-center transition"><i class="fa-brands fa-tiktok text-xs"></i></a>
           <a href="https://wa.me/923266131394?text=Assalam-o-Alaikum%20Miss%20Collection!" target="_blank" class="w-8 h-8 rounded-full bg-white/5 hover:bg-[#25D366] hover:text-white flex items-center justify-center transition" title="WhatsApp: +92 326 6131394"><i class="fa-brands fa-whatsapp text-xs"></i></a>
         </div>
       </div>
@@ -479,7 +483,7 @@
       <div>
         <h4 class="text-xs font-bold uppercase tracking-widest text-white mb-3">Customer Support</h4>
         <ul class="space-y-2 text-xs text-stone-400">
-          <li><a href="javascript:void(0)" onclick="App.openBraCalculatorModal()" class="hover:text-white transition text-rose-400 font-semibold"><i class="fa-solid fa-ruler"></i> Bra Size Calculator</a></li>
+          <li><a href="javascript:void(0)" onclick="App.openBraCalculatorModal()" class="hover:text-white transition text-[#D4AF37] font-semibold"><i class="fa-solid fa-ruler"></i> Bra Size Calculator</a></li>
           <li><a href="javascript:void(0)" onclick="App.openOrderTrackingModal()" class="hover:text-white transition"><i class="fa-solid fa-truck-fast"></i> Live Courier Tracking</a></li>
           <li><a href="javascript:void(0)" onclick="alert('Orders are dispatched in unbranded plain brown boxes with confidential labels. No one can see the parcel contents.')" class="hover:text-white transition">Discreet Packaging Policy</a></li>
           <li><a href="javascript:void(0)" onclick="alert('Due to personal hygiene, intimate apparel can be exchanged within 7 days if unworn with original tags attached.')" class="hover:text-white transition">Hygienic Exchange Policy</a></li>
@@ -493,13 +497,13 @@
         <h4 class="text-xs font-bold uppercase tracking-widest text-white mb-2">Accepted Payments</h4>
         <p class="text-xs text-stone-400">Cash on Delivery available nationwide across 200+ Pakistani cities.</p>
         <div class="flex flex-wrap gap-2 text-xs pt-1">
-          <span class="px-2.5 py-1 bg-stone-900 border border-stone-800 rounded font-bold text-stone-300">Cash on Delivery</span>
-          <span class="px-2.5 py-1 bg-stone-900 border border-stone-800 rounded font-bold text-rose-400">JazzCash</span>
-          <span class="px-2.5 py-1 bg-stone-900 border border-stone-800 rounded font-bold text-emerald-400">EasyPaisa</span>
-          <span class="px-2.5 py-1 bg-stone-900 border border-stone-800 rounded font-bold text-stone-300">Visa / Mastercard</span>
+          <span class="px-2.5 py-1 bg-[#181716] border border-white/10 rounded font-bold text-stone-300">Cash on Delivery</span>
+          <span class="px-2.5 py-1 bg-[#181716] border border-white/10 rounded font-bold text-amber-400">JazzCash</span>
+          <span class="px-2.5 py-1 bg-[#181716] border border-white/10 rounded font-bold text-emerald-400">EasyPaisa</span>
+          <span class="px-2.5 py-1 bg-[#181716] border border-white/10 rounded font-bold text-stone-300">Visa / Mastercard</span>
         </div>
-        <div class="pt-2 text-[11px] text-stone-500">
-          <i class="fa-solid fa-lock text-rose-400 mr-1"></i> 256-Bit SSL Encrypted & Confidential Checkout
+        <div class="pt-2 text-[11px] text-stone-400">
+          <i class="fa-solid fa-lock text-[#D4AF37] mr-1"></i> 256-Bit SSL Encrypted & Confidential Checkout
         </div>
       </div>
 
@@ -530,27 +534,27 @@
   </a>
 
   <!-- Mobile iOS Bottom Navigation Bar -->
-  <div class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-stone-200 pt-2 px-4 z-40 flex items-center justify-around shadow-lg">
-    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-stone-700 hover:text-rose-600 transition">
+  <div class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 bg-[#100F0E]/95 backdrop-blur-md border-t border-white/10 pt-2 px-4 z-40 flex items-center justify-around shadow-2xl">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-stone-400 hover:text-[#D4AF37] transition">
       <i class="fa-solid fa-house text-sm"></i>
       <span class="text-[10px] font-medium">Home</span>
     </button>
-    <button onclick="App.filterByCategory('bras')" class="flex flex-col items-center gap-1 text-stone-700 hover:text-rose-600 transition">
+    <button onclick="App.filterByCategory('bras')" class="flex flex-col items-center gap-1 text-stone-400 hover:text-[#D4AF37] transition">
       <i class="fa-solid fa-shapes text-sm"></i>
       <span class="text-[10px] font-medium">Catalog</span>
     </button>
-    <button onclick="App.openBraCalculatorModal()" class="flex flex-col items-center gap-1 text-rose-600 font-bold">
+    <button onclick="App.openBraCalculatorModal()" class="flex flex-col items-center gap-1 text-[#D4AF37] font-bold">
       <i class="fa-solid fa-ruler-combined text-sm"></i>
       <span class="text-[10px]">Fit Guide</span>
     </button>
-    <button onclick="App.openWishlistDrawer()" class="flex flex-col items-center gap-1 text-stone-700 hover:text-rose-600 relative transition">
+    <button onclick="App.openWishlistDrawer()" class="flex flex-col items-center gap-1 text-stone-400 hover:text-[#D4AF37] relative transition">
       <div class="relative">
         <i class="fa-regular fa-heart text-sm"></i>
         <span class="wishlist-count-badge hidden absolute -top-1 -right-2 w-3.5 h-3.5 bg-rose-600 text-white rounded-full text-[8px] font-bold flex items-center justify-center">0</span>
       </div>
       <span class="text-[10px] font-medium">Saved</span>
     </button>
-    <button onclick="App.openCartDrawer()" class="flex flex-col items-center gap-1 text-stone-700 hover:text-rose-600 relative transition">
+    <button onclick="App.openCartDrawer()" class="flex flex-col items-center gap-1 text-stone-400 hover:text-[#D4AF37] relative transition">
       <div class="relative">
         <i class="fa-solid fa-bag-shopping text-sm"></i>
         <span class="cart-count-badge hidden absolute -top-1 -right-2 w-3.5 h-3.5 bg-rose-600 text-white rounded-full text-[8px] font-bold flex items-center justify-center">0</span>
@@ -568,21 +572,21 @@
     <div class="drawer-panel drawer-right">
       
       <!-- Drawer Header (Khaadi Minimalist Bag) -->
-      <div class="p-4 border-b border-stone-200 flex items-center justify-between bg-white">
+      <div class="p-4 border-b border-white/10 flex items-center justify-between bg-[#121110]">
         <div class="flex items-center gap-2">
-          <i class="fa-solid fa-bag-shopping text-stone-900 text-base"></i>
-          <h3 class="font-bold text-xs uppercase tracking-[0.16em] text-stone-900 font-heading">
-            Shopping Bag
+          <i class="fa-solid fa-bag-shopping text-[#D4AF37] text-base"></i>
+          <h3 class="font-bold text-xs uppercase tracking-[0.16em] text-white font-heading">
+            Shopping Bag <span class="sparkle-icon">✨</span>
           </h3>
         </div>
-        <button onclick="App.closeAllDrawers()" class="w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400 hover:text-stone-900 transition" aria-label="Close Bag">
+        <button onclick="App.closeAllDrawers()" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-stone-400 hover:text-white transition" aria-label="Close Bag">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
       <!-- Free Shipping Thermometer (Khaadi Progress Bar) -->
       <div class="free-shipping-thermometer">
-        <div id="freeShippingThresholdText" class="text-xs text-stone-700 mb-1.5 font-semibold text-center">
+        <div id="freeShippingThresholdText" class="text-xs text-stone-300 mb-1.5 font-semibold text-center">
           Add <strong>Rs. 2,500</strong> for <strong>Free Delivery across Pakistan</strong>
         </div>
         <div class="shipping-progress-bg">
@@ -601,48 +605,48 @@
       </div>
 
       <!-- Drawer Footer with Promo Code & Checkout -->
-      <div class="p-4 border-t border-stone-200 bg-white space-y-3">
+      <div class="p-4 border-t border-white/10 bg-[#121110] space-y-3">
         <div class="flex gap-2">
           <input 
             id="cartCouponInput" 
             type="text" 
             placeholder="Promo code (e.g. MISS10)" 
-            class="flex-1 bg-stone-50 border border-stone-200 rounded text-xs px-3 py-2 uppercase font-semibold focus:outline-none focus:border-stone-900" 
+            class="flex-1 bg-[#181716] border border-white/10 text-white rounded text-xs px-3 py-2 uppercase font-semibold focus:outline-none focus:border-[#D4AF37] placeholder-stone-500" 
           />
-          <button onclick="App.applyCartCoupon()" class="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white rounded text-xs font-bold uppercase tracking-wider transition">
+          <button onclick="App.applyCartCoupon()" class="px-4 py-2 bg-[#D4AF37] hover:bg-[#c49f2e] text-[#0A0908] rounded text-xs font-bold uppercase tracking-wider transition">
             Apply
           </button>
         </div>
 
-        <div class="space-y-1.5 text-xs text-stone-600">
+        <div class="space-y-1.5 text-xs text-stone-400">
           <div class="flex justify-between">
             <span>Subtotal:</span>
-            <span id="cartSubtotalDisplay" class="font-bold text-stone-900">Rs. 0</span>
+            <span id="cartSubtotalDisplay" class="font-bold text-white">Rs. 0</span>
           </div>
-          <div id="cartDiscountRow" class="flex justify-between text-rose-600 font-semibold hidden">
+          <div id="cartDiscountRow" class="flex justify-between text-emerald-400 font-semibold hidden">
             <span>Promo Discount:</span>
             <span id="cartDiscountDisplay">-Rs. 0</span>
           </div>
           <div class="flex justify-between">
             <span>Delivery:</span>
-            <span id="cartShippingDisplay" class="font-bold text-stone-900">Rs. 250</span>
+            <span id="cartShippingDisplay" class="font-bold text-white">Rs. 250</span>
           </div>
-          <div class="flex justify-between text-sm font-bold text-stone-900 pt-2 border-t border-stone-100">
+          <div class="flex justify-between text-sm font-bold text-white pt-2 border-t border-white/10">
             <span>Grand Total:</span>
-            <span id="cartGrandTotalDisplay" class="text-stone-900 font-extrabold">Rs. 0</span>
+            <span id="cartGrandTotalDisplay" class="text-[#D4AF37] font-extrabold text-base">Rs. 0</span>
           </div>
         </div>
 
         <div class="space-y-2 pt-1">
           <!-- Direct WhatsApp 1-Click Order Booking Button -->
-          <button onclick="App.checkoutViaWhatsApp()" class="btn-whatsapp-booking w-full shadow-md">
+          <button onclick="App.checkoutViaWhatsApp()" class="btn-whatsapp-booking w-full shadow-lg">
             <i class="fa-brands fa-whatsapp text-lg"></i>
             <span>Checkout & Book via WhatsApp</span>
           </button>
-          <button onclick="App.openCheckoutModal()" class="w-full py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-file-lines text-stone-500"></i> Enter Delivery Address First
+          <button onclick="App.openCheckoutModal()" class="w-full py-2.5 bg-[#1C1B19] hover:bg-[#252422] text-stone-200 border border-white/10 font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-file-lines text-[#D4AF37]"></i> Enter Delivery Address First
           </button>
-          <button onclick="App.closeAllDrawers()" class="w-full py-2 bg-white hover:bg-stone-50 text-stone-600 border border-stone-200 font-bold text-xs uppercase tracking-wider rounded transition">
+          <button onclick="App.closeAllDrawers()" class="w-full py-2 bg-transparent hover:bg-white/5 text-stone-400 border border-white/10 font-bold text-xs uppercase tracking-wider rounded transition">
             Continue Shopping
           </button>
         </div>
@@ -663,21 +667,21 @@
   <!-- C. MOBILE SLIDE-OVER FILTER & SORT DRAWER -->
   <div id="filterDrawerBackdrop" class="drawer-backdrop">
     <div class="drawer-panel drawer-right">
-      <div class="p-4 border-b border-stone-200 flex items-center justify-between">
-        <h3 class="font-bold text-sm text-stone-900 font-serif-luxury flex items-center gap-2">
-          <i class="fa-solid fa-sliders text-rose-600"></i> Filter & Refine Intimates
+      <div class="p-4 border-b border-white/10 bg-[#121110] flex items-center justify-between">
+        <h3 class="font-bold text-sm text-white font-serif-luxury flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-[#D4AF37]"></i> Filter & Refine Intimates
         </h3>
-        <button onclick="App.closeAllDrawers()" class="w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-500">
+        <button onclick="App.closeAllDrawers()" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-stone-400 hover:text-white">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
-      <div class="flex-1 overflow-y-auto p-4 space-y-5 text-xs text-stone-700">
+      <div class="flex-1 overflow-y-auto p-4 space-y-5 text-xs text-stone-300">
         <!-- Price Range Slider -->
         <div>
-          <div class="flex justify-between font-bold mb-1.5 uppercase tracking-wider">
+          <div class="flex justify-between font-bold mb-1.5 uppercase tracking-wider text-stone-300">
             <span>Max Price:</span>
-            <span id="mobilePriceRangeValue" class="text-rose-600 font-bold">Rs. 8,000</span>
+            <span id="mobilePriceRangeValue" class="text-[#D4AF37] font-bold">Rs. 8,000</span>
           </div>
           <input 
             id="mobilePriceRangeSlider" 
@@ -686,50 +690,50 @@
             max="8000" 
             step="250" 
             value="8000" 
-            class="w-full accent-rose-600" 
+            class="w-full accent-[#D4AF37]" 
           />
         </div>
 
         <!-- Cup Size Filter -->
         <div>
-          <span class="font-bold uppercase tracking-wider block mb-2">Cup Size:</span>
+          <span class="font-bold uppercase tracking-wider block mb-2 text-stone-300">Cup Size:</span>
           <div class="grid grid-cols-5 gap-2">
-            <button onclick="App.activeFilters.cup=null; App.renderProducts();" class="py-2 border border-stone-200 rounded font-semibold hover:border-rose-500 text-center">Any</button>
-            <button onclick="App.activeFilters.cup='B'; App.renderProducts();" class="py-2 border border-stone-200 rounded font-semibold hover:border-rose-500 text-center">B</button>
-            <button onclick="App.activeFilters.cup='C'; App.renderProducts();" class="py-2 border border-stone-200 rounded font-semibold hover:border-rose-500 text-center">C</button>
-            <button onclick="App.activeFilters.cup='D'; App.renderProducts();" class="py-2 border border-stone-200 rounded font-semibold hover:border-rose-500 text-center">D</button>
-            <button onclick="App.activeFilters.cup='DD'; App.renderProducts();" class="py-2 border border-stone-200 rounded font-semibold hover:border-rose-500 text-center">DD</button>
+            <button onclick="App.activeFilters.cup=null; App.renderProducts();" class="py-2 bg-[#181716] border border-white/10 rounded font-semibold hover:border-[#D4AF37] text-center text-stone-200">Any</button>
+            <button onclick="App.activeFilters.cup='B'; App.renderProducts();" class="py-2 bg-[#181716] border border-white/10 rounded font-semibold hover:border-[#D4AF37] text-center text-stone-200">B</button>
+            <button onclick="App.activeFilters.cup='C'; App.renderProducts();" class="py-2 bg-[#181716] border border-white/10 rounded font-semibold hover:border-[#D4AF37] text-center text-stone-200">C</button>
+            <button onclick="App.activeFilters.cup='D'; App.renderProducts();" class="py-2 bg-[#181716] border border-white/10 rounded font-semibold hover:border-[#D4AF37] text-center text-stone-200">D</button>
+            <button onclick="App.activeFilters.cup='DD'; App.renderProducts();" class="py-2 bg-[#181716] border border-white/10 rounded font-semibold hover:border-[#D4AF37] text-center text-stone-200">DD</button>
           </div>
         </div>
 
         <!-- Band Size Filter -->
         <div>
-          <span class="font-bold uppercase tracking-wider block mb-2">Band Size (Ribcage):</span>
+          <span class="font-bold uppercase tracking-wider block mb-2 text-stone-300">Band Size (Ribcage):</span>
           <div class="grid grid-cols-5 gap-2">
-            <button onclick="App.activeFilters.band=null; App.renderProducts();" class="py-2 border border-stone-200 rounded font-semibold hover:border-rose-500 text-center">Any</button>
-            <button onclick="App.activeFilters.band='32'; App.renderProducts();" class="py-2 border border-stone-200 rounded font-semibold hover:border-rose-500 text-center">32</button>
-            <button onclick="App.activeFilters.band='34'; App.renderProducts();" class="py-2 border border-stone-200 rounded font-semibold hover:border-rose-500 text-center">34</button>
-            <button onclick="App.activeFilters.band='36'; App.renderProducts();" class="py-2 border border-stone-200 rounded font-semibold hover:border-rose-500 text-center">36</button>
-            <button onclick="App.activeFilters.band='38'; App.renderProducts();" class="py-2 border border-stone-200 rounded font-semibold hover:border-rose-500 text-center">38</button>
+            <button onclick="App.activeFilters.band=null; App.renderProducts();" class="py-2 bg-[#181716] border border-white/10 rounded font-semibold hover:border-[#D4AF37] text-center text-stone-200">Any</button>
+            <button onclick="App.activeFilters.band='32'; App.renderProducts();" class="py-2 bg-[#181716] border border-white/10 rounded font-semibold hover:border-[#D4AF37] text-center text-stone-200">32</button>
+            <button onclick="App.activeFilters.band='34'; App.renderProducts();" class="py-2 bg-[#181716] border border-white/10 rounded font-semibold hover:border-[#D4AF37] text-center text-stone-200">34</button>
+            <button onclick="App.activeFilters.band='36'; App.renderProducts();" class="py-2 bg-[#181716] border border-white/10 rounded font-semibold hover:border-[#D4AF37] text-center text-stone-200">36</button>
+            <button onclick="App.activeFilters.band='38'; App.renderProducts();" class="py-2 bg-[#181716] border border-white/10 rounded font-semibold hover:border-[#D4AF37] text-center text-stone-200">38</button>
           </div>
         </div>
 
         <!-- Availability Toggle -->
-        <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
-          <span class="font-bold uppercase tracking-wider">In-Stock Only</span>
+        <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+          <span class="font-bold uppercase tracking-wider text-stone-300">In-Stock Only</span>
           <input 
             type="checkbox" 
             onchange="App.activeFilters.inStockOnly = this.checked; App.renderProducts();" 
-            class="w-4 h-4 rounded text-rose-600 focus:ring-rose-500" 
+            class="w-4 h-4 rounded text-[#D4AF37] focus:ring-[#D4AF37] bg-[#181716] border-white/20" 
           />
         </div>
       </div>
 
-      <div class="p-4 border-t border-stone-200 bg-stone-50 flex gap-2">
-        <button onclick="App.resetFilters()" class="flex-1 py-2.5 border border-stone-300 rounded-lg font-bold uppercase text-stone-700 text-xs">
+      <div class="p-4 border-t border-white/10 bg-[#121110] flex gap-2">
+        <button onclick="App.resetFilters()" class="flex-1 py-2.5 border border-white/20 hover:border-white/40 rounded-lg font-bold uppercase text-stone-300 text-xs">
           Clear All
         </button>
-        <button onclick="App.closeAllDrawers()" class="flex-1 py-2.5 bg-rose-600 text-white rounded-lg font-bold uppercase text-xs">
+        <button onclick="App.closeAllDrawers()" class="flex-1 py-2.5 bg-[#D4AF37] hover:bg-[#c49f2e] text-[#0A0908] rounded-lg font-bold uppercase text-xs">
           View Results
         </button>
       </div>
@@ -739,12 +743,12 @@
   <!-- D. WISHLIST DRAWER -->
   <div id="wishlistDrawerBackdrop" class="drawer-backdrop">
     <div class="drawer-panel drawer-right">
-      <div class="p-4 border-b border-stone-200 flex items-center justify-between">
+      <div class="p-4 border-b border-white/10 bg-[#121110] flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <i class="fa-solid fa-heart text-rose-600 text-lg"></i>
-          <h3 class="font-bold text-sm text-stone-900 font-serif-luxury">My Saved Wishlist</h3>
+          <i class="fa-solid fa-heart text-[#D4AF37] text-lg"></i>
+          <h3 class="font-bold text-sm text-white font-serif-luxury">My Saved Wishlist <span class="sparkle-icon">✨</span></h3>
         </div>
-        <button onclick="App.closeAllDrawers()" class="w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-500">
+        <button onclick="App.closeAllDrawers()" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-stone-400 hover:text-white">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
@@ -755,28 +759,28 @@
   <!-- E. MOBILE NAVIGATION DRAWER -->
   <div id="mobileNavDrawerBackdrop" class="drawer-backdrop">
     <div class="drawer-panel drawer-left">
-      <div class="p-4 border-b border-stone-200 flex items-center justify-between bg-stone-950 text-white">
+      <div class="p-4 border-b border-white/10 flex items-center justify-between bg-[#0A0908] text-white">
         <span class="font-extrabold tracking-widest text-sm uppercase font-serif-luxury">
-          MISS<span class="text-rose-500">COLLECTION</span>
+          MISS<span class="text-[#D4AF37]">COLLECTION</span> <span class="sparkle-icon text-xs">✨</span>
         </span>
         <button onclick="App.closeAllDrawers()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
-      <div id="mobileNavItemsContainer" class="p-4 overflow-y-auto flex-1 divide-y divide-stone-100 text-xs font-bold uppercase tracking-wider text-stone-800 space-y-1">
+      <div id="mobileNavItemsContainer" class="p-4 overflow-y-auto flex-1 divide-y divide-white/5 text-xs font-bold uppercase tracking-wider text-stone-200 space-y-1">
         <!-- Rendered dynamically via App.renderNavigation() -->
       </div>
 
-      <div class="px-4 py-2 border-t border-stone-100">
-        <a href="admin.html" class="block py-2 text-stone-400 hover:text-stone-700 text-xs font-normal">
+      <div class="px-4 py-2 border-t border-white/10">
+        <a href="admin.html" class="block py-2 text-stone-400 hover:text-[#D4AF37] text-xs font-normal">
           <i class="fa-solid fa-gear mr-1"></i> Admin Management Portal &rarr;
         </a>
       </div>
 
-      <div class="mt-auto p-4 bg-stone-50 border-t border-stone-200 text-xs text-stone-500">
-        <div class="font-bold text-stone-800 mb-1"><i class="fa-solid fa-lock text-rose-600"></i> 100% Confidential Packing</div>
-        <p class="text-[11px]">Unbranded parcel box, zero sensitive markings outside.</p>
+      <div class="mt-auto p-4 bg-[#121110] border-t border-white/10 text-xs text-stone-400">
+        <div class="font-bold text-white mb-1"><i class="fa-solid fa-lock text-[#D4AF37]"></i> 100% Confidential Packing</div>
+        <p class="text-[11px] text-stone-400">Unbranded parcel box, zero sensitive markings outside.</p>
       </div>
     </div>
   </div>
@@ -790,24 +794,24 @@
   <div id="braCalculatorModalBackdrop" class="modal-backdrop">
     <div class="modal-content max-w-lg">
       <div class="p-6">
-        <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
           <div class="flex items-center gap-2">
-            <i class="fa-solid fa-ruler-combined text-rose-600 text-lg"></i>
-            <h3 class="font-bold text-base text-stone-900 font-serif-luxury">Bra Size Fit Calculator</h3>
+            <i class="fa-solid fa-ruler-combined text-[#D4AF37] text-lg"></i>
+            <h3 class="font-bold text-base text-white font-serif-luxury">Bra Size Fit Calculator <span class="sparkle-icon">✨</span></h3>
           </div>
-          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500">
+          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
             <i class="fa-solid fa-xmark text-sm"></i>
           </button>
         </div>
 
         <form id="braCalculatorForm" class="mt-4 space-y-4">
-          <p class="text-xs text-stone-600 leading-relaxed">
+          <p class="text-xs text-stone-300 leading-relaxed">
             Grab a measuring tape wearing your most comfortable unpadded bra. Measure snugly in <strong>inches</strong>:
           </p>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold text-stone-800 uppercase mb-1">
+              <label class="block text-xs font-bold text-stone-300 uppercase mb-1">
                 1. Underbust / Ribcage (Inches)
               </label>
               <input 
@@ -818,13 +822,13 @@
                 max="50" 
                 placeholder="e.g. 30" 
                 required 
-                class="w-full bg-stone-50 border border-stone-300 rounded-lg text-xs px-3 py-2.5 font-bold focus:outline-none focus:border-rose-500"
+                class="w-full bg-[#181716] border border-white/10 rounded-lg text-xs px-3 py-2.5 font-bold text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500"
               />
               <span class="text-[10px] text-stone-400 mt-0.5 block">Directly under your bust snugly</span>
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-stone-800 uppercase mb-1">
+              <label class="block text-xs font-bold text-stone-300 uppercase mb-1">
                 2. Fullest Bust (Inches)
               </label>
               <input 
@@ -835,13 +839,13 @@
                 max="60" 
                 placeholder="e.g. 33" 
                 required 
-                class="w-full bg-stone-50 border border-stone-300 rounded-lg text-xs px-3 py-2.5 font-bold focus:outline-none focus:border-rose-500"
+                class="w-full bg-[#181716] border border-white/10 rounded-lg text-xs px-3 py-2.5 font-bold text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500"
               />
               <span class="text-[10px] text-stone-400 mt-0.5 block">Across the nipples/fullest point</span>
             </div>
           </div>
 
-          <button type="submit" class="w-full py-3 bg-stone-900 hover:bg-rose-600 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-md">
+          <button type="submit" class="w-full py-3 bg-[#D4AF37] hover:bg-[#c49f2e] text-[#0A0908] font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-lg">
             Compute My Perfect Size
           </button>
 
@@ -856,12 +860,12 @@
   <div id="checkoutModalBackdrop" class="modal-backdrop">
     <div class="modal-content max-w-2xl">
       <div class="p-6">
-        <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
           <div class="flex items-center gap-2">
-            <i class="fa-solid fa-lock text-rose-600 text-lg"></i>
-            <h3 class="font-bold text-base text-stone-900 font-serif-luxury">Express Discreet Checkout</h3>
+            <i class="fa-solid fa-lock text-[#D4AF37] text-lg"></i>
+            <h3 class="font-bold text-base text-white font-serif-luxury">Express Discreet Checkout <span class="sparkle-icon">✨</span></h3>
           </div>
-          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500">
+          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
             <i class="fa-solid fa-xmark text-sm"></i>
           </button>
         </div>
@@ -869,29 +873,29 @@
         <div id="checkoutSummaryBox" class="mt-4"></div>
 
         <form id="checkoutOrderForm" class="space-y-4">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-stone-800 border-b border-stone-100 pb-1">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white border-b border-white/10 pb-1">
             Shipping & Contact Details
           </h4>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
-              <label class="block font-semibold text-stone-700 mb-1">Full Name *</label>
-              <input type="text" name="fullName" required placeholder="e.g. Ayesha Khan" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+              <label class="block font-semibold text-stone-300 mb-1">Full Name *</label>
+              <input type="text" name="fullName" required placeholder="e.g. Ayesha Khan" class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500" />
             </div>
 
             <div>
-              <label class="block font-semibold text-stone-700 mb-1">Phone Number (For Courier) *</label>
-              <input type="tel" name="phone" required placeholder="0300-1234567" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+              <label class="block font-semibold text-stone-300 mb-1">Phone Number (For Courier) *</label>
+              <input type="tel" name="phone" required placeholder="0300-1234567" class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500" />
             </div>
 
             <div>
-              <label class="block font-semibold text-stone-700 mb-1">Email Address</label>
-              <input type="email" name="email" placeholder="name@domain.com" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+              <label class="block font-semibold text-stone-300 mb-1">Email Address</label>
+              <input type="email" name="email" placeholder="name@domain.com" class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500" />
             </div>
 
             <div>
-              <label class="block font-semibold text-stone-700 mb-1">Destination City *</label>
-              <select name="city" required class="w-full border border-stone-300 rounded px-3 py-2 bg-white focus:outline-none focus:border-rose-500 font-semibold">
+              <label class="block font-semibold text-stone-300 mb-1">Destination City *</label>
+              <select name="city" required class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] font-semibold">
                 <option value="Karachi">Karachi</option>
                 <option value="Lahore" selected>Lahore</option>
                 <option value="Islamabad">Islamabad</option>
@@ -912,50 +916,50 @@
             </div>
 
             <div class="sm:col-span-2">
-              <label class="block font-semibold text-stone-700 mb-1">Complete Delivery Address *</label>
-              <textarea name="address" required rows="2" placeholder="House/Flat #, Street #, Sector/Area, Landmark" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500"></textarea>
+              <label class="block font-semibold text-stone-300 mb-1">Complete Delivery Address *</label>
+              <textarea name="address" required rows="2" placeholder="House/Flat #, Street #, Sector/Area, Landmark" class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500"></textarea>
             </div>
 
             <div class="sm:col-span-2">
-              <label class="block font-semibold text-stone-700 mb-1">Delivery Instructions / Confidential Notes</label>
-              <input type="text" name="notes" placeholder="e.g. Call before arrival, leave with security" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+              <label class="block font-semibold text-stone-300 mb-1">Delivery Instructions / Confidential Notes</label>
+              <input type="text" name="notes" placeholder="e.g. Call before arrival, leave with security" class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500" />
             </div>
           </div>
 
-          <h4 class="text-xs font-bold uppercase tracking-wider text-stone-800 border-b border-stone-100 pb-1 pt-2">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white border-b border-white/10 pb-1 pt-2">
             Select Payment Method
           </h4>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
-            <label class="p-3 border border-rose-300 bg-rose-50/50 rounded-lg flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="paymentMethod" value="Cash on Delivery (COD)" checked class="text-rose-600 focus:ring-rose-500" />
+            <label class="p-3 border border-[#D4AF37]/50 bg-[#181716] rounded-lg flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="paymentMethod" value="Cash on Delivery (COD)" checked class="text-[#D4AF37] focus:ring-[#D4AF37] accent-[#D4AF37]" />
               <div>
-                <strong class="block text-stone-900">Cash on Delivery</strong>
-                <span class="text-[10px] text-stone-500">Pay when parcel arrives</span>
+                <strong class="block text-white">Cash on Delivery</strong>
+                <span class="text-[10px] text-stone-400">Pay when parcel arrives</span>
               </div>
             </label>
 
-            <label class="p-3 border border-stone-200 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-stone-50">
-              <input type="radio" name="paymentMethod" value="JazzCash / EasyPaisa" class="text-rose-600 focus:ring-rose-500" />
+            <label class="p-3 border border-white/10 bg-[#181716] rounded-lg flex items-center gap-2 cursor-pointer hover:border-[#D4AF37]/40">
+              <input type="radio" name="paymentMethod" value="JazzCash / EasyPaisa" class="text-[#D4AF37] focus:ring-[#D4AF37] accent-[#D4AF37]" />
               <div>
-                <strong class="block text-stone-900">JazzCash / EasyPaisa</strong>
-                <span class="text-[10px] text-stone-500">Mobile Wallet Transfer</span>
+                <strong class="block text-white">JazzCash / EasyPaisa</strong>
+                <span class="text-[10px] text-stone-400">Mobile Wallet Transfer</span>
               </div>
             </label>
 
-            <label class="p-3 border border-stone-200 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-stone-50">
-              <input type="radio" name="paymentMethod" value="Debit / Credit Card" class="text-rose-600 focus:ring-rose-500" />
+            <label class="p-3 border border-white/10 bg-[#181716] rounded-lg flex items-center gap-2 cursor-pointer hover:border-[#D4AF37]/40">
+              <input type="radio" name="paymentMethod" value="Debit / Credit Card" class="text-[#D4AF37] focus:ring-[#D4AF37] accent-[#D4AF37]" />
               <div>
-                <strong class="block text-stone-900">Card Payment</strong>
-                <span class="text-[10px] text-stone-500">Visa / Mastercard</span>
+                <strong class="block text-white">Card Payment</strong>
+                <span class="text-[10px] text-stone-400">Visa / Mastercard</span>
               </div>
             </label>
           </div>
 
-          <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 flex items-start gap-2.5">
-            <input type="checkbox" id="discreetPledgeCheck" checked required class="mt-0.5 rounded text-rose-600 focus:ring-rose-500" />
-            <label for="discreetPledgeCheck" class="text-xs text-stone-700 select-none">
-              <strong>100% Confidential Delivery Guaranteed:</strong> I confirm that this order should be shipped in a plain unbranded box with no sensitive product labels on the exterior.
+          <div class="p-3 bg-[#181716] rounded-lg border border-[#D4AF37]/30 flex items-start gap-2.5">
+            <input type="checkbox" id="discreetPledgeCheck" checked required class="mt-0.5 rounded text-[#D4AF37] focus:ring-[#D4AF37] accent-[#D4AF37]" />
+            <label for="discreetPledgeCheck" class="text-xs text-stone-300 select-none">
+              <strong class="text-white">100% Confidential Delivery Guaranteed:</strong> I confirm that this order should be shipped in a plain unbranded box with no sensitive product labels on the exterior.
             </label>
           </div>
 
@@ -976,18 +980,18 @@
   <div id="orderTrackingModalBackdrop" class="modal-backdrop">
     <div class="modal-content max-w-md">
       <div class="p-6">
-        <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
           <div class="flex items-center gap-2">
-            <i class="fa-solid fa-truck-fast text-rose-600 text-lg"></i>
-            <h3 class="font-bold text-base text-stone-900 font-serif-luxury">Live Courier Tracking</h3>
+            <i class="fa-solid fa-truck-fast text-[#D4AF37] text-lg"></i>
+            <h3 class="font-bold text-base text-white font-serif-luxury">Live Courier Tracking</h3>
           </div>
-          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500">
+          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
             <i class="fa-solid fa-xmark text-sm"></i>
           </button>
         </div>
 
         <form id="orderTrackingForm" class="mt-4 space-y-3">
-          <p class="text-xs text-stone-600">
+          <p class="text-xs text-stone-300">
             Enter your <strong>Order ID</strong> (e.g. <code>MC-78921</code>) or <strong>TCS Tracking Code</strong>:
           </p>
           <div class="flex gap-2">
@@ -996,9 +1000,9 @@
               type="text" 
               required 
               placeholder="e.g. MC-78921" 
-              class="flex-1 border border-stone-300 rounded text-xs px-3 py-2 uppercase font-bold focus:outline-none focus:border-rose-500" 
+              class="flex-1 bg-[#181716] border border-white/10 rounded text-xs px-3 py-2 uppercase font-bold text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500" 
             />
-            <button type="submit" class="px-4 py-2 bg-stone-900 hover:bg-rose-600 text-white font-bold text-xs uppercase rounded transition">
+            <button type="submit" class="px-4 py-2 bg-[#D4AF37] hover:bg-[#c49f2e] text-[#0A0908] font-bold text-xs uppercase rounded transition">
               Track
             </button>
           </div>
@@ -1013,17 +1017,17 @@
   <div id="writeReviewModalBackdrop" class="modal-backdrop">
     <div class="modal-content max-w-lg">
       <div class="p-6">
-        <div class="flex items-center justify-between pb-3 border-b border-stone-200">
-          <h3 class="font-bold text-base text-stone-900 font-serif-luxury">Write a Verified Review</h3>
-          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <h3 class="font-bold text-base text-white font-serif-luxury">Write a Verified Review <span class="sparkle-icon">✨</span></h3>
+          <button onclick="App.closeAllModals()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
             <i class="fa-solid fa-xmark text-sm"></i>
           </button>
         </div>
 
         <form id="writeReviewForm" class="mt-4 space-y-3 text-xs">
           <div>
-            <label class="block font-bold text-stone-700 mb-1">Select Rating *</label>
-            <select name="rating" class="w-full border border-stone-300 rounded px-3 py-2 bg-white font-semibold focus:outline-none focus:border-rose-500">
+            <label class="block font-bold text-stone-300 mb-1">Select Rating *</label>
+            <select name="rating" class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white font-semibold focus:outline-none focus:border-[#D4AF37]">
               <option value="5">⭐⭐⭐⭐⭐ (5/5) Exceptional Quality & Fit</option>
               <option value="4">⭐⭐⭐⭐ (4/5) Very Good</option>
               <option value="3">⭐⭐⭐ (3/5) Average</option>
@@ -1032,31 +1036,31 @@
 
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block font-bold text-stone-700 mb-1">Your Name *</label>
-              <input type="text" name="reviewerName" required placeholder="e.g. Ayesha" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+              <label class="block font-bold text-stone-300 mb-1">Your Name *</label>
+              <input type="text" name="reviewerName" required placeholder="e.g. Ayesha" class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500" />
             </div>
             <div>
-              <label class="block font-bold text-stone-700 mb-1">City *</label>
-              <input type="text" name="reviewerCity" required placeholder="e.g. Lahore" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+              <label class="block font-bold text-stone-300 mb-1">City *</label>
+              <input type="text" name="reviewerCity" required placeholder="e.g. Lahore" class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500" />
             </div>
           </div>
 
           <div>
-            <label class="block font-bold text-stone-700 mb-1">Product Reviewed</label>
-            <input type="text" name="productTitle" placeholder="e.g. Seamless Wireless Bra" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+            <label class="block font-bold text-stone-300 mb-1">Product Reviewed</label>
+            <input type="text" name="productTitle" placeholder="e.g. Seamless Wireless Bra" class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500" />
           </div>
 
           <div>
-            <label class="block font-bold text-stone-700 mb-1">Review Headline *</label>
-            <input type="text" name="reviewTitle" required placeholder="e.g. Best wireless bra I have ever worn!" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+            <label class="block font-bold text-stone-300 mb-1">Review Headline *</label>
+            <input type="text" name="reviewTitle" required placeholder="e.g. Best wireless bra I have ever worn!" class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500" />
           </div>
 
           <div>
-            <label class="block font-bold text-stone-700 mb-1">Your Detailed Feedback *</label>
-            <textarea name="reviewComment" required rows="3" placeholder="Share your experience regarding fabric softness, fit, packaging, and courier delivery..." class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500"></textarea>
+            <label class="block font-bold text-stone-300 mb-1">Your Detailed Feedback *</label>
+            <textarea name="reviewComment" required rows="3" placeholder="Share your experience regarding fabric softness, fit, packaging, and courier delivery..." class="w-full bg-[#181716] border border-white/10 rounded px-3 py-2 text-white focus:outline-none focus:border-[#D4AF37] placeholder-stone-500"></textarea>
           </div>
 
-          <button type="submit" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold uppercase rounded-lg transition shadow-md">
+          <button type="submit" class="w-full py-3 bg-[#D4AF37] hover:bg-[#c49f2e] text-[#0A0908] font-bold uppercase rounded-lg transition shadow-lg">
             Submit Verified Review
           </button>
         </form>

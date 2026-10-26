@@ -23,6 +23,7 @@ const App = {
   activeProductForSheet: null,
 
   init: function () {
+    this.initAmbientSparkles();
     this.bindEvents();
     this.renderNavigation();
     this.renderHeroSlider();
@@ -180,6 +181,104 @@ const App = {
         header.classList.remove("header-shadow");
       }
     });
+  },
+
+  // Ambient Haute Sparkle Canvas Particle Engine
+  initAmbientSparkles: function () {
+    const canvas = document.getElementById("ambientSparklesCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    const count = Math.min(38, Math.max(22, Math.floor(width / 38)));
+
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 2.2 + 0.8,
+        speedX: (Math.random() - 0.5) * 0.35,
+        speedY: -Math.random() * 0.45 - 0.1,
+        alpha: Math.random() * 0.7 + 0.2,
+        twinkleSpeed: Math.random() * 0.02 + 0.01,
+        isStar: Math.random() > 0.4
+      });
+    }
+
+    function drawSparkleStar(cx, cy, spikes, outerRadius, innerRadius, color) {
+      let rot = (Math.PI / 2) * 3;
+      let x = cx;
+      let y = cy;
+      const step = Math.PI / spikes;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - outerRadius);
+      for (let i = 0; i < spikes; i++) {
+        x = cx + Math.cos(rot) * outerRadius;
+        y = cy + Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+
+        x = cx + Math.cos(rot) * innerRadius;
+        y = cy + Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+      }
+      ctx.lineTo(cx, cy - outerRadius);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = "rgba(212, 175, 55, 0.6)";
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      particles.forEach(p => {
+        p.alpha += p.twinkleSpeed;
+        if (p.alpha > 0.95 || p.alpha < 0.15) {
+          p.twinkleSpeed = -p.twinkleSpeed;
+        }
+
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        if (p.y < -10) {
+          p.y = height + 10;
+          p.x = Math.random() * width;
+        }
+        if (p.x < -10) p.x = width + 10;
+        if (p.x > width + 10) p.x = -10;
+
+        const goldColor = `rgba(212, 175, 55, ${Math.max(0, Math.min(1, p.alpha))})`;
+        if (p.isStar) {
+          drawSparkleStar(p.x, p.y, 4, p.size * 2.2, p.size * 0.7, goldColor);
+        } else {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = goldColor;
+          ctx.shadowBlur = 5;
+          ctx.shadowColor = "rgba(212, 175, 55, 0.5)";
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
   },
 
   // Mega-Menu HTML Templates for Desktop Navigation
@@ -697,11 +796,11 @@ const App = {
 
     container.innerHTML = categories.map(cat => `
       <div class="category-circle-item shrink-0 text-center select-none" onclick="App.filterByCategory('${cat.id}')">
-        <div class="category-circle-img-wrapper p-1 rounded-full border-2 ${this.currentCategory === cat.id ? 'border-rose-600 ring-2 ring-rose-200' : 'border-stone-200 hover:border-rose-400'} transition-all">
+        <div class="category-circle-img-wrapper p-1 rounded-full border-2 ${this.currentCategory === cat.id ? 'border-[#D4AF37] ring-2 ring-[#D4AF37]/30' : 'border-white/10 hover:border-[#D4AF37]/50'} transition-all">
           <img src="${cat.img}" alt="${cat.name}" class="category-circle-img" loading="lazy" />
         </div>
-        <span class="text-xs font-semibold text-stone-800 tracking-tight block mt-1">${cat.name}</span>
-        <span class="text-[10px] text-stone-600 block -mt-1 font-medium">${cat.count}</span>
+        <span class="text-xs font-semibold text-stone-200 tracking-tight block mt-1">${cat.name}</span>
+        <span class="text-[10px] text-stone-400 block -mt-1 font-medium">${cat.count}</span>
       </div>
     `).join("");
   },
@@ -932,8 +1031,8 @@ const App = {
           <div>
             <div class="flex items-center justify-between gap-1 mb-1">
               <span class="card-fabric-line truncate">${p.fabric ? p.fabric.split(',')[0] : p.subCategory}</span>
-              <div class="flex items-center gap-1 text-[11px] text-stone-600 font-semibold shrink-0">
-                <i class="fa-solid fa-star text-[9px] text-amber-500"></i>
+              <div class="flex items-center gap-1 text-[11px] text-stone-300 font-semibold shrink-0">
+                <i class="fa-solid fa-star text-[9px] text-[#D4AF37]"></i>
                 <span>${p.rating}</span>
                 <span class="text-stone-400 font-normal text-[10px]">(${p.reviewsCount})</span>
               </div>
@@ -948,12 +1047,12 @@ const App = {
                 ${p.colors.slice(0, 4).map(c => `
                   <span class="swatch-circle" style="background-color: ${c.hex};" title="${c.name}"></span>
                 `).join("")}
-                ${p.colors.length > 4 ? `<span class="text-[10px] text-stone-500 font-medium">+${p.colors.length - 4}</span>` : ""}
+                ${p.colors.length > 4 ? `<span class="text-[10px] text-stone-400 font-medium">+${p.colors.length - 4}</span>` : ""}
               </div>
             ` : ""}
           </div>
 
-          <div class="pt-2 border-t border-stone-100 flex items-center justify-between mt-auto">
+          <div class="pt-2 border-t border-white/10 flex items-center justify-between mt-auto">
             <div class="flex items-baseline gap-1.5 flex-wrap">
               <span class="card-price-primary">${Store.formatPKR(p.price)}</span>
               ${p.originalPrice ? `<span class="card-price-original">${Store.formatPKR(p.originalPrice)}</span>` : ""}
@@ -963,7 +1062,7 @@ const App = {
             <button 
               type="button" 
               onclick="event.stopPropagation(); App.openMobileQuickAddSheet('${p.id}')"
-              class="md:hidden px-2.5 py-1 bg-stone-900 text-white rounded text-[10px] font-bold uppercase tracking-wider transition"
+              class="md:hidden px-2.5 py-1 bg-[#181716] text-[#D4AF37] border border-white/10 hover:border-[#D4AF37]/50 rounded text-[10px] font-bold uppercase tracking-wider transition"
             >
               + Add
             </button>
@@ -984,19 +1083,19 @@ const App = {
     if (!sheetContent || !sheetBackdrop) return;
 
     sheetContent.innerHTML = `
-      <div class="p-4 sm:p-5">
+      <div class="p-4 sm:p-5 text-white">
         <!-- Header -->
-        <div class="flex gap-3 pb-3 border-b border-stone-100">
-          <img src="${p.images[0]}" alt="${p.title}" class="w-16 h-20 object-cover rounded bg-stone-50 shrink-0" />
+        <div class="flex gap-3 pb-3 border-b border-white/10">
+          <img src="${p.images[0]}" alt="${p.title}" class="w-16 h-20 object-cover rounded bg-[#181716] shrink-0" />
           <div class="flex-1 min-w-0">
-            <span class="text-[10px] uppercase font-bold text-rose-600 tracking-wider">${p.subCategory}</span>
-            <h4 class="text-xs sm:text-sm font-bold text-stone-900 line-clamp-1">${p.title}</h4>
-            <div class="text-xs font-extrabold text-stone-900 mt-0.5">${Store.formatPKR(p.price)}</div>
-            <span class="inline-flex items-center gap-1 text-[10px] text-emerald-700 font-semibold mt-1">
-              <i class="fa-solid fa-circle-check text-emerald-600"></i> In Stock (${p.stockCount} units)
+            <span class="text-[10px] uppercase font-bold text-[#D4AF37] tracking-wider">${p.subCategory}</span>
+            <h4 class="text-xs sm:text-sm font-bold text-white line-clamp-1">${p.title}</h4>
+            <div class="text-xs font-extrabold text-[#D4AF37] mt-0.5">${Store.formatPKR(p.price)}</div>
+            <span class="inline-flex items-center gap-1 text-[10px] text-emerald-400 font-semibold mt-1">
+              <i class="fa-solid fa-circle-check"></i> In Stock (${p.stockCount} units)
             </span>
           </div>
-          <button onclick="App.closeBottomSheet()" class="w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400 shrink-0">
+          <button onclick="App.closeBottomSheet()" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-stone-400 hover:text-white shrink-0">
             <i class="fa-solid fa-xmark text-sm"></i>
           </button>
         </div>
@@ -1004,8 +1103,8 @@ const App = {
         <!-- Size Selection Chips -->
         <div class="py-4">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold uppercase text-stone-800 tracking-wider">Tap Your Size to Add:</span>
-            <button onclick="App.closeBottomSheet(); App.openBraCalculatorModal();" class="text-xs text-rose-600 font-bold hover:underline flex items-center gap-1">
+            <span class="text-xs font-bold uppercase text-stone-300 tracking-wider">Tap Your Size to Add:</span>
+            <button onclick="App.closeBottomSheet(); App.openBraCalculatorModal();" class="text-xs text-[#D4AF37] font-bold hover:underline flex items-center gap-1">
               <i class="fa-solid fa-ruler-combined"></i> Size Guide
             </button>
           </div>
@@ -1015,7 +1114,7 @@ const App = {
               <button 
                 type="button" 
                 onclick="App.quickAddFromSheet('${s}')"
-                class="py-2.5 px-2 bg-stone-50 hover:bg-rose-600 hover:text-white border border-stone-200 rounded-lg text-xs font-bold text-stone-800 transition active:scale-95 flex items-center justify-center"
+                class="py-2.5 px-2 bg-[#181716] hover:bg-[#D4AF37] hover:text-[#0A0908] border border-white/10 rounded-lg text-xs font-bold text-stone-200 transition active:scale-95 flex items-center justify-center"
               >
                 ${s}
               </button>
@@ -1023,8 +1122,8 @@ const App = {
           </div>
         </div>
 
-        <div class="p-2.5 bg-rose-50/60 rounded-lg border border-rose-100 flex items-center gap-2 text-[11px] text-rose-800 font-medium">
-          <i class="fa-solid fa-lock text-rose-600"></i>
+        <div class="p-2.5 bg-[#181716] rounded-lg border border-[#D4AF37]/30 flex items-center gap-2 text-[11px] text-[#D4AF37] font-medium">
+          <i class="fa-solid fa-lock"></i>
           100% Discreet Packaging: Plain brown parcel, zero product labels.
         </div>
       </div>
@@ -1169,18 +1268,18 @@ const App = {
     if (!modalContent) return;
 
     modalContent.innerHTML = `
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 sm:p-6 relative">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 sm:p-6 relative text-white">
         <!-- Close Button -->
-        <button onclick="App.closeAllModals()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center transition z-20">
+        <button onclick="App.closeAllModals()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition z-20">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
 
         <!-- Product Gallery -->
         <div class="space-y-3">
-          <div class="aspect-[3/4] rounded-lg overflow-hidden bg-stone-50 border border-stone-200 relative">
+          <div class="aspect-[3/4] rounded-lg overflow-hidden bg-[#181716] border border-white/10 relative">
             <img id="modalMainImage" src="${selectedImage}" alt="${p.title}" class="w-full h-full object-cover" />
-            <span class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-xs text-[11px] font-semibold text-stone-800 px-2.5 py-1 rounded-md shadow-xs flex items-center gap-1.5 border border-stone-200">
-              <i class="fa-solid fa-lock text-rose-600"></i> 100% Discreet Packaging
+            <span class="absolute bottom-3 left-3 bg-[#0A0908]/90 backdrop-blur-xs text-[11px] font-semibold text-stone-200 px-2.5 py-1 rounded-md shadow-xs flex items-center gap-1.5 border border-white/10">
+              <i class="fa-solid fa-lock text-[#D4AF37]"></i> 100% Discreet Packaging
             </span>
           </div>
 
@@ -1192,7 +1291,7 @@ const App = {
                   src="${img}" 
                   alt="Thumb ${idx}" 
                   onclick="document.getElementById('modalMainImage').src='${img}'"
-                  class="w-14 h-18 object-cover rounded border border-stone-200 cursor-pointer hover:border-rose-600 transition" 
+                  class="w-14 h-18 object-cover rounded border border-white/10 cursor-pointer hover:border-[#D4AF37] transition" 
                 />
               `).join("")}
             </div>
@@ -1203,32 +1302,32 @@ const App = {
         <div class="flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between text-xs mb-1">
-              <span class="text-rose-700 font-bold tracking-wider uppercase">${p.subCategory}</span>
-              <div class="flex items-center gap-1 text-amber-500 font-bold">
+              <span class="text-[#D4AF37] font-bold tracking-wider uppercase">${p.subCategory}</span>
+              <div class="flex items-center gap-1 text-[#D4AF37] font-bold">
                 <i class="fa-solid fa-star text-xs"></i>
-                <span class="text-stone-800">${p.rating}</span>
+                <span class="text-white">${p.rating}</span>
                 <span class="text-stone-400">(${p.reviewsCount} reviews)</span>
               </div>
             </div>
 
-            <h2 class="text-lg sm:text-xl font-bold text-stone-900 leading-snug mb-2 font-serif-luxury">
+            <h2 class="text-lg sm:text-xl font-bold text-white leading-snug mb-2 font-serif-luxury">
               ${p.title}
             </h2>
 
             <!-- Pricing -->
             <div class="flex items-baseline gap-3 mb-3">
-              <span class="text-xl sm:text-2xl font-bold text-stone-900">${Store.formatPKR(p.price)}</span>
+              <span class="text-xl sm:text-2xl font-bold text-white">${Store.formatPKR(p.price)}</span>
               ${p.originalPrice ? `
                 <span class="text-sm text-stone-400 line-through">${Store.formatPKR(p.originalPrice)}</span>
-                <span class="px-2 py-0.5 bg-rose-100 text-rose-700 text-xs font-bold rounded">
+                <span class="px-2 py-0.5 bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/30 text-xs font-bold rounded">
                   Save ${Store.formatPKR(p.originalPrice - p.price)}
                 </span>
               ` : ""}
             </div>
 
             <!-- Stock Status Pill -->
-            <div class="mb-4 inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <div class="mb-4 inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/30">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               In Stock & Ready for Confidential Dispatch (${p.stockCount} left)
             </div>
 
@@ -1236,8 +1335,8 @@ const App = {
             ${p.colors && p.colors.length > 0 ? `
               <div class="mb-4">
                 <div class="flex items-center justify-between mb-1.5">
-                  <span class="text-xs font-bold text-stone-800 uppercase tracking-wider">Color:</span>
-                  <span id="modalSelectedColorLabel" class="text-xs text-rose-600 font-semibold">${selectedColor}</span>
+                  <span class="text-xs font-bold text-stone-300 uppercase tracking-wider">Color:</span>
+                  <span id="modalSelectedColorLabel" class="text-xs text-[#D4AF37] font-semibold">${selectedColor}</span>
                 </div>
                 <div class="flex items-center gap-2">
                   ${p.colors.map(c => `
@@ -1258,8 +1357,8 @@ const App = {
             ${p.sizes && p.sizes.length > 0 ? `
               <div class="mb-4">
                 <div class="flex items-center justify-between mb-1.5">
-                  <span class="text-xs font-bold text-stone-800 uppercase tracking-wider">Select Size:</span>
-                  <button onclick="App.openBraCalculatorModal()" class="text-xs text-rose-600 hover:underline font-semibold flex items-center gap-1">
+                  <span class="text-xs font-bold text-stone-300 uppercase tracking-wider">Select Size:</span>
+                  <button onclick="App.openBraCalculatorModal()" class="text-xs text-[#D4AF37] hover:underline font-semibold flex items-center gap-1">
                     <i class="fa-solid fa-ruler"></i> Find My Exact Size
                   </button>
                 </div>
@@ -1278,24 +1377,24 @@ const App = {
               </div>
             ` : ""}
 
-            <p class="text-xs text-stone-600 leading-relaxed mb-3">
+            <p class="text-xs text-stone-300 leading-relaxed mb-3">
               ${p.description}
             </p>
 
-            <div class="text-[11px] text-stone-500 mb-4 bg-stone-50 p-2.5 rounded border border-stone-100">
-              <strong>Fabric & Care:</strong> ${p.fabric}. Hand wash cold, line dry in shade.
+            <div class="text-[11px] text-stone-400 mb-4 bg-[#181716] p-2.5 rounded border border-white/10">
+              <strong class="text-stone-200">Fabric & Care:</strong> ${p.fabric}. Hand wash cold, line dry in shade.
             </div>
           </div>
 
           <!-- Actions -->
-          <div class="space-y-2.5 pt-3 border-t border-stone-100">
+          <div class="space-y-2.5 pt-3 border-t border-white/10">
             <div class="flex items-center gap-3">
-              <div class="flex items-center border border-stone-300 rounded h-11 bg-white">
-                <button type="button" onclick="App.stepModalQty(-1)" class="w-10 h-full text-stone-600 hover:text-stone-900 transition flex items-center justify-center font-bold">
+              <div class="flex items-center border border-white/20 rounded h-11 bg-[#181716]">
+                <button type="button" onclick="App.stepModalQty(-1)" class="w-10 h-full text-stone-300 hover:text-white transition flex items-center justify-center font-bold">
                   &minus;
                 </button>
-                <input id="modalQtyInput" type="number" value="1" min="1" max="10" readonly class="w-10 text-center text-xs font-bold text-stone-900 focus:outline-none" />
-                <button type="button" onclick="App.stepModalQty(1)" class="w-10 h-full text-stone-600 hover:text-stone-900 transition flex items-center justify-center font-bold">
+                <input id="modalQtyInput" type="number" value="1" min="1" max="10" readonly class="w-10 text-center text-xs font-bold text-white bg-transparent focus:outline-none" />
+                <button type="button" onclick="App.stepModalQty(1)" class="w-10 h-full text-stone-300 hover:text-white transition flex items-center justify-center font-bold">
                   &#43;
                 </button>
               </div>
@@ -1303,7 +1402,7 @@ const App = {
               <button 
                 type="button" 
                 onclick="App.addActiveModalToCart()"
-                class="flex-1 h-11 bg-stone-900 hover:bg-rose-600 text-white font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-2 shadow-md"
+                class="flex-1 h-11 bg-[#D4AF37] hover:bg-[#c49f2e] text-[#0A0908] font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-2 shadow-lg"
               >
                 <i class="fa-solid fa-bag-shopping"></i> Add to Shopping Bag
               </button>
@@ -1483,21 +1582,21 @@ const App = {
       const upsellItems = Store.getCartCrossSells();
       if (upsellItems.length > 0 && cart.length > 0) {
         upsellSection.innerHTML = `
-          <div class="mt-4 pt-3 border-t border-stone-200">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-500 block mb-2">
+          <div class="mt-4 pt-3 border-t border-white/10">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#D4AF37] block mb-2">
               Frequently Bought Together
             </span>
             <div class="space-y-2">
               ${upsellItems.map(item => `
-                <div class="cart-upsell-item">
-                  <img src="${item.images[0]}" alt="${item.title}" class="w-10 h-12 object-cover rounded bg-stone-100 shrink-0" />
+                <div class="cart-upsell-item bg-[#181716] p-2 rounded border border-white/10 flex items-center gap-2">
+                  <img src="${item.images[0]}" alt="${item.title}" class="w-10 h-12 object-cover rounded bg-[#100F0E] shrink-0" />
                   <div class="flex-1 min-w-0 text-left">
-                    <h5 class="text-xs font-bold text-stone-900 truncate">${item.title}</h5>
-                    <span class="text-xs font-semibold text-rose-600">${Store.formatPKR(item.price)}</span>
+                    <h5 class="text-xs font-bold text-white truncate">${item.title}</h5>
+                    <span class="text-xs font-semibold text-[#D4AF37]">${Store.formatPKR(item.price)}</span>
                   </div>
                   <button 
                     onclick="Store.addToCart(Store.getProductById('${item.id}'), 'Standard', 'Standard', 1); App.showToast('Added ${item.title}!');" 
-                    class="px-2.5 py-1 bg-stone-900 hover:bg-rose-600 text-white rounded text-[10px] font-bold uppercase shrink-0 transition"
+                    class="px-2.5 py-1 bg-[#D4AF37] hover:bg-[#c49f2e] text-[#0A0908] rounded text-[10px] font-bold uppercase shrink-0 transition"
                   >
                     + Add
                   </button>
@@ -1517,12 +1616,12 @@ const App = {
     if (cart.length === 0) {
       itemsContainer.innerHTML = `
         <div class="py-16 text-center text-stone-400">
-          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 text-2xl">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] text-2xl">
             <i class="fa-solid fa-bag-shopping"></i>
           </div>
-          <h4 class="text-sm font-bold text-stone-800">Your shopping bag is empty</h4>
-          <p class="text-xs text-stone-500 mt-1 max-w-xs mx-auto">Discover ultra-comfortable bras, seamless knickers, and bridal trousseau.</p>
-          <button onclick="App.closeAllDrawers(); App.filterByCategory('bras');" class="mt-4 px-5 py-2.5 bg-stone-900 hover:bg-rose-600 text-white text-xs font-bold uppercase tracking-wider rounded transition">
+          <h4 class="text-sm font-bold text-white">Your shopping bag is empty</h4>
+          <p class="text-xs text-stone-400 mt-1 max-w-xs mx-auto">Discover ultra-comfortable bras, seamless knickers, and bridal trousseau.</p>
+          <button onclick="App.closeAllDrawers(); App.filterByCategory('bras');" class="mt-4 px-5 py-2.5 bg-[#D4AF37] hover:bg-[#c49f2e] text-[#0A0908] text-xs font-bold uppercase tracking-wider rounded transition shadow-md">
             Shop Bras Collection
           </button>
         </div>
@@ -1531,36 +1630,36 @@ const App = {
     }
 
     itemsContainer.innerHTML = cart.map(item => `
-      <div class="flex gap-3 py-3 border-b border-stone-100">
-        <img src="${item.image}" alt="${item.title}" class="w-16 h-20 object-cover rounded bg-stone-50 shrink-0" />
+      <div class="flex gap-3 py-3 border-b border-white/10">
+        <img src="${item.image}" alt="${item.title}" class="w-16 h-20 object-cover rounded bg-[#181716] shrink-0" />
         <div class="flex-1 min-w-0 flex flex-col justify-between">
           <div>
             <div class="flex items-start justify-between gap-2">
-              <h4 class="text-xs font-semibold text-stone-900 line-clamp-1">${item.title}</h4>
-              <button onclick="Store.removeFromCart('${item.cartItemId}')" class="text-stone-400 hover:text-rose-600 text-xs shrink-0 p-1" title="Remove">
+              <h4 class="text-xs font-semibold text-white line-clamp-1">${item.title}</h4>
+              <button onclick="Store.removeFromCart('${item.cartItemId}')" class="text-stone-400 hover:text-rose-400 text-xs shrink-0 p-1" title="Remove">
                 <i class="fa-solid fa-trash-can"></i>
               </button>
             </div>
-            <div class="flex items-center gap-2 mt-0.5 text-[11px] text-stone-500">
-              <span class="bg-stone-100 px-1.5 py-0.5 rounded font-medium text-stone-700">Size: ${item.size}</span>
-              <span class="bg-stone-100 px-1.5 py-0.5 rounded font-medium text-stone-700">Color: ${item.color}</span>
+            <div class="flex items-center gap-2 mt-0.5 text-[11px] text-stone-400">
+              <span class="bg-[#181716] border border-white/10 px-1.5 py-0.5 rounded font-medium text-stone-300">Size: ${item.size}</span>
+              <span class="bg-[#181716] border border-white/10 px-1.5 py-0.5 rounded font-medium text-stone-300">Color: ${item.color}</span>
             </div>
           </div>
 
           <div class="flex items-center justify-between mt-2">
             <!-- Stepper -->
-            <div class="flex items-center border border-stone-200 rounded h-7 bg-white">
-              <button onclick="Store.updateCartQuantity('${item.cartItemId}', ${item.quantity - 1})" class="w-6 h-full flex items-center justify-center text-xs text-stone-600 hover:bg-stone-100">
+            <div class="flex items-center border border-white/20 rounded h-7 bg-[#181716]">
+              <button onclick="Store.updateCartQuantity('${item.cartItemId}', ${item.quantity - 1})" class="w-6 h-full flex items-center justify-center text-xs text-stone-300 hover:text-white">
                 &minus;
               </button>
-              <span class="w-7 text-center text-xs font-bold text-stone-800">${item.quantity}</span>
-              <button onclick="Store.updateCartQuantity('${item.cartItemId}', ${item.quantity + 1})" class="w-6 h-full flex items-center justify-center text-xs text-stone-600 hover:bg-stone-100">
+              <span class="w-7 text-center text-xs font-bold text-white">${item.quantity}</span>
+              <button onclick="Store.updateCartQuantity('${item.cartItemId}', ${item.quantity + 1})" class="w-6 h-full flex items-center justify-center text-xs text-stone-300 hover:text-white">
                 &#43;
               </button>
             </div>
 
             <!-- Item Price -->
-            <span class="text-xs font-bold text-stone-900">${Store.formatPKR(item.price * item.quantity)}</span>
+            <span class="text-xs font-bold text-[#D4AF37]">${Store.formatPKR(item.price * item.quantity)}</span>
           </div>
         </div>
       </div>
@@ -1679,28 +1778,28 @@ const App = {
     if (countDisplay) countDisplay.textContent = `${reviews.length} Verified Reviews`;
 
     container.innerHTML = reviews.map(r => `
-      <div class="p-5 bg-stone-50 rounded-xl border border-stone-200 space-y-3 flex flex-col justify-between">
+      <div class="p-5 bg-[#181716] rounded-xl border border-white/10 hover:border-[#D4AF37]/30 transition space-y-3 flex flex-col justify-between shadow-lg">
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <div class="flex text-amber-400 text-xs">
-              ${Array.from({ length: 5 }, (_, i) => `<i class="fa-solid fa-star ${i < r.rating ? "text-amber-400" : "text-stone-200"}"></i>`).join("")}
+            <div class="flex text-[#D4AF37] text-xs">
+              ${Array.from({ length: 5 }, (_, i) => `<i class="fa-solid fa-star ${i < r.rating ? "text-[#D4AF37]" : "text-white/20"}"></i>`).join("")}
             </div>
             ${r.verified ? `
-              <span class="text-[10px] text-emerald-700 bg-emerald-100 font-bold px-2 py-0.5 rounded-full">
+              <span class="text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 font-bold px-2 py-0.5 rounded-full">
                 <i class="fa-solid fa-check"></i> Verified Buyer
               </span>
             ` : ""}
           </div>
-          <h4 class="text-xs sm:text-sm font-bold text-stone-900">"${r.title}"</h4>
-          <p class="text-xs text-stone-600 leading-relaxed">${r.comment}</p>
+          <h4 class="text-xs sm:text-sm font-bold text-white">"${r.title}"</h4>
+          <p class="text-xs text-stone-300 leading-relaxed">${r.comment}</p>
         </div>
 
-        <div class="pt-2 border-t border-stone-200 text-xs font-semibold text-stone-800 flex justify-between items-center">
+        <div class="pt-2 border-t border-white/10 text-xs font-semibold text-stone-200 flex justify-between items-center">
           <div>
-            <span>${r.name}</span>
+            <span class="text-white">${r.name}</span>
             <span class="text-stone-400 font-normal block text-[11px]">${r.city}, PK &bull; ${r.date}</span>
           </div>
-          <span class="text-[10px] text-rose-600 font-medium truncate max-w-[120px]">${r.productTitle}</span>
+          <span class="text-[10px] text-[#D4AF37] font-semibold truncate max-w-[120px]">${r.productTitle}</span>
         </div>
       </div>
     `).join("");
@@ -1741,35 +1840,35 @@ const App = {
 
     if (summaryBox) {
       summaryBox.innerHTML = `
-        <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 mb-4 text-xs space-y-2">
-          <div class="font-bold text-stone-900 text-sm mb-2 border-b border-stone-200 pb-1.5 flex justify-between">
+        <div class="bg-[#181716] p-4 rounded-xl border border-white/10 mb-4 text-xs space-y-2 text-white">
+          <div class="font-bold text-white text-sm mb-2 border-b border-white/10 pb-1.5 flex justify-between">
             <span>Order Summary (${Store.getCartCount()} Items)</span>
-            <span class="text-rose-600 flex items-center gap-1 font-semibold"><i class="fa-solid fa-lock"></i> Discreet Packing</span>
+            <span class="text-[#D4AF37] flex items-center gap-1 font-semibold"><i class="fa-solid fa-lock"></i> Discreet Packing</span>
           </div>
           ${cart.map(i => `
-            <div class="flex justify-between text-stone-600">
+            <div class="flex justify-between text-stone-300">
               <span class="truncate max-w-[220px]">${i.quantity}x ${i.title} (${i.size})</span>
-              <span class="font-semibold text-stone-900">${Store.formatPKR(i.price * i.quantity)}</span>
+              <span class="font-semibold text-white">${Store.formatPKR(i.price * i.quantity)}</span>
             </div>
           `).join("")}
-          <div class="border-t border-stone-200 pt-2 space-y-1">
-            <div class="flex justify-between text-stone-600">
+          <div class="border-t border-white/10 pt-2 space-y-1">
+            <div class="flex justify-between text-stone-300">
               <span>Subtotal:</span>
-              <span class="font-semibold text-stone-900">${Store.formatPKR(totals.subtotal)}</span>
+              <span class="font-semibold text-white">${Store.formatPKR(totals.subtotal)}</span>
             </div>
             ${totals.discount > 0 ? `
-              <div class="flex justify-between text-rose-600 font-semibold">
+              <div class="flex justify-between text-emerald-400 font-semibold">
                 <span>Discount (${totals.coupon.code}):</span>
                 <span>-${Store.formatPKR(totals.discount)}</span>
               </div>
             ` : ""}
-            <div class="flex justify-between text-stone-600">
+            <div class="flex justify-between text-stone-300">
               <span>Shipping (TCS Express Discreet):</span>
-              <span class="font-semibold text-stone-900">${totals.shipping === 0 ? "FREE" : Store.formatPKR(totals.shipping)}</span>
+              <span class="font-semibold text-white">${totals.shipping === 0 ? "FREE" : Store.formatPKR(totals.shipping)}</span>
             </div>
-            <div class="flex justify-between text-sm font-bold text-stone-900 pt-1.5 border-t border-stone-200">
+            <div class="flex justify-between text-sm font-bold text-white pt-1.5 border-t border-white/10">
               <span>Total Payable:</span>
-              <span class="text-rose-600 text-base">${Store.formatPKR(totals.total)}</span>
+              <span class="text-[#D4AF37] text-base font-extrabold">${Store.formatPKR(totals.total)}</span>
             </div>
           </div>
         </div>
