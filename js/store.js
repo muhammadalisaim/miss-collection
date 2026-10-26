@@ -27,6 +27,10 @@ const Store = {
   SHIPPING_FEE: 250,
   FREE_SHIPPING_THRESHOLD: 2500,
 
+  // WhatsApp Order Booking Contact
+  WHATSAPP_NUMBER: "923266131394",
+  WHATSAPP_DISPLAY: "+92 326 6131394",
+
   // Initialize or fetch products
   getProducts: function() {
     try {
@@ -618,6 +622,65 @@ const Store = {
   // Price Formatter Helper
   formatPKR: function(amount) {
     return "Rs. " + Number(amount || 0).toLocaleString("en-PK");
+  },
+
+  // WhatsApp Order Message Generator
+  buildWhatsAppOrderMessage: function(customerDetails = null, orderRef = null) {
+    const cart = this.getCart();
+    if (cart.length === 0) return "";
+    const totals = this.getCartTotals();
+    const ref = orderRef || ("MC-" + Math.floor(10000 + Math.random() * 90000));
+
+    let text = "🌸 *MISS COLLECTION - NEW ORDER BOOKING* 🌸\n";
+    text += "──────────────────────────\n";
+    text += `*Order Reference:* #${ref}\n`;
+    text += "Assalam-o-Alaikum! Mujhe Miss Collection se yeh order book/purchase karna hai:\n\n";
+    text += "📦 *Ordered Product(s):*\n";
+
+    cart.forEach((item, index) => {
+      text += `${index + 1}. *${item.title}*\n`;
+      text += `   • Size: ${item.size} | Color: ${item.color}\n`;
+      text += `   • Qty: ${item.quantity} × ${this.formatPKR(item.price)} = ${this.formatPKR(item.price * item.quantity)}\n\n`;
+    });
+
+    text += "──────────────────────────\n";
+    text += "💰 *Bill Summary:*\n";
+    text += `• Subtotal: ${this.formatPKR(totals.subtotal)}\n`;
+    if (totals.discount > 0 && totals.coupon) {
+      text += `• Promo Discount (${totals.coupon.code}): -${this.formatPKR(totals.discount)}\n`;
+    }
+    text += `• Confidential Delivery: ${totals.shipping === 0 ? "FREE" : this.formatPKR(totals.shipping)}\n`;
+    text += `• *Grand Total: ${this.formatPKR(totals.total)}*\n`;
+    text += "• Payment: Cash on Delivery (COD)\n";
+    text += "──────────────────────────\n";
+
+    if (customerDetails && (customerDetails.fullName || customerDetails.phone || customerDetails.city || customerDetails.address)) {
+      text += "📍 *Customer Delivery Details:*\n";
+      text += `• Name: ${customerDetails.fullName || "N/A"}\n`;
+      text += `• Phone: ${customerDetails.phone || "N/A"}\n`;
+      text += `• City: ${customerDetails.city || "N/A"}\n`;
+      text += `• Address: ${customerDetails.address || "N/A"}\n`;
+      if (customerDetails.notes) {
+        text += `• Instructions: ${customerDetails.notes}\n`;
+      }
+    } else {
+      text += "📍 *Customer Delivery Details (COD Courier):*\n";
+      text += "• Full Name: \n";
+      text += "• Phone Number: \n";
+      text += "• Delivery City: \n";
+      text += "• Complete Address: \n";
+    }
+
+    text += "──────────────────────────\n";
+    text += "🔒 *Discreet Packing:* 100% confidential unbranded box parcel.\n";
+    text += "Kindly mera order confirm karein aur TCS tracking share karein. Shukriya! ✨";
+
+    return text;
+  },
+
+  getWhatsAppOrderUrl: function(customerDetails = null, orderRef = null) {
+    const message = this.buildWhatsAppOrderMessage(customerDetails, orderRef);
+    return `https://wa.me/${this.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   }
 };
 

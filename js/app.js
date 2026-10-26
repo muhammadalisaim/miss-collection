@@ -1784,20 +1784,69 @@ const App = {
     if (modal) modal.classList.add("open");
   },
 
+  // 1-Click WhatsApp Checkout & Booking
+  checkoutViaWhatsApp: function (customerDetails = null) {
+    const cart = Store.getCart();
+    if (!cart || cart.length === 0) {
+      alert("Aap ka shopping bag khali hai! Pehle koi product add karein.");
+      return;
+    }
+
+    const totals = Store.getCartTotals();
+    const orderData = {
+      customer: customerDetails || {
+        fullName: "WhatsApp Customer",
+        phone: Store.WHATSAPP_DISPLAY,
+        city: "Pakistan",
+        address: "Booked via WhatsApp"
+      },
+      paymentMethod: "Cash on Delivery (WhatsApp Booking)",
+      items: [...cart],
+      subtotal: totals.subtotal,
+      discount: totals.discount,
+      shipping: totals.shipping,
+      total: totals.total,
+      discreetPackaging: true
+    };
+
+    let newOrder = null;
+    try {
+      newOrder = Store.addOrder(orderData);
+    } catch (e) {
+      console.warn("Could not save order locally", e);
+    }
+
+    const orderRef = newOrder ? newOrder.orderId : null;
+    const waUrl = Store.getWhatsAppOrderUrl(customerDetails, orderRef);
+
+    this.showToast("WhatsApp open ho raha hai... Apna booking message send karein! 💬");
+    this.closeAllDrawers();
+    this.closeAllModals();
+
+    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.location.href = waUrl;
+    } else {
+      window.open(waUrl, "_blank");
+    }
+  },
+
   handleCheckoutSubmission: function (form) {
     const formData = new FormData(form);
     const totals = Store.getCartTotals();
     const cart = Store.getCart();
 
+    const customerDetails = {
+      fullName: formData.get("fullName"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      address: formData.get("address"),
+      city: formData.get("city"),
+      notes: formData.get("notes") || ""
+    };
+
     const orderData = {
-      customer: {
-        fullName: formData.get("fullName"),
-        phone: formData.get("phone"),
-        email: formData.get("email"),
-        address: formData.get("address"),
-        city: formData.get("city"),
-        notes: formData.get("notes") || ""
-      },
+      customer: customerDetails,
       paymentMethod: formData.get("paymentMethod") || "Cash on Delivery (COD)",
       items: cart,
       subtotal: totals.subtotal,
@@ -1810,6 +1859,17 @@ const App = {
     const newOrder = Store.addOrder(orderData);
     this.closeAllModals();
     this.showOrderConfirmationModal(newOrder);
+
+    // Auto-open WhatsApp with complete booking info
+    const waUrl = Store.getWhatsAppOrderUrl(customerDetails, newOrder.orderId);
+    setTimeout(() => {
+      const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = waUrl;
+      } else {
+        window.open(waUrl, "_blank");
+      }
+    }, 400);
   },
 
   showOrderConfirmationModal: function (order) {
@@ -1848,6 +1908,17 @@ const App = {
             <i class="fa-solid fa-shield-halved text-emerald-600"></i>
             100% Confidential Delivery Guarantee: The parcel exterior has NO intimate wear labels.
           </div>
+        </div>
+
+        <!-- WhatsApp Direct Link -->
+        <div class="mb-4">
+          <a 
+            href="${Store.getWhatsAppOrderUrl(order.customer, order.orderId)}" 
+            target="_blank" 
+            class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-md flex items-center justify-center gap-2"
+          >
+            <i class="fa-brands fa-whatsapp text-lg"></i> Send Order Details to WhatsApp (+92 326 6131394)
+          </a>
         </div>
 
         <!-- Buttons -->
@@ -1967,16 +2038,9 @@ const App = {
   // WhatsApp 1-Click Order Assistant
   orderViaWhatsApp: function (product) {
     if (!product) return;
-    const phone = "923001234567";
+    const phone = (typeof Store !== "undefined" && Store.WHATSAPP_NUMBER) ? Store.WHATSAPP_NUMBER : "923266131394";
     const msg = encodeURIComponent(
-      `Assalam-o-Alaikum Miss Collection!
-
-I want to order:
-• Product: ${product.title}
-• Price: ${Store.formatPKR(product.price)}
-• Code: ${product.id}
-
-Please confirm availability and discreet delivery details.`
+      `🌸 Assalam-o-Alaikum Miss Collection!\n\nMujhe yeh product book/purchase karna hai:\n• Product: ${product.title}\n• Price: ${Store.formatPKR(product.price)}\n• Code: ${product.id}\n\nKindly availability confirm karein aur discreet delivery TCS se dispatch karein. Shukriya! ✨`
     );
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
   },
