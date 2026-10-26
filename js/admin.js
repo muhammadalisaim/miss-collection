@@ -90,10 +90,10 @@ const AdminApp = {
     this.currentTab = tabName;
     document.querySelectorAll("[data-admin-tab]").forEach(btn => {
       if (btn.getAttribute("data-admin-tab") === tabName) {
-        btn.classList.add("bg-rose-600", "text-white");
+        btn.classList.add("bg-stone-900", "text-white");
         btn.classList.remove("text-stone-600", "hover:bg-stone-100");
       } else {
-        btn.classList.remove("bg-rose-600", "text-white");
+        btn.classList.remove("bg-stone-900", "text-white");
         btn.classList.add("text-stone-600", "hover:bg-stone-100");
       }
     });

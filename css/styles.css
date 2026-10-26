@@ -1,34 +1,43 @@
 /* ==========================================================================
-   Miss Collection — Luxury Ladies Undergarments & Haute Lingerie
-   Ella Theme & thesaher.com Premium Responsive Styling
+   Miss Collection — High-Fashion Retail Storefront
+   Reverse-Engineered from pk.khaadi.com (Khaadi Pakistan)
+   Design System: Stark Monochrome, Warm Ochre Accents, Clean Grotesque Sans
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400..800;1,400..800&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
 
 :root {
-  --mc-font-sans: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --mc-font-serif: "Playfair Display", Georgia, serif;
-  --mc-font-display: "Cormorant Garamond", Georgia, serif;
+  /* Khaadi Signature Color Palette */
+  --kh-black: #1A1817;
+  --kh-charcoal: #2D2B2A;
+  --kh-dark-muted: #555452;
+  --kh-text-secondary: #706F6E;
+  --kh-text-muted: #8E8D8A;
+  
+  --kh-white: #FFFFFF;
+  --kh-stone: #FAF9F8;
+  --kh-stone-light: #F5F5F5;
+  --kh-border-subtle: #E8E7E5;
+  --kh-border-strong: #DCDAD7;
+  
+  /* Khaadi Brand Accents */
+  --kh-ochre: #B4640A;
+  --kh-ochre-hover: #965207;
+  --kh-ochre-light: #FBF4EC;
+  --kh-red: #D92D20;
+  --kh-emerald: #1B8A5A;
+  --kh-whatsapp: #25D366;
 
-  --mc-primary: #c25e72;
-  --mc-primary-dark: #9b384e;
-  --mc-primary-hover: #b04e62;
-  --mc-blush: #fff1f3;
-  --mc-blush-subtle: #fff8f9;
-  --mc-blush-border: #fce7eb;
-  --mc-dark: #1a1a20;
-  --mc-dark-muted: #52525e;
-  --mc-gray-light: #f8f8f9;
-  --mc-border-light: #eae6e7;
-  --mc-gold: #c59b27;
-  --mc-success: #10b981;
-  --mc-danger: #e11d48;
+  /* Typography */
+  --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-editorial: "Cormorant Garamond", Georgia, serif;
 
-  --mc-shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
-  --mc-shadow-sm: 0 2px 4px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
-  --mc-shadow-md: 0 6px 18px rgba(194, 94, 114, 0.09), 0 2px 6px rgba(0,0,0,0.04);
-  --mc-shadow-lg: 0 12px 30px -5px rgba(0, 0, 0, 0.1), 0 8px 12px -6px rgba(0, 0, 0, 0.05);
-  --mc-shadow-drawer: -6px 0 30px rgba(0, 0, 0, 0.18);
+  /* High-end Shadows */
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-drawer: -8px 0 32px rgba(0, 0, 0, 0.16);
+  --shadow-float: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 html {
@@ -38,39 +47,53 @@ html {
 }
 
 body {
-  font-family: var(--mc-font-sans);
-  color: var(--mc-dark);
-  background-color: #ffffff;
+  font-family: var(--font-body);
+  color: var(--kh-black);
+  background-color: #FFFFFF;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-.font-serif-luxury {
-  font-family: var(--mc-font-serif);
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-sans);
 }
 
-.font-display-luxury {
-  font-family: var(--mc-font-display);
+.font-editorial {
+  font-family: var(--font-editorial);
 }
 
-/* Custom Scrollbars */
+/* Subtle Minimalist Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #fbfbfb;
+  background: var(--kh-stone);
 }
 ::-webkit-scrollbar-thumb {
-  background: #dfd4d7;
-  border-radius: 4px;
+  background: #D1CFCD;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--mc-primary);
+  background: var(--kh-black);
 }
 
-/* Glassmorphism Header */
+/* ==========================================================================
+   TOP ANNOUNCEMENT BAR (Khaadi High-Fashion Ticker)
+   ========================================================================== */
+.announcement-ticker {
+  background-color: var(--kh-black);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   STICKY HEADER (Khaadi Minimalist Centered Layout)
+   ========================================================================== */
 .header-sticky {
   position: sticky;
   top: 0;
@@ -78,38 +101,71 @@ body {
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.header-shadow {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--kh-border-subtle);
+  transition: all 0.25s ease;
 }
 
-/* Navigation Links */
-.nav-link {
+.header-brand-logo {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--kh-black);
+  transition: opacity 0.2s ease;
+}
+.header-brand-logo:hover {
+  opacity: 0.85;
+}
+
+/* Search Bar (Khaadi Sleek Pill) */
+.khaadi-search-box {
+  background-color: var(--kh-stone);
+  border: 1px solid var(--kh-border-subtle);
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+.khaadi-search-box:focus-within {
+  background-color: #FFFFFF;
+  border-color: var(--kh-black);
+  box-shadow: 0 0 0 1px var(--kh-black);
+}
+
+/* Sticky Navigation Category Links */
+.nav-category-link {
   position: relative;
-  transition: color 0.2s ease;
-  white-space: nowrap !important;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--kh-black);
+  padding: 12px 14px;
   display: inline-flex;
   align-items: center;
-  cursor: pointer;
+  transition: color 0.2s ease;
 }
-.nav-link::after {
+.nav-category-link:hover {
+  color: var(--kh-ochre);
+}
+.nav-category-link::after {
   content: "";
   position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0%;
+  bottom: 0;
+  left: 14px;
+  right: 14px;
   height: 2px;
-  background-color: var(--mc-primary);
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: var(--kh-black);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.nav-link:hover::after,
-.nav-link.active::after {
-  width: 100%;
+.nav-category-link:hover::after,
+.nav-category-link.active::after {
+  transform: scaleX(1);
 }
 
 /* ==========================================================================
-   MEGA MENU DROPDOWNS (Desktop Haute Couture Experience)
+   MEGA MENU (Khaadi Luxury Flyout)
    ========================================================================== */
 .nav-item-has-mega {
   position: static;
@@ -119,10 +175,10 @@ body {
   top: 100%;
   left: 0;
   right: 0;
-  background: #ffffff;
-  border-top: 1px solid var(--mc-border-light);
-  border-bottom: 1px solid var(--mc-border-light);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.09);
+  background: #FFFFFF;
+  border-top: 1px solid var(--kh-border-subtle);
+  border-bottom: 1px solid var(--kh-border-subtle);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.1);
   opacity: 0;
   visibility: hidden;
   transform: translateY(6px);
@@ -157,30 +213,55 @@ body {
 }
 
 /* ==========================================================================
-   PRODUCT CARDS & DUAL-IMAGE HOVER SWAP
+   ASYMMETRIC EDITORIAL CAMPAIGN LOOKBOOK (Khaadi Hallmark)
+   ========================================================================== */
+.lookbook-tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: var(--kh-stone);
+}
+.lookbook-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lookbook-tile:hover img {
+  transform: scale(1.05);
+}
+.lookbook-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.7) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   PRODUCT CARDS (Khaadi 3:4 Vertical Fashion Portrait)
    ========================================================================== */
 .product-card {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.3s ease;
   position: relative;
-  background: #ffffff;
-  border: 1px solid var(--mc-border-light);
-  border-radius: 10px;
+  background-color: #FFFFFF;
+  border-radius: 0px;
   overflow: hidden;
-}
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--mc-shadow-md);
-  border-color: #f1cfd5;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-card-img-wrapper {
-  overflow: hidden;
   position: relative;
   aspect-ratio: 3 / 4;
-  background: #faf7f8;
+  overflow: hidden;
+  background-color: var(--kh-stone);
+  cursor: pointer;
 }
 
-/* Dual image cross-fade effect */
+/* Dual-Image Look Swap */
 .product-card-img-primary,
 .product-card-img-secondary {
   position: absolute;
@@ -189,7 +270,7 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  transition: opacity 0.5s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.4s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .product-card-img-secondary {
   opacity: 0;
@@ -199,10 +280,9 @@ body {
 }
 .product-card:hover .product-card-img-secondary {
   opacity: 1;
-  transform: scale(1.06);
+  transform: scale(1.05);
 }
 
-/* Touch fallback for mobile: subtle zoom */
 @media (hover: none) {
   .product-card-img-primary {
     opacity: 1 !important;
@@ -212,113 +292,172 @@ body {
   }
 }
 
-/* Action Overlay on Desktop */
-.product-action-bar {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  display: flex;
-  gap: 6px;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 10;
+/* Floating Pill Badges (Top Left) */
+.badge-pill-khaadi {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
 }
-.product-card:hover .product-action-bar {
-  opacity: 1;
-  transform: translateY(0);
+.badge-pill-khaadi.ochre {
+  background-color: var(--kh-ochre);
+  color: #FFFFFF;
+}
+.badge-pill-khaadi.sale {
+  background-color: var(--kh-red);
+  color: #FFFFFF;
+}
+.badge-pill-khaadi.dark {
+  background-color: var(--kh-black);
+  color: #FFFFFF;
 }
 
-/* Mobile Quick Add Pill Button (Always visible on mobile cards for effortless shopping) */
-.mobile-quick-add-btn {
-  display: none;
+/* Wishlist Icon Button */
+.wishlist-btn-khaadi {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--kh-black);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
 }
+.wishlist-btn-khaadi:hover {
+  background: var(--kh-black);
+  color: #FFFFFF;
+}
+.wishlist-btn-khaadi.active {
+  background: var(--kh-black);
+  color: #FFFFFF;
+}
+
+/* Desktop Hover Quick-Size Chips Bar (Khaadi Hallmark) */
+.product-size-chips-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  transform: translateY(100%);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 20;
+  border-top: 1px solid var(--kh-border-subtle);
+}
+.product-card:hover .product-size-chips-bar {
+  transform: translateY(0);
+}
+.quick-size-chip {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 3px 7px;
+  border: 1px solid var(--kh-black);
+  background: #FFFFFF;
+  color: var(--kh-black);
+  border-radius: 2px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  user-select: none;
+}
+.quick-size-chip:hover {
+  background: var(--kh-black);
+  color: #FFFFFF;
+}
+
 @media (max-width: 768px) {
-  .mobile-quick-add-btn {
-    display: flex;
-  }
-  .product-action-bar {
+  .product-size-chips-bar {
     display: none;
   }
 }
 
-/* Wishlist Heart Button */
-.wishlist-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(4px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s, background 0.2s, color 0.2s;
+/* Product Card Information Typography */
+.card-fabric-line {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--kh-text-secondary);
 }
-.wishlist-btn:hover {
-  transform: scale(1.12);
-}
-.wishlist-btn:active {
-  transform: scale(0.92);
-}
-.wishlist-btn.active {
-  background: var(--mc-primary);
-  color: white;
-}
-
-/* Color Swatches */
-.swatch-circle {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s, box-shadow 0.2s;
-  display: inline-block;
-  flex-shrink: 0;
-}
-.swatch-circle:hover,
-.swatch-circle.active {
-  transform: scale(1.22);
-  box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px var(--mc-primary);
-}
-
-/* Size Pills */
-.size-pill {
-  padding: 5px 11px;
-  font-size: 11px;
+.card-title-line {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
   font-weight: 600;
-  border: 1px solid #dfd5d8;
-  border-radius: 6px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s;
+  color: var(--kh-black);
+  line-height: 1.35;
+  transition: color 0.2s ease;
 }
-.size-pill:hover {
-  border-color: var(--mc-primary);
-  color: var(--mc-primary);
+.product-card:hover .card-title-line {
+  color: var(--kh-ochre);
 }
-.size-pill.active {
-  background-color: var(--mc-primary);
-  border-color: var(--mc-primary);
-  color: white;
-  box-shadow: 0 2px 6px rgba(194, 94, 114, 0.35);
+.card-price-primary {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--kh-black);
+  font-variant-numeric: tabular-nums;
+}
+.card-price-original {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--kh-text-muted);
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Category Filter Pills (Khaadi Horizontal Strip) */
+.filter-pill-khaadi {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border: 1px solid var(--kh-border-subtle);
+  background: #FFFFFF;
+  color: var(--kh-black);
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.filter-pill-khaadi:hover {
+  border-color: var(--kh-black);
+}
+.filter-pill-khaadi.active {
+  background-color: var(--kh-black);
+  border-color: var(--kh-black);
+  color: #FFFFFF;
 }
 
 /* ==========================================================================
-   DRAWERS & VIEWPORT HEIGHT FIXES (100dvh for iOS Safari / Mobile Chrome)
+   SLIDING SHOPPING BAG DRAWER (Khaadi Design)
    ========================================================================== */
 .drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(18, 14, 16, 0.6);
+  background: rgba(26, 24, 23, 0.6);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 50;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.3s ease;
 }
 .drawer-backdrop.open {
   opacity: 1;
@@ -329,14 +468,10 @@ body {
   position: fixed;
   top: 0;
   bottom: 0;
-  height: 100vh;
-  height: 100dvh;
-  max-height: 100dvh;
   width: 100%;
   max-width: 440px;
-  background: #ffffff;
-  z-index: 51;
-  box-shadow: var(--mc-shadow-drawer);
+  background: #FFFFFF;
+  box-shadow: var(--shadow-drawer);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
@@ -349,20 +484,82 @@ body {
   left: 0;
   transform: translateX(-100%);
 }
-.drawer-backdrop.open .drawer-right {
-  transform: translateX(0);
-}
+.drawer-backdrop.open .drawer-right,
 .drawer-backdrop.open .drawer-left {
   transform: translateX(0);
 }
 
-/* ==========================================================================
-   MOBILE QUICK-ADD BOTTOM SHEET
-   ========================================================================== */
+/* Free Shipping Thermometer */
+.free-shipping-thermometer {
+  background-color: var(--kh-stone);
+  border-bottom: 1px solid var(--kh-border-subtle);
+  padding: 12px 16px;
+}
+.shipping-progress-bg {
+  background: #E8E6E3;
+  height: 5px;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.shipping-progress-fill {
+  background: linear-gradient(90deg, var(--kh-ochre), #D97706);
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* WhatsApp 1-Click Order Button */
+.btn-whatsapp-booking {
+  background-color: var(--kh-emerald);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(27, 138, 90, 0.25);
+}
+.btn-whatsapp-booking:hover {
+  background-color: #156E47;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(27, 138, 90, 0.35);
+}
+
+/* Floating WhatsApp Quick Action Button */
+.whatsapp-float {
+  position: fixed;
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  right: 20px;
+  width: 52px;
+  height: 52px;
+  background: #25D366;
+  color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+  z-index: 35;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.whatsapp-float:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 26px rgba(37, 211, 102, 0.55);
+}
+
+/* Mobile Quick Add Bottom Sheet */
 .bottom-sheet-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(18, 14, 16, 0.6);
+  background: rgba(26, 24, 23, 0.65);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 60;
@@ -374,15 +571,14 @@ body {
   opacity: 1;
   pointer-events: auto;
 }
-
 .bottom-sheet-panel {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  background: white;
-  border-radius: 20px 20px 0 0;
-  box-shadow: 0 -10px 35px rgba(0,0,0,0.18);
+  background: #FFFFFF;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
   z-index: 61;
   transform: translateY(100%);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -394,22 +590,19 @@ body {
 .bottom-sheet-backdrop.open .bottom-sheet-panel {
   transform: translateY(0);
 }
-
 .sheet-drag-handle {
-  width: 42px;
+  width: 36px;
   height: 4px;
-  background: #e0d8da;
+  background: #D5D3D1;
   border-radius: 999px;
-  margin: 10px auto 4px auto;
+  margin: 12px auto 6px auto;
 }
 
-/* ==========================================================================
-   MODALS
-   ========================================================================== */
+/* Modals */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(18, 14, 16, 0.65);
+  background: rgba(26, 24, 23, 0.7);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   z-index: 60;
@@ -426,141 +619,49 @@ body {
   pointer-events: auto;
 }
 .modal-content {
-  background: white;
-  border-radius: 14px;
-  max-width: 800px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  max-width: 820px;
   width: 100%;
   max-height: 90vh;
   max-height: 90dvh;
   overflow-y: auto;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  transform: scale(0.96);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  transform: scale(0.97);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .modal-backdrop.open .modal-content {
   transform: scale(1);
 }
 
-/* ==========================================================================
-   FREE SHIPPING THERMOMETER & IN-CART CROSS SELLS
-   ========================================================================== */
-.shipping-progress-bg {
-  background: #f3e5e8;
-  height: 6px;
-  border-radius: 999px;
-  overflow: hidden;
-  position: relative;
-}
-.shipping-progress-fill {
-  background: linear-gradient(90deg, #c25e72, #e57373);
-  height: 100%;
-  border-radius: 999px;
-  transition: width 0.4s ease;
-  position: relative;
-}
-.shipping-progress-fill::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  animation: shimmer 2s infinite;
-}
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+/* Swatches */
+.swatch-circle {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.15);
+  display: inline-block;
 }
 
-/* In-Cart Upsell Card */
-.cart-upsell-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #fdf8f9;
-  border: 1px dashed #f1cfd5;
-  border-radius: 8px;
-  padding: 8px 10px;
-  transition: background 0.2s;
-}
-.cart-upsell-item:hover {
-  background: #fcf1f3;
-}
-
-/* ==========================================================================
-   REVIEW HISTOGRAM PROGRESS BARS
-   ========================================================================== */
-.review-bar-bg {
-  height: 8px;
-  background: #f0e6e8;
-  border-radius: 999px;
-  overflow: hidden;
-}
-.review-bar-fill {
-  height: 100%;
-  background: #f59e0b;
-  border-radius: 999px;
-  transition: width 0.6s ease;
-}
-
-/* ==========================================================================
-   MOBILE FLOATING BOTTOM NAV BAR
-   ========================================================================== */
-.mobile-bottom-nav {
-  padding-bottom: calc(0.4rem + env(safe-area-inset-bottom, 0px));
-}
-
-/* Floating WhatsApp Button */
-.whatsapp-float {
+/* Toast Notifications */
+.toast-notification {
   position: fixed;
-  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-  right: 18px;
-  width: 52px;
-  height: 52px;
-  background: #25d366;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
-  z-index: 35;
-  transition: transform 0.2s, box-shadow 0.2s;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--kh-black);
+  color: #FFFFFF;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  z-index: 100;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
 }
-.whatsapp-float:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.55);
-}
-
-/* Category Circular Story Highlights */
-.category-circle-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  user-select: none;
-}
-.category-circle-item:hover {
-  transform: translateY(-3px);
-}
-.category-circle-img {
-  width: 82px;
-  height: 82px;
-  border-radius: 50%;
-  object-fit: cover;
-  transition: all 0.3s ease;
-}
-@media (max-width: 640px) {
-  .category-circle-img {
-    width: 68px;
-    height: 68px;
-  }
+.toast-notification.show {
+  transform: translateX(-50%) translateY(0);
 }

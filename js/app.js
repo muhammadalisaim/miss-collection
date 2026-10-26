@@ -585,11 +585,11 @@ const App = {
               </p>` : ''}
               <div class="pt-2 flex flex-wrap gap-2.5 sm:gap-3">
                 ${banner.btnText ? `
-                <button onclick="App.filterByCategory('${banner.btnCategory || 'all'}')" class="px-5 sm:px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-lg">
+                <button onclick="App.filterByCategory('${banner.btnCategory || 'all'}')" class="px-6 py-3.5 bg-white text-stone-950 hover:bg-[#B4640A] hover:text-white font-bold text-xs uppercase tracking-widest rounded-none transition shadow-lg">
                   ${banner.btnText}
                 </button>` : ''}
                 ${banner.secondaryBtnText ? `
-                <button onclick="App.${banner.secondaryBtnAction || 'openBraCalculatorModal'}()" class="px-4 sm:px-5 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-xs border border-white/30 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition">
+                <button onclick="App.${banner.secondaryBtnAction || 'openBraCalculatorModal'}()" class="px-5 py-3.5 bg-transparent hover:bg-white/10 border border-white/60 text-white font-bold text-xs uppercase tracking-widest rounded-none transition">
                   <i class="fa-solid fa-ruler-horizontal mr-1.5"></i> ${banner.secondaryBtnText}
                 </button>` : ''}
               </div>
@@ -600,7 +600,7 @@ const App = {
     }).join("");
 
     dotsContainer.innerHTML = banners.map((banner, idx) => `
-      <button class="hero-dot ${idx === 0 ? 'w-8 bg-rose-600' : 'w-2.5 bg-white/60 hover:bg-white'} h-2 rounded-full transition-all duration-300" aria-label="Go to Slide ${idx + 1}"></button>
+      <button class="hero-dot ${idx === 0 ? 'w-8 bg-[#B4640A]' : 'w-2.5 bg-white/50 hover:bg-white'} h-1 rounded-full transition-all duration-300" aria-label="Go to Slide ${idx + 1}"></button>
     `).join("");
 
     this.initHeroSlider();
@@ -867,85 +867,84 @@ const App = {
     grid.innerHTML = products.map(p => this.generateProductCardHTML(p)).join("");
   },
 
-  // Dual-Image Card HTML with Touch-Friendly Mobile Quick Add
+  quickSelectSizeAndAdd: function (productId, size) {
+    const p = Store.getProductById(productId);
+    if (!p) return;
+    const defaultColor = (p.colors && p.colors.length > 0) ? p.colors[0].name : "Standard";
+    Store.addToCart(p, size, defaultColor, 1);
+    this.showToast(`Added ${p.title} (${size}) to Bag! 🛍️`);
+    this.openCartDrawer();
+  },
+
+  // Dual-Image 3:4 Vertical Card HTML with Hover Look Swap & Quick-Size Selector Chips
   generateProductCardHTML: function (p) {
     const isWishlisted = Store.isInWishlist(p.id);
     const discountPercent = p.originalPrice ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
     const badgeColorClass = p.badgeColor === "red" 
-      ? "bg-rose-700 text-white" 
-      : p.badgeColor === "amber" 
-      ? "bg-amber-600 text-white" 
-      : p.badgeColor === "emerald"
-      ? "bg-emerald-700 text-white"
-      : "bg-stone-900 text-white";
+      ? "sale" 
+      : (p.badgeColor === "amber" ? "ochre" : "dark");
 
     const img1 = p.images[0];
     const img2 = p.images[1] || p.images[0];
 
+    const sizesList = (p.sizes && p.sizes.length > 0) ? p.sizes.slice(0, 5) : ["XS", "S", "M", "L", "XL"];
+    const sizeChipsHTML = sizesList.map(sz => `
+      <button 
+        type="button" 
+        onclick="event.stopPropagation(); App.quickSelectSizeAndAdd('${p.id}', '${sz}')" 
+        class="quick-size-chip"
+        title="Add size ${sz} to Bag"
+      >${sz}</button>
+    `).join("");
+
     return `
       <div class="product-card group flex flex-col justify-between" data-product-id="${p.id}">
-        <!-- Image & Dual Hover Swap -->
-        <div class="product-card-img-wrapper cursor-pointer" onclick="App.openQuickView('${p.id}')">
+        <!-- 3:4 Vertical Image & Dual Look Swap -->
+        <div class="product-card-img-wrapper" onclick="App.openQuickView('${p.id}')">
           <img src="${img1}" alt="${p.title}" class="product-card-img-primary" loading="lazy" />
-          <img src="${img2}" alt="${p.title} alternate view" class="product-card-img-secondary" loading="lazy" />
+          <img src="${img2}" alt="${p.title} alternate look" class="product-card-img-secondary" loading="lazy" />
           
           <!-- Top Badges -->
           <div class="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
-            ${p.badge ? `<span class="px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider rounded ${badgeColorClass} shadow-xs">${p.badge}</span>` : ""}
-            ${discountPercent > 0 ? `<span class="px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider rounded bg-rose-700 text-white shadow-xs">-${discountPercent}%</span>` : ""}
+            ${p.badge ? `<span class="badge-pill-khaadi ${badgeColorClass}">${p.badge}</span>` : ""}
+            ${discountPercent > 0 ? `<span class="badge-pill-khaadi sale">-${discountPercent}%</span>` : ""}
           </div>
 
           <!-- Wishlist Heart Button -->
           <button 
             type="button" 
             onclick="event.stopPropagation(); App.toggleWishlist('${p.id}')"
-            class="wishlist-btn absolute top-2.5 right-2.5 z-10 ${isWishlisted ? "active text-white bg-rose-600" : "text-stone-600 hover:text-rose-600"}"
+            class="wishlist-btn-khaadi absolute top-2.5 right-2.5 z-10 ${isWishlisted ? "active" : ""}"
             title="${isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}"
           >
-            <i class="${isWishlisted ? "fa-solid" : "fa-regular"} fa-heart text-xs sm:text-sm"></i>
+            <i class="${isWishlisted ? "fa-solid" : "fa-regular"} fa-heart text-xs"></i>
           </button>
 
-          <!-- Desktop Quick Actions Bar on Hover -->
-          <div class="product-action-bar">
-            <button 
-              type="button" 
-              onclick="event.stopPropagation(); App.openQuickView('${p.id}')" 
-              class="flex-1 py-2 bg-stone-900/90 backdrop-blur-xs text-white text-xs font-semibold rounded hover:bg-rose-600 transition flex items-center justify-center gap-1.5 shadow-md"
-            >
-              <i class="fa-regular fa-eye text-xs"></i> Quick View
-            </button>
-            <button 
-              type="button" 
-              onclick="event.stopPropagation(); App.openMobileQuickAddSheet('${p.id}')" 
-              class="px-3 py-2 bg-rose-600 text-white rounded hover:bg-rose-700 transition flex items-center justify-center shadow-md font-semibold text-xs"
-              title="Select Size & Add"
-            >
-              <i class="fa-solid fa-bag-shopping text-xs mr-1"></i> Quick Add
-            </button>
+          <!-- Desktop Quick-Size Selector Chips on Hover -->
+          <div class="product-size-chips-bar" onclick="event.stopPropagation()">
+            <span class="text-[9px] font-bold uppercase tracking-wider text-stone-500 mr-1 hidden lg:inline">Quick Add:</span>
+            ${sizeChipsHTML}
           </div>
         </div>
 
         <!-- Product Details -->
-        <div class="p-3 sm:p-4 flex flex-col flex-1 justify-between">
+        <div class="pt-3 pb-2 px-1 flex flex-col flex-1 justify-between">
           <div>
-            <!-- Subcategory & Rating -->
-            <div class="flex items-center justify-between text-[10px] sm:text-[11px] text-stone-500 mb-1">
-              <span class="uppercase tracking-wider font-semibold text-rose-700 truncate mr-1">${p.subCategory}</span>
-              <div class="flex items-center gap-1 text-amber-500 font-bold shrink-0">
-                <i class="fa-solid fa-star text-[9px] sm:text-[10px]"></i>
-                <span class="text-stone-800 text-[11px] sm:text-xs">${p.rating}</span>
-                <span class="text-stone-400 font-normal">(${p.reviewsCount})</span>
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span class="card-fabric-line truncate">${p.fabric ? p.fabric.split(',')[0] : p.subCategory}</span>
+              <div class="flex items-center gap-1 text-[11px] text-stone-600 font-semibold shrink-0">
+                <i class="fa-solid fa-star text-[9px] text-amber-500"></i>
+                <span>${p.rating}</span>
+                <span class="text-stone-400 font-normal text-[10px]">(${p.reviewsCount})</span>
               </div>
             </div>
 
-            <!-- Title -->
-            <h4 class="text-xs sm:text-sm font-semibold text-stone-900 hover:text-rose-600 transition line-clamp-2 cursor-pointer mb-2" onclick="App.openQuickView('${p.id}')">
+            <h4 class="card-title-line line-clamp-2 cursor-pointer mb-2" onclick="App.openQuickView('${p.id}')">
               ${p.title}
             </h4>
 
-            <!-- Color Swatches preview -->
             ${p.colors && p.colors.length > 0 ? `
-              <div class="flex items-center gap-1.5 mb-2.5">
+              <div class="flex items-center gap-1.5 mb-2">
                 ${p.colors.slice(0, 4).map(c => `
                   <span class="swatch-circle" style="background-color: ${c.hex};" title="${c.name}"></span>
                 `).join("")}
@@ -954,25 +953,21 @@ const App = {
             ` : ""}
           </div>
 
-          <!-- Price & Discreet packaging guarantee badge -->
           <div class="pt-2 border-t border-stone-100 flex items-center justify-between mt-auto">
-            <div class="flex items-baseline flex-wrap gap-1">
-              <span class="text-xs sm:text-sm md:text-base font-bold text-stone-900">${Store.formatPKR(p.price)}</span>
-              ${p.originalPrice ? `<span class="text-[10px] sm:text-xs text-stone-400 line-through">${Store.formatPKR(p.originalPrice)}</span>` : ""}
+            <div class="flex items-baseline gap-1.5 flex-wrap">
+              <span class="card-price-primary">${Store.formatPKR(p.price)}</span>
+              ${p.originalPrice ? `<span class="card-price-original">${Store.formatPKR(p.originalPrice)}</span>` : ""}
             </div>
-            <span class="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-rose-800 bg-rose-100/90 px-1.5 py-0.5 rounded border border-rose-300">
-              <i class="fa-solid fa-shield-halved text-[9px] text-rose-700"></i> Discreet
-            </span>
-          </div>
 
-          <!-- Mobile 1-Tap Quick Add Button -->
-          <button 
-            type="button" 
-            onclick="event.stopPropagation(); App.openMobileQuickAddSheet('${p.id}')"
-            class="mobile-quick-add-btn mt-2.5 w-full py-1.5 bg-stone-900 hover:bg-rose-600 text-white rounded text-[11px] font-bold uppercase tracking-wider transition items-center justify-center gap-1.5 shadow-xs"
-          >
-            <i class="fa-solid fa-plus text-[10px]"></i> Quick Add Size
-          </button>
+            <!-- Mobile Quick Add Trigger -->
+            <button 
+              type="button" 
+              onclick="event.stopPropagation(); App.openMobileQuickAddSheet('${p.id}')"
+              class="md:hidden px-2.5 py-1 bg-stone-900 text-white rounded text-[10px] font-bold uppercase tracking-wider transition"
+            >
+              + Add
+            </button>
+          </div>
         </div>
       </div>
     `;
