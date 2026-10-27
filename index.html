@@ -23,28 +23,28 @@
   <!-- =========================================================================
        1. TOP ANNOUNCEMENT TICKER (Midnight Noir Strip with Sparkles)
        ========================================================================= -->
-  <div class="announcement-ticker py-2 px-3 sm:px-6 relative z-40">
-    <div class="max-w-7xl mx-auto flex items-center justify-between text-[11px]">
+  <div class="announcement-ticker py-1.5 sm:py-2 px-2.5 sm:px-6 relative z-40">
+    <div class="max-w-7xl mx-auto flex items-center justify-between text-[10px] sm:text-[11px]">
       
       <!-- Announcement Message -->
-      <div class="flex items-center gap-2 overflow-hidden">
-        <span class="px-2.5 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-extrabold uppercase tracking-widest text-[9px] border border-[#D4AF37]/40 shrink-0 flex items-center gap-1 shadow-xs">
-          <i class="fa-solid fa-sparkles sparkle-icon"></i> Complimentary Delivery
+      <div class="flex items-center gap-1.5 sm:gap-2 overflow-hidden flex-1 mr-2">
+        <span class="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-extrabold uppercase tracking-widest text-[8px] sm:text-[9px] border border-[#D4AF37]/40 shrink-0 flex items-center gap-1 shadow-xs">
+          <i class="fa-solid fa-sparkles sparkle-icon"></i> Free Shipping
         </span>
         <span class="text-stone-300 truncate font-medium">
-          Free Shipping across Pakistan on orders above PKR 2,500 &bull; 100% Plain Unbranded Confidential Box
+          Nationwide on orders over PKR 2,500 &bull; 100% Confidential Box
         </span>
       </div>
 
       <!-- Quick Actions -->
-      <div class="flex items-center gap-4 shrink-0 font-semibold text-stone-300 text-[11px]">
+      <div class="flex items-center gap-2.5 sm:gap-4 shrink-0 font-semibold text-stone-300 text-[10px] sm:text-[11px]">
         <a href="https://wa.me/923266131394" target="_blank" class="hover:text-emerald-400 transition flex items-center gap-1 text-emerald-400 font-bold" title="WhatsApp Assistance">
-          <i class="fa-brands fa-whatsapp text-sm"></i> <span class="hidden sm:inline">+92 326 6131394</span>
+          <i class="fa-brands fa-whatsapp text-xs sm:text-sm"></i> <span class="hidden sm:inline">+92 326 6131394</span>
         </a>
-        <a href="javascript:void(0)" onclick="App.openOrderTrackingModal()" class="hover:text-white transition">
-          Track Order
+        <a href="javascript:void(0)" onclick="App.openOrderTrackingModal()" class="hover:text-white transition hidden xs:inline">
+          Track
         </a>
-        <a href="admin.html" class="hover:text-white transition text-stone-400 uppercase tracking-widest text-[10px] border-l border-white/20 pl-3">
+        <a href="admin.html" class="hover:text-white transition text-stone-400 uppercase tracking-widest text-[9px] sm:text-[10px] border-l border-white/20 pl-2 sm:pl-3">
           Admin
         </a>
       </div>
@@ -56,13 +56,13 @@
        ========================================================================= -->
   <header class="header-sticky">
     <!-- TIER 1: MAIN LOGO & ACTIONS BAR -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4 py-3 sm:py-4">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 py-2 sm:py-3.5">
       
       <!-- Left: Mobile Hamburger & Desktop Search -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1.5 sm:gap-3">
         <!-- Mobile Hamburger Button -->
-        <button onclick="App.openMobileNav()" class="lg:hidden p-2 text-stone-300 hover:text-[#D4AF37] transition" aria-label="Open Navigation Menu">
-          <i class="fa-solid fa-bars-staggered text-lg"></i>
+        <button onclick="App.openMobileNav()" class="lg:hidden p-2 text-stone-300 hover:text-[#D4AF37] transition touch-manipulation" aria-label="Open Navigation Menu">
+          <i class="fa-solid fa-bars-staggered text-base sm:text-lg"></i>
         </button>
 
         <!-- Desktop Search Box (Smoked Glass Pill) -->
@@ -81,32 +81,32 @@
 
       <!-- Center: Luxury Brand Mark (Haute Couture Typography) -->
       <a href="index.html" class="flex flex-col items-center text-center select-none group py-0.5">
-        <span class="font-serif-luxury tracking-[0.32em] text-2xl sm:text-3xl md:text-4xl font-normal text-white uppercase transition-all duration-300 group-hover:tracking-[0.36em]">
+        <span class="font-serif-luxury tracking-[0.16em] sm:tracking-[0.28em] md:tracking-[0.32em] text-lg sm:text-2xl md:text-3xl font-normal text-white uppercase transition-all duration-300">
           MISS <span class="text-[#D4AF37] font-semibold">COLLECTION</span>
         </span>
-        <span class="text-[8px] sm:text-[9px] tracking-[0.42em] text-[#D4AF37]/80 uppercase font-medium mt-1">
+        <span class="text-[7.5px] sm:text-[9px] tracking-[0.22em] sm:tracking-[0.42em] text-[#D4AF37]/80 uppercase font-medium mt-0.5">
           HAUTE LINGERIE &bull; PAKISTAN
         </span>
       </a>
 
       <!-- Right: Search (Mobile), Wishlist & Shopping Bag -->
-      <div class="flex items-center gap-1.5 sm:gap-3">
+      <div class="flex items-center gap-1 sm:gap-2">
         
         <!-- Mobile Search Trigger -->
-        <button onclick="document.getElementById('mobileSearchOverlay').classList.toggle('hidden')" class="md:hidden p-2 text-stone-300 hover:text-[#D4AF37] transition" aria-label="Search">
-          <i class="fa-solid fa-magnifying-glass text-lg"></i>
+        <button onclick="document.getElementById('mobileSearchOverlay').classList.toggle('hidden')" class="md:hidden p-2 text-stone-300 hover:text-[#D4AF37] transition touch-manipulation" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass text-base sm:text-lg"></i>
         </button>
 
         <!-- Wishlist Button -->
-        <button onclick="App.openWishlistDrawer()" class="p-2 text-stone-300 hover:text-[#D4AF37] relative transition" title="Wishlist">
-          <i class="fa-regular fa-heart text-lg"></i>
+        <button onclick="App.openWishlistDrawer()" class="p-2 text-stone-300 hover:text-[#D4AF37] relative transition touch-manipulation" title="Wishlist">
+          <i class="fa-regular fa-heart text-base sm:text-lg"></i>
           <span class="wishlist-count-badge hidden absolute top-0.5 right-0.5 w-4 h-4 bg-[#D4AF37] text-black font-extrabold rounded-full text-[9px] flex items-center justify-center">0</span>
         </button>
 
         <!-- Shopping Bag Trigger -->
-        <button onclick="App.openCartDrawer()" class="p-2 text-stone-300 hover:text-[#D4AF37] relative transition flex items-center gap-1.5" title="Shopping Bag">
+        <button onclick="App.openCartDrawer()" class="p-2 text-stone-300 hover:text-[#D4AF37] relative transition flex items-center gap-1 touch-manipulation" title="Shopping Bag">
           <div class="relative">
-            <i class="fa-solid fa-bag-shopping text-lg"></i>
+            <i class="fa-solid fa-bag-shopping text-base sm:text-lg"></i>
             <span class="cart-count-badge hidden absolute -top-1 -right-1 w-4 h-4 bg-[#D4AF37] text-black font-extrabold rounded-full text-[9px] flex items-center justify-center">0</span>
           </div>
           <span class="hidden sm:inline text-xs font-bold uppercase tracking-wider text-white">Bag</span>
@@ -153,46 +153,46 @@
   <!-- =========================================================================
        4. PRIVACY-FIRST VALUE PROPOSITION (Dark Velvet Panels)
        ========================================================================= -->
-  <section class="bg-[#121110] border-y border-white/5 py-4 px-4 sm:px-6 relative z-10">
-    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
+  <section class="bg-[#121110] border-y border-white/5 py-3 sm:py-4 px-3 sm:px-6 relative z-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 text-left">
       
-      <div class="flex items-center gap-3 p-2 bg-[#181716] rounded border border-white/5">
-        <div class="w-10 h-10 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] flex items-center justify-center shrink-0 text-base">
+      <div class="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 bg-[#181716] rounded border border-white/5">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] flex items-center justify-center shrink-0 text-xs sm:text-base">
           <i class="fa-solid fa-user-shield"></i>
         </div>
-        <div>
-          <h4 class="text-xs font-bold text-white uppercase tracking-wider">100% Discreet Box</h4>
-          <p class="text-[11px] text-stone-400">Plain brown box, zero sensitive marks</p>
+        <div class="overflow-hidden">
+          <h4 class="text-[11px] sm:text-xs font-bold text-white uppercase tracking-wider truncate">100% Discreet</h4>
+          <p class="text-[9.5px] sm:text-[11px] text-stone-400 truncate">Plain brown parcel</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-3 p-2 bg-[#181716] rounded border border-white/5">
-        <div class="w-10 h-10 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] flex items-center justify-center shrink-0 text-base">
+      <div class="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 bg-[#181716] rounded border border-white/5">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] flex items-center justify-center shrink-0 text-xs sm:text-base">
           <i class="fa-solid fa-money-bill-wave"></i>
         </div>
-        <div>
-          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Cash on Delivery</h4>
-          <p class="text-[11px] text-stone-400">Nationwide doorstep payment</p>
+        <div class="overflow-hidden">
+          <h4 class="text-[11px] sm:text-xs font-bold text-white uppercase tracking-wider truncate">Cash on Delivery</h4>
+          <p class="text-[9.5px] sm:text-[11px] text-stone-400 truncate">Doorstep payment</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-3 p-2 bg-[#181716] rounded border border-white/5">
-        <div class="w-10 h-10 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] flex items-center justify-center shrink-0 text-base">
+      <div class="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 bg-[#181716] rounded border border-white/5">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] flex items-center justify-center shrink-0 text-xs sm:text-base">
           <i class="fa-solid fa-rotate-left"></i>
         </div>
-        <div>
-          <h4 class="text-xs font-bold text-white uppercase tracking-wider">7-Day Fit Exchange</h4>
-          <p class="text-[11px] text-stone-400">Hygienic size swap policy</p>
+        <div class="overflow-hidden">
+          <h4 class="text-[11px] sm:text-xs font-bold text-white uppercase tracking-wider truncate">7-Day Exchange</h4>
+          <p class="text-[9.5px] sm:text-[11px] text-stone-400 truncate">Size swap guarantee</p>
         </div>
       </div>
 
-      <a href="https://wa.me/923266131394?text=Assalam-o-Alaikum%20Miss%20Collection!%20Mujhe%20fitting%20aur%20order%20ke%20hawale%20se%20help%20chahiye." target="_blank" class="flex items-center gap-3 p-2 bg-[#181716] rounded border border-emerald-500/20 hover:border-emerald-500/40 transition">
-        <div class="w-10 h-10 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 text-base">
-          <i class="fa-brands fa-whatsapp text-lg"></i>
+      <a href="https://wa.me/923266131394?text=Assalam-o-Alaikum%20Miss%20Collection!%20Mujhe%20fitting%20aur%20order%20ke%20hawale%20se%20help%20chahiye." target="_blank" class="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 bg-[#181716] rounded border border-emerald-500/20 hover:border-emerald-500/40 transition">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 text-xs sm:text-base">
+          <i class="fa-brands fa-whatsapp text-sm sm:text-lg"></i>
         </div>
-        <div>
-          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Female Fit Advisors</h4>
-          <p class="text-[11px] text-emerald-400 font-semibold">+92 326 6131394</p>
+        <div class="overflow-hidden">
+          <h4 class="text-[11px] sm:text-xs font-bold text-white uppercase tracking-wider truncate">Fit Advisors</h4>
+          <p class="text-[9.5px] sm:text-[11px] text-emerald-400 font-semibold truncate">+92 326 6131394</p>
         </div>
       </a>
 
@@ -285,51 +285,51 @@
   <section id="catalogSection" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
     
     <!-- Heading & Mobile Filter Button -->
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 border-b border-white/10">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 pb-4 sm:pb-5 border-b border-white/10">
       <div>
-        <span class="text-[10px] font-semibold uppercase tracking-[0.35em] text-[#D4AF37] block mb-2">Couture & Essentials</span>
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif-luxury font-normal text-white">
+        <span class="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D4AF37] block mb-1">Couture & Essentials</span>
+        <h2 class="text-2xl sm:text-4xl md:text-5xl font-serif-luxury font-normal text-white">
           The <span class="italic font-light text-[#E6C275]">Intimates</span> Collection
         </h2>
       </div>
 
-      <div class="flex items-center justify-between sm:justify-end gap-3 flex-wrap">
-        <span id="productCountDisplay" class="text-xs text-stone-400 font-medium">Showing Items</span>
+      <div class="flex items-center justify-between sm:justify-end gap-2 sm:gap-3 flex-wrap w-full sm:w-auto">
+        <span id="productCountDisplay" class="text-[11px] sm:text-xs text-stone-400 font-medium">Showing Items</span>
         
         <!-- View Mode Switcher (Slides vs Grid) -->
         <div class="flex items-center bg-[#181716] border border-white/10 rounded-lg p-0.5">
           <button 
             id="viewModeSlideBtn" 
             onclick="App.setViewMode('slide')" 
-            class="px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider transition flex items-center gap-1.5 bg-[#D4AF37] text-[#0A0908]"
+            class="px-2 sm:px-2.5 py-1 rounded text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition flex items-center gap-1.5 bg-[#D4AF37] text-[#0A0908] touch-manipulation"
             title="Horizontal Sliding Showcase"
           >
-            <i class="fa-solid fa-sliders"></i> Slides
+            <i class="fa-solid fa-sliders text-[9px] sm:text-xs"></i> Slides
           </button>
           <button 
             id="viewModeGridBtn" 
             onclick="App.setViewMode('grid')" 
-            class="px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider transition flex items-center gap-1.5 text-stone-300 hover:text-white"
+            class="px-2 sm:px-2.5 py-1 rounded text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition flex items-center gap-1.5 text-stone-300 hover:text-white touch-manipulation"
             title="Standard 4-Column Grid"
           >
-            <i class="fa-solid fa-table-cells"></i> Grid
+            <i class="fa-solid fa-table-cells text-[9px] sm:text-xs"></i> Grid
           </button>
         </div>
 
         <!-- Mobile Filter Button Trigger -->
         <button 
           onclick="App.openFilterDrawer()" 
-          class="sm:hidden px-3.5 py-1.5 bg-[#181716] border border-white/10 text-white text-xs font-bold rounded flex items-center gap-1.5 shadow-sm uppercase tracking-wider hover:border-[#D4AF37]/50"
+          class="sm:hidden px-2.5 py-1 bg-[#181716] border border-white/10 text-white text-[11px] font-bold rounded flex items-center gap-1.5 shadow-sm uppercase tracking-wider hover:border-[#D4AF37]/50 touch-manipulation"
         >
           <i class="fa-solid fa-sliders text-[#D4AF37]"></i> Filters <span id="mobileFilterBtnCount" class="text-[#D4AF37] font-normal"></span>
         </button>
 
         <!-- Sorting dropdown (Khaadi style) -->
-        <select id="catalogSortSelect" class="text-xs font-semibold bg-[#181716] border border-white/10 rounded px-3 py-1.5 text-stone-200 focus:outline-none focus:border-[#D4AF37]">
-          <option value="featured">Featured Intimates</option>
+        <select id="catalogSortSelect" class="text-[11px] sm:text-xs font-semibold bg-[#181716] border border-white/10 rounded px-2.5 py-1 text-stone-200 focus:outline-none focus:border-[#D4AF37] max-w-[130px] sm:max-w-none">
+          <option value="featured">Featured</option>
           <option value="price-low">Price: Low to High</option>
           <option value="price-high">Price: High to Low</option>
-          <option value="rating">Top Customer Rated</option>
+          <option value="rating">Top Rated</option>
           <option value="reviews">Most Reviewed</option>
         </select>
       </div>
@@ -552,34 +552,34 @@
   </a>
 
   <!-- Mobile iOS Bottom Navigation Bar -->
-  <div class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 bg-[#100F0E]/95 backdrop-blur-md border-t border-white/10 pt-2 px-4 z-40 flex items-center justify-around shadow-2xl">
-    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1 text-stone-400 hover:text-[#D4AF37] transition">
-      <i class="fa-solid fa-house text-sm"></i>
-      <span class="text-[10px] font-medium">Home</span>
+  <nav class="mobile-bottom-nav md:hidden" aria-label="Mobile Bottom Navigation">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mobile-nav-tab active" title="Home">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
     </button>
-    <button onclick="App.filterByCategory('bras')" class="flex flex-col items-center gap-1 text-stone-400 hover:text-[#D4AF37] transition">
-      <i class="fa-solid fa-shapes text-sm"></i>
-      <span class="text-[10px] font-medium">Catalog</span>
+    <button onclick="App.filterByCategory('bras')" class="mobile-nav-tab" title="Catalog">
+      <i class="fa-solid fa-shapes"></i>
+      <span>Catalog</span>
     </button>
-    <button onclick="App.openBraCalculatorModal()" class="flex flex-col items-center gap-1 text-[#D4AF37] font-bold">
-      <i class="fa-solid fa-ruler-combined text-sm"></i>
-      <span class="text-[10px]">Fit Guide</span>
+    <button onclick="App.openBraCalculatorModal()" class="mobile-nav-tab text-[#D4AF37]" title="Bra Fit Guide">
+      <i class="fa-solid fa-ruler-combined"></i>
+      <span>Fit Guide</span>
     </button>
-    <button onclick="App.openWishlistDrawer()" class="flex flex-col items-center gap-1 text-stone-400 hover:text-[#D4AF37] relative transition">
-      <div class="relative">
-        <i class="fa-regular fa-heart text-sm"></i>
-        <span class="wishlist-count-badge hidden absolute -top-1 -right-2 w-3.5 h-3.5 bg-rose-600 text-white rounded-full text-[8px] font-bold flex items-center justify-center">0</span>
+    <button onclick="App.openWishlistDrawer()" class="mobile-nav-tab relative" title="Wishlist">
+      <div class="relative inline-flex">
+        <i class="fa-regular fa-heart"></i>
+        <span class="wishlist-count-badge hidden absolute -top-1.5 -right-2.5 w-3.5 h-3.5 bg-[#D4AF37] text-black rounded-full text-[8px] font-extrabold flex items-center justify-center">0</span>
       </div>
-      <span class="text-[10px] font-medium">Saved</span>
+      <span>Saved</span>
     </button>
-    <button onclick="App.openCartDrawer()" class="flex flex-col items-center gap-1 text-stone-400 hover:text-[#D4AF37] relative transition">
-      <div class="relative">
-        <i class="fa-solid fa-bag-shopping text-sm"></i>
-        <span class="cart-count-badge hidden absolute -top-1 -right-2 w-3.5 h-3.5 bg-rose-600 text-white rounded-full text-[8px] font-bold flex items-center justify-center">0</span>
+    <button onclick="App.openCartDrawer()" class="mobile-nav-tab relative" title="Shopping Bag">
+      <div class="relative inline-flex">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="cart-count-badge hidden absolute -top-1.5 -right-2.5 w-3.5 h-3.5 bg-[#D4AF37] text-black rounded-full text-[8px] font-extrabold flex items-center justify-center">0</span>
       </div>
-      <span class="text-[10px] font-medium">Bag</span>
+      <span>Bag</span>
     </button>
-  </div>
+  </nav>
 
   <!-- =========================================================================
        12. DRAWERS & MODALS CONTAINER
@@ -811,7 +811,7 @@
   <!-- G. BRA SIZE CALCULATOR WIZARD MODAL -->
   <div id="braCalculatorModalBackdrop" class="modal-backdrop">
     <div class="modal-content max-w-lg">
-      <div class="p-6">
+      <div class="p-4 sm:p-6">
         <div class="flex items-center justify-between pb-3 border-b border-white/10">
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-ruler-combined text-[#D4AF37] text-lg"></i>
@@ -877,7 +877,7 @@
   <!-- H. EXPRESS PAKISTANI CHECKOUT MODAL -->
   <div id="checkoutModalBackdrop" class="modal-backdrop">
     <div class="modal-content max-w-2xl">
-      <div class="p-6">
+      <div class="p-4 sm:p-6">
         <div class="flex items-center justify-between pb-3 border-b border-white/10">
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-lock text-[#D4AF37] text-lg"></i>
@@ -968,7 +968,7 @@
   <!-- J. ORDER TRACKING LOOKUP MODAL -->
   <div id="orderTrackingModalBackdrop" class="modal-backdrop">
     <div class="modal-content max-w-md">
-      <div class="p-6">
+      <div class="p-4 sm:p-6">
         <div class="flex items-center justify-between pb-3 border-b border-white/10">
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-truck-fast text-[#D4AF37] text-lg"></i>

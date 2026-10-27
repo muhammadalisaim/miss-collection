@@ -208,8 +208,12 @@ const App = {
     let mouseY = -1000;
 
     window.addEventListener("resize", () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      const newW = window.innerWidth;
+      const newH = window.innerHeight;
+      if (Math.abs(width - newW) > 30 || Math.abs(height - newH) > 120) {
+        width = canvas.width = newW;
+        height = canvas.height = newH;
+      }
     });
 
     window.addEventListener("mousemove", (e) => {
@@ -765,23 +769,33 @@ const App = {
     if (sliderContainer && !sliderContainer.dataset.swipeBound) {
       sliderContainer.dataset.swipeBound = "true";
       let touchStartX = 0;
+      let touchStartY = 0;
       let touchEndX = 0;
+      let touchEndY = 0;
 
       sliderContainer.addEventListener("touchstart", function (e) {
         touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
       }, { passive: true });
 
       sliderContainer.addEventListener("touchend", function (e) {
         touchEndX = e.changedTouches[0].screenX;
-        const threshold = 40;
-        const currentSlides = document.querySelectorAll(".hero-slide");
-        if (!currentSlides.length) return;
-        if (touchEndX < touchStartX - threshold) {
-          // Swipe Left -> Next
-          showSlide((currentSlide + 1) % currentSlides.length);
-        } else if (touchEndX > touchStartX + threshold) {
-          // Swipe Right -> Prev
-          showSlide((currentSlide - 1 + currentSlides.length) % currentSlides.length);
+        touchEndY = e.changedTouches[0].screenY;
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+        const threshold = 35;
+
+        // Ensure user is swiping horizontally rather than scrolling vertically
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > threshold) {
+          const currentSlides = document.querySelectorAll(".hero-slide");
+          if (!currentSlides.length) return;
+          if (diffX < 0) {
+            // Swipe Left -> Next
+            showSlide((currentSlide + 1) % currentSlides.length);
+          } else {
+            // Swipe Right -> Prev
+            showSlide((currentSlide - 1 + currentSlides.length) % currentSlides.length);
+          }
         }
       }, { passive: true });
     }
@@ -904,22 +918,22 @@ const App = {
       : [];
 
     const allCircle = `
-      <div class="category-circle-item shrink-0 text-center select-none cursor-pointer" onclick="App.filterByCategory('all')">
-        <div class="category-circle-img-wrapper p-1 rounded-full border-2 ${this.currentCategory === 'all' ? 'border-[#D4AF37] ring-2 ring-[#D4AF37]/30' : 'border-white/10 hover:border-[#D4AF37]/50'} transition-all">
+      <div class="category-circle-item shrink-0 text-center select-none cursor-pointer touch-manipulation" onclick="App.filterByCategory('all')">
+        <div class="category-circle-img-wrapper p-0.5 sm:p-1 rounded-full border-2 ${this.currentCategory === 'all' ? 'border-[#D4AF37] ring-2 ring-[#D4AF37]/30' : 'border-white/10 hover:border-[#D4AF37]/50'} transition-all">
           <img src="https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=300&q=80" alt="All Silhouettes" class="category-circle-img" loading="lazy" />
         </div>
-        <span class="text-xs font-semibold text-stone-200 tracking-tight block mt-1">All Silhouettes</span>
-        <span class="text-[10px] text-stone-400 block -mt-1 font-medium">Full Collection</span>
+        <span class="text-[11px] sm:text-xs font-semibold text-stone-200 tracking-tight block mt-1 truncate">All Silhouettes</span>
+        <span class="text-[9px] sm:text-[10px] text-stone-400 block -mt-0.5 font-medium truncate">Full Collection</span>
       </div>
     `;
 
     const dynamicCircles = categories.map(cat => `
-      <div class="category-circle-item shrink-0 text-center select-none cursor-pointer" onclick="App.filterByCategory('${cat.id}')">
-        <div class="category-circle-img-wrapper p-1 rounded-full border-2 ${this.currentCategory === cat.id ? 'border-[#D4AF37] ring-2 ring-[#D4AF37]/30' : 'border-white/10 hover:border-[#D4AF37]/50'} transition-all">
+      <div class="category-circle-item shrink-0 text-center select-none cursor-pointer touch-manipulation" onclick="App.filterByCategory('${cat.id}')">
+        <div class="category-circle-img-wrapper p-0.5 sm:p-1 rounded-full border-2 ${this.currentCategory === cat.id ? 'border-[#D4AF37] ring-2 ring-[#D4AF37]/30' : 'border-white/10 hover:border-[#D4AF37]/50'} transition-all">
           <img src="${cat.img}" alt="${cat.name}" class="category-circle-img" loading="lazy" />
         </div>
-        <span class="text-xs font-semibold text-stone-200 tracking-tight block mt-1">${cat.name}</span>
-        <span class="text-[10px] text-stone-400 block -mt-1 font-medium">${cat.count} Designs</span>
+        <span class="text-[11px] sm:text-xs font-semibold text-stone-200 tracking-tight block mt-1 truncate">${cat.name}</span>
+        <span class="text-[9px] sm:text-[10px] text-stone-400 block -mt-0.5 font-medium truncate">${cat.count} Designs</span>
       </div>
     `).join("");
 
@@ -1107,20 +1121,20 @@ const App = {
         return `
           <div class="category-slide-showcase-row">
             <!-- Row Header with Title & Left/Right Slide Controls -->
-            <div class="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
+            <div class="flex items-center justify-between mb-3 sm:mb-4 pb-2 border-b border-white/10">
               <div>
-                <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#D4AF37] block">${cat.subtitle || 'Silhouette Collection'}</span>
-                <h3 class="text-xl sm:text-2xl font-serif-luxury text-white flex items-center gap-2">
+                <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#D4AF37] block">${cat.subtitle || 'Silhouette Collection'}</span>
+                <h3 class="text-base sm:text-2xl font-serif-luxury text-white flex items-center gap-1.5 sm:gap-2">
                   <span>${cat.name}</span>
-                  <span class="text-xs font-normal text-stone-400 font-sans">(${catProducts.length} Designs)</span>
+                  <span class="text-[11px] sm:text-xs font-normal text-stone-400 font-sans">(${catProducts.length})</span>
                 </h3>
               </div>
 
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-1.5 sm:gap-2">
                 <button 
                   type="button" 
                   onclick="App.slideCategoryRow('${cat.id}', -1)" 
-                  class="w-8 h-8 rounded-full border border-white/20 bg-[#181716] text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A0908] transition flex items-center justify-center text-xs shadow-sm" 
+                  class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-white/20 bg-[#181716] text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A0908] transition flex items-center justify-center text-xs shadow-sm touch-manipulation" 
                   title="Slide Left"
                 >
                   <i class="fa-solid fa-chevron-left"></i>
@@ -1128,7 +1142,7 @@ const App = {
                 <button 
                   type="button" 
                   onclick="App.slideCategoryRow('${cat.id}', 1)" 
-                  class="w-8 h-8 rounded-full border border-white/20 bg-[#181716] text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A0908] transition flex items-center justify-center text-xs shadow-sm" 
+                  class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-white/20 bg-[#181716] text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A0908] transition flex items-center justify-center text-xs shadow-sm touch-manipulation" 
                   title="Slide Right"
                 >
                   <i class="fa-solid fa-chevron-right"></i>
@@ -1154,7 +1168,7 @@ const App = {
             </div>
 
             <!-- Horizontal Sliding Cards Container ("through sides / slides") -->
-            <div id="slider-cat-${cat.id}" class="flex gap-4 sm:gap-6 overflow-x-auto pb-4 scrollbar-hide scroll-smooth snap-x">
+            <div id="slider-cat-${cat.id}" class="flex gap-3 sm:gap-6 overflow-x-auto pb-4 scrollbar-hide scroll-smooth snap-x">
               ${catProducts.map(p => this.generateProductCardHTML(p, true)).join("")}
             </div>
           </div>
@@ -1169,7 +1183,7 @@ const App = {
       products = products.filter(p => (p.category || "").toLowerCase() === this.currentCategory.toLowerCase());
     }
 
-    grid.className = "grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 pt-4";
+    grid.className = "grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 pt-4";
     grid.innerHTML = products.map(p => this.generateProductCardHTML(p, false)).join("");
   },
 
@@ -1269,12 +1283,12 @@ const App = {
               ${p.originalPrice ? `<span class="card-price-original">${Store.formatPKR(p.originalPrice)}</span>` : ""}
             </div>
 
-            <div class="flex items-center gap-1.5">
+            <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
               <!-- WhatsApp Quick Order Button -->
               <button 
                 type="button" 
                 onclick="event.stopPropagation(); App.orderViaWhatsApp(Store.getProductById('${p.id}'))"
-                class="px-2.5 py-1 bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-white border border-[#25D366]/40 rounded text-[10px] font-bold uppercase tracking-wider transition flex items-center gap-1"
+                class="px-2 sm:px-2.5 py-1 bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-white border border-[#25D366]/40 rounded text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider transition flex items-center gap-1 touch-manipulation"
                 title="Book via WhatsApp"
               >
                 <i class="fa-brands fa-whatsapp text-xs"></i>
@@ -1285,7 +1299,7 @@ const App = {
               <button 
                 type="button" 
                 onclick="event.stopPropagation(); App.openMobileQuickAddSheet('${p.id}')"
-                class="md:hidden px-2.5 py-1 bg-[#181716] text-[#D4AF37] border border-white/10 hover:border-[#D4AF37]/50 rounded text-[10px] font-bold uppercase tracking-wider transition"
+                class="md:hidden px-2 sm:px-2.5 py-1 bg-[#181716] text-[#D4AF37] border border-white/10 hover:border-[#D4AF37]/50 rounded text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider transition touch-manipulation"
               >
                 + Add
               </button>
@@ -1500,17 +1514,17 @@ const App = {
     if (!modalContent) return;
 
     modalContent.innerHTML = `
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 sm:p-6 relative text-white">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6 relative text-white">
         <!-- Close Button -->
-        <button onclick="App.closeAllModals()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition z-20">
+        <button onclick="App.closeAllModals()" class="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-black/70 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center transition z-20 touch-manipulation" aria-label="Close modal">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
 
         <!-- Product Gallery -->
         <div class="space-y-3">
-          <div class="aspect-[3/4] rounded-lg overflow-hidden bg-[#181716] border border-white/10 relative">
+          <div class="max-h-[260px] sm:max-h-none aspect-[4/3] sm:aspect-[3/4] rounded-lg overflow-hidden bg-[#181716] border border-white/10 relative">
             <img id="modalMainImage" src="${selectedImage}" alt="${p.title}" class="w-full h-full object-cover" />
-            <span class="absolute bottom-3 left-3 bg-[#0A0908]/90 backdrop-blur-xs text-[11px] font-semibold text-stone-200 px-2.5 py-1 rounded-md shadow-xs flex items-center gap-1.5 border border-white/10">
+            <span class="absolute bottom-2.5 left-2.5 bg-[#0A0908]/90 backdrop-blur-xs text-[10px] sm:text-[11px] font-semibold text-stone-200 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md shadow-xs flex items-center gap-1.5 border border-white/10">
               <i class="fa-solid fa-lock text-[#D4AF37]"></i> 100% Discreet Packaging
             </span>
           </div>
