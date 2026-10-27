@@ -36,6 +36,15 @@ const App = {
     this.renderReviewsSection();
     this.initStickyHeader();
     this.initMobileFilterDrawer();
+
+    // Sync latest products from Google Sheets cloud database if connected
+    if (typeof Store !== "undefined" && Store.isCloudConnected && Store.isCloudConnected()) {
+      Store.fetchRemoteProducts().then(() => {
+        this.renderCategoryCircles();
+        this.renderCategoryFilterPills();
+        this.renderProducts();
+      }).catch(err => console.warn("Google Sheets background sync:", err));
+    }
   },
 
   bindEvents: function () {
@@ -2159,6 +2168,10 @@ const App = {
     let newOrder = null;
     try {
       newOrder = Store.addOrder(orderData);
+      // Auto-log to Google Sheets Cloud Database
+      if (typeof Store !== "undefined" && Store.logOrderToRemote) {
+        Store.logOrderToRemote(newOrder || orderData);
+      }
     } catch (e) {
       console.warn("Could not save order locally", e);
     }
@@ -2204,6 +2217,12 @@ const App = {
     };
 
     const newOrder = Store.addOrder(orderData);
+
+    // Auto-log to Google Sheets Cloud Database
+    if (typeof Store !== "undefined" && Store.logOrderToRemote) {
+      Store.logOrderToRemote(newOrder);
+    }
+
     this.closeAllModals();
     this.showOrderConfirmationModal(newOrder);
 
@@ -2395,6 +2414,36 @@ const App = {
       `Assalam-o-Alaikum Miss Collection!\n\nMujhe yeh product WhatsApp par book / purchase karna hai:\n\n• Product: *${product.title}*\n${categoryLine}${sizeLine}• Price: *${Store.formatPKR(product.price)}*\n• Item Code: ${product.id}\n\nKindly availability confirm karein aur 100% discreet packaging ke sath dispatch karein. Shukriya! ✨`
     );
     const waUrl = `https://wa.me/${phone}?text=${msg}`;
+
+    // Auto-log order inquiry into Google Sheets
+    if (typeof Store !== "undefined" && Store.logOrderToRemote) {
+      const waOrderRecord = {
+        orderId: "WA-" + Date.now().toString(36).toUpperCase(),
+        date: new Date().toISOString().replace("T", " ").substr(0, 19),
+        customer: {
+          fullName: "WhatsApp Direct Buyer",
+          phone: "WhatsApp Chat Booking",
+          city: "Pakistan",
+          address: "Direct WhatsApp Order"
+        },
+        paymentMethod: "WhatsApp / COD",
+        items: [{
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          quantity: 1,
+          size: selectedSize || (product.sizes && product.sizes[0] ? product.sizes[0] : "Standard")
+        }],
+        subtotal: product.price,
+        discount: 0,
+        shipping: 0,
+        total: product.price,
+        status: "WhatsApp Booking Inquired",
+        discreetPackaging: true
+      };
+      Store.logOrderToRemote(waOrderRecord);
+    }
+
     const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isMobile) {
       window.location.href = waUrl;

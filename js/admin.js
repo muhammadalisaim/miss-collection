@@ -13,8 +13,15 @@ const AdminApp = {
   init: function () {
     this.checkAuth();
     this.bindEvents();
+    this.updateCloudStatusUI();
     if (this.isLoggedIn) {
       this.refreshDashboard();
+      if (typeof Store !== "undefined" && Store.isCloudConnected && Store.isCloudConnected()) {
+        Store.fetchRemoteProducts().then(() => {
+          this.renderProductsTable();
+          this.renderKPIs();
+        }).catch(err => console.warn("Admin cloud sync:", err));
+      }
     }
   },
 
@@ -59,6 +66,9 @@ const AdminApp = {
         self.switchTab(tab);
       });
     });
+
+    // Cloud Database updates
+    window.addEventListener("cloud_config_updated", () => self.updateCloudStatusUI());
   },
 
   handleLogin: function (form) {
@@ -109,6 +119,10 @@ const AdminApp = {
       else if (tabName === "navigation") addBtnText.textContent = "Add Menu Item";
       else if (tabName === "banners") addBtnText.textContent = "Add Slide";
       else if (tabName === "lookbook") addBtnText.textContent = "Edit Lookbook";
+      else if (tabName === "cloud") {
+        addBtnText.textContent = "Sync Catalog";
+        this.updateCloudStatusUI();
+      }
       else addBtnText.textContent = "New Item";
     }
   },
@@ -197,48 +211,69 @@ const AdminApp = {
     `).join("");
   },
 
-  renderOrdersTable: function () {
+  renderOrdersTable: function (customList = null) {
     const tbody = document.getElementById("adminOrdersTableBody");
     if (!tbody) return;
 
-    const orders = Store.getOrders();
-    tbody.innerHTML = orders.map(o => `
+    const orders = customList || Store.getOrders();
+    if (!orders || orders.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="p-8 text-center text-stone-400 text-xs">
+            <i class="fa-solid fa-box-open text-2xl mb-2 block text-stone-300"></i>
+            Abhi tak koi order record nahi mila. Customer checkout ya WhatsApp booking par orders yahan show honge.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = orders.map(o => {
+      const orderId = o.orderId || o.id || "ORD";
+      const dateStr = o.date || o.timestamp || "-";
+      const cust = o.customer || {};
+      const custName = cust.fullName || o.customerName || "WhatsApp Customer";
+      const custPhone = cust.phone || o.customerPhone || "Direct Chat";
+      const custCity = cust.city || o.city || "Pakistan";
+      const itemsCount = Array.isArray(o.items) ? o.items.length : 1;
+      const itemsText = Array.isArray(o.items)
+        ? o.items.map(i => `${i.quantity || 1}x ${i.title || i.name} [${i.size || "Standard"}]`).join(", ")
+        : (o.itemsSummary || "Direct Order");
+      const totalVal = o.total || o.totalAmount || 0;
+      const payment = o.paymentMethod || "WhatsApp / COD";
+      const status = o.status || "Order Confirmed";
+
+      return `
       <tr class="border-b border-stone-100 hover:bg-stone-50/50 transition">
         <td class="p-3">
-          <strong class="text-xs font-mono text-rose-600">${o.orderId}</strong>
-          <span class="block text-[10px] text-stone-400">${o.date}</span>
+          <strong class="text-xs font-mono text-rose-600">${orderId}</strong>
+          <span class="block text-[10px] text-stone-400">${dateStr}</span>
         </td>
         <td class="p-3 text-xs">
-          <strong class="text-stone-900 block">${o.customer.fullName}</strong>
-          <span class="text-stone-500 block text-[11px]">${o.customer.phone} &bull; ${o.customer.city}</span>
+          <strong class="text-stone-900 block">${custName}</strong>
+          <span class="text-stone-500 block text-[11px]">${custPhone} &bull; ${custCity}</span>
         </td>
         <td class="p-3 text-xs text-stone-600">
-          ${o.items.length} item(s)
-          <span class="block text-[10px] text-stone-400 truncate max-w-[150px]">${o.items.map(i => i.title).join(", ")}</span>
+          ${itemsCount} item(s)
+          <span class="block text-[10px] text-stone-400 truncate max-w-[150px]" title="${itemsText}">${itemsText}</span>
         </td>
         <td class="p-3 text-xs font-bold text-stone-900">
-          ${Store.formatPKR(o.total)}
-          <span class="block text-[10px] text-stone-400 font-normal">${o.paymentMethod}</span>
+          ${Store.formatPKR(totalVal)}
+          <span class="block text-[10px] text-stone-400 font-normal">${payment}</span>
         </td>
         <td class="p-3">
-          <select 
-            onchange="AdminApp.changeOrderStatus('${o.orderId}', this.value)" 
-            class="text-xs font-semibold p-1.5 rounded border border-stone-200 bg-white text-stone-800 focus:outline-none focus:border-rose-500"
-          >
-            <option value="Order Confirmed" ${o.status === "Order Confirmed" ? "selected" : ""}>Order Confirmed</option>
-            <option value="Confidential Packaging" ${o.status === "Confidential Packaging" ? "selected" : ""}>Confidential Packaging</option>
-            <option value="Dispatched via TCS" ${o.status === "Dispatched via TCS" ? "selected" : ""}>Dispatched via TCS</option>
-            <option value="Out for Delivery" ${o.status === "Out for Delivery" ? "selected" : ""}>Out for Delivery</option>
-            <option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>Delivered</option>
-          </select>
+          <span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${status.toLowerCase().includes('inquir') || status.toLowerCase().includes('whatsapp') ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
+            ${status}
+          </span>
         </td>
         <td class="p-3 text-right">
-          <button onclick="AdminApp.viewOrderDetails('${o.orderId}')" class="px-2.5 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded">
+          <button onclick="AdminApp.viewOrderDetails('${orderId}')" class="px-2.5 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded">
             View
           </button>
         </td>
       </tr>
-    `).join("");
+      `;
+    }).join("");
   },
 
   promptEditPrice: function (productId, currentPrice) {
@@ -271,20 +306,32 @@ const AdminApp = {
 
   currentUploadedImage: null,
 
-  clearAllProducts: function () {
+  clearAllProducts: async function () {
     if (confirm("⚠️ Kya aap waqai tamaam products ko catalog se delete karna chahte hain?\n\n(Yeh action tamam products remove kar dega aur woh dobara wapis nahi aayenge).")) {
       Store.clearAllProducts();
+      if (Store.isCloudConnected && Store.isCloudConnected()) {
+        try {
+          await Store.bulkSaveProductsToRemote([]);
+        } catch (e) {
+          console.warn("Could not clear remote products:", e);
+        }
+      }
       this.refreshDashboard();
       alert("Tamaam products kamyabi se delete ho chuki hain!");
     }
   },
 
-  deleteProduct: function (productId) {
+  deleteProduct: async function (productId) {
     if (confirm("Are you sure you want to remove this product from Miss Collection catalog?")) {
-      let products = Store.getProducts();
-      products = products.filter(i => i.id !== productId);
-      Store.saveProducts(products);
+      if (typeof Store.deleteProductFromRemote === "function") {
+        await Store.deleteProductFromRemote(productId);
+      } else {
+        let products = Store.getProducts();
+        products = products.filter(i => i.id !== productId);
+        Store.saveProducts(products);
+      }
       this.refreshDashboard();
+      alert("Product kamyabi se remove kar di gayi!");
     }
   },
 
@@ -440,7 +487,7 @@ const AdminApp = {
     document.getElementById("adminProductModal").classList.add("hidden");
   },
 
-  handleSaveProduct: function (form) {
+  handleSaveProduct: async function (form) {
     const editId = document.getElementById("adminProductModalId").value;
     const products = Store.getProducts();
 
@@ -475,6 +522,8 @@ const AdminApp = {
 
     const subCategory = category.charAt(0).toUpperCase() + category.slice(1);
 
+    let targetProduct = null;
+
     if (editId) {
       // Edit existing product
       const p = products.find(i => i.id === editId);
@@ -487,13 +536,14 @@ const AdminApp = {
         p.stockCount = stockCount;
         p.inStock = inStock;
         p.sizes = finalSizes;
-        p.images[0] = imageUrl;
+        p.images = [imageUrl];
         if (p.colors && p.colors[0]) p.colors[0].image = imageUrl;
+        targetProduct = p;
       }
     } else {
       // Add new product
       const newId = "mc-" + category.substring(0, 3).toLowerCase() + "-" + Date.now().toString().slice(-4);
-      products.unshift({
+      targetProduct = {
         id: newId,
         title: title,
         category: category,
@@ -511,13 +561,28 @@ const AdminApp = {
         colors: [{ name: "Standard", hex: "#d4af37", image: imageUrl }],
         sizes: finalSizes,
         images: [imageUrl]
-      });
+      };
     }
 
-    Store.saveProducts(products);
+    if (targetProduct) {
+      if (typeof Store.saveProductToRemote === "function") {
+        await Store.saveProductToRemote(targetProduct);
+      } else {
+        const idx = products.findIndex(p => p.id === targetProduct.id);
+        if (idx > -1) products[idx] = targetProduct;
+        else products.unshift(targetProduct);
+        Store.saveProducts(products);
+      }
+    }
+
     this.closeProductModal();
     this.refreshDashboard();
-    alert("Product catalog updated successfully!");
+
+    if (Store.isCloudConnected && Store.isCloudConnected()) {
+      alert("✅ Product kamyabi se save ho gaya aur Google Sheets database mein sync ho chuka hai! Ab har mobile device par yeh product live nazar aayega.");
+    } else {
+      alert("Product locally save ho gaya! Mukammal global sync ke liye 'Google Sheets DB' tab mein Google Sheet connect karein.");
+    }
   },
 
   changeOrderStatus: function (orderId, newStatus) {
@@ -527,18 +592,31 @@ const AdminApp = {
 
   viewOrderDetails: function (orderId) {
     const orders = Store.getOrders();
-    const o = orders.find(i => i.orderId === orderId);
+    const o = orders.find(i => (i.orderId === orderId || i.id === orderId));
     if (!o) return;
 
+    const custName = (o.customer && o.customer.fullName) || o.customerName || "Customer";
+    const custPhone = (o.customer && o.customer.phone) || o.customerPhone || "Direct Chat";
+    const custAddr = (o.customer && o.customer.address) || o.deliveryAddress || "-";
+    const custCity = (o.customer && o.customer.city) || o.city || "Pakistan";
+    const totalAmount = o.total || o.totalAmount || 0;
+    const itemsDetail = Array.isArray(o.items)
+      ? o.items.map(i => ` • ${i.quantity || 1}x ${i.title || i.name} [Size: ${i.size || "Standard"}]`).join("\n")
+      : (o.itemsSummary ? ` • ${o.itemsSummary}` : " • Direct item inquiry");
+
     alert(
-      `Order: ${o.orderId}\n` +
-      `Date: ${o.date}\n` +
-      `Customer: ${o.customer.fullName} (${o.customer.phone})\n` +
-      `Address: ${o.customer.address}, ${o.customer.city}\n` +
-      `Payment: ${o.paymentMethod}\n` +
-      `Status: ${o.status}\n` +
-      `Total: ${Store.formatPKR(o.total)}\n\n` +
-      `Items:\n` + o.items.map(i => ` - ${i.quantity}x ${i.title} [Size: ${i.size}, Color: ${i.color}]`).join("\n")
+      `==============================\n` +
+      `ORDER: ${o.orderId || o.id}\n` +
+      `DATE: ${o.date || o.timestamp || "-"}\n` +
+      `STATUS: ${o.status || "Confirmed"}\n` +
+      `==============================\n` +
+      `CUSTOMER: ${custName}\n` +
+      `PHONE: ${custPhone}\n` +
+      `ADDRESS: ${custAddr}, ${custCity}\n` +
+      `PAYMENT: ${o.paymentMethod || "COD"}\n` +
+      `TOTAL: ${Store.formatPKR(totalAmount)}\n\n` +
+      `ITEMS:\n${itemsDetail}\n\n` +
+      `PACKAGING: 100% Discreet & Confidential`
     );
   },
 
@@ -1089,5 +1167,214 @@ const AdminApp = {
       this.renderLookbookGrid();
       alert("Lookbook restored to default seasonal styling.");
     }
+  },
+
+  // ==========================================
+  // GOOGLE SHEETS CLOUD DATABASE MANAGEMENT
+  // ==========================================
+  updateCloudStatusUI: function () {
+    const isConn = (typeof Store !== "undefined" && Store.isCloudConnected) ? Store.isCloudConnected() : false;
+    const cloudUrl = (typeof Store !== "undefined" && Store.getCloudUrl) ? Store.getCloudUrl() : "";
+
+    // Top Header Badge
+    const headerBadge = document.getElementById("adminCloudStatusBadge");
+    const headerDot = document.getElementById("adminCloudStatusDot");
+    const headerLabel = document.getElementById("adminCloudStatusLabel");
+
+    if (headerBadge && headerDot && headerLabel) {
+      if (isConn) {
+        headerBadge.className = "text-xs font-semibold px-2.5 py-1.5 rounded-lg border flex items-center gap-1.5 transition bg-emerald-500/15 border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/25";
+        headerDot.className = "w-2 h-2 rounded-full bg-emerald-400";
+        headerLabel.textContent = "Cloud DB: Connected";
+      } else {
+        headerBadge.className = "text-xs font-semibold px-2.5 py-1.5 rounded-lg border flex items-center gap-1.5 transition bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20";
+        headerDot.className = "w-2 h-2 rounded-full bg-amber-400";
+        headerLabel.textContent = "Cloud DB: Local Only";
+      }
+    }
+
+    // Cloud Tab Card
+    const cardDot = document.getElementById("cloudCardStatusDot");
+    const cardTitle = document.getElementById("cloudCardStatusTitle");
+    const cardSub = document.getElementById("cloudCardStatusSub");
+    const urlInput = document.getElementById("adminCloudUrlInput");
+
+    if (cardDot && cardTitle && cardSub) {
+      if (isConn) {
+        cardDot.className = "w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]";
+        cardTitle.textContent = "Google Sheets Cloud Database (Active & Connected)";
+        cardSub.innerHTML = `Connected to Google Apps Script Web App. Catalog is synchronized across all devices and orders are logged live.`;
+      } else {
+        cardDot.className = "w-3 h-3 rounded-full bg-amber-500";
+        cardTitle.textContent = "Google Sheets Cloud Database (Not Connected)";
+        cardSub.textContent = "Products are currently stored in local browser only. Connect Google Sheet to enable multi-device sync and cloud order logging.";
+      }
+    }
+
+    if (urlInput && !urlInput.value && cloudUrl) {
+      urlInput.value = cloudUrl;
+    }
+  },
+
+  saveCloudSettings: async function () {
+    const input = document.getElementById("adminCloudUrlInput");
+    if (!input) return;
+    const url = input.value.trim();
+
+    if (!url) {
+      alert("Barah-e-karam valid Google Apps Script Web App URL darj karein.");
+      return;
+    }
+
+    if (!url.startsWith("https://script.google.com/macros/s/")) {
+      alert("URL format ghalat hai! URL 'https://script.google.com/macros/s/...' se shuru hona chahiye.");
+      return;
+    }
+
+    // Test connection first
+    const testResult = await Store.testConnection(url);
+    if (!testResult.success) {
+      const cont = confirm(`⚠️ Connection test fail hua:\n${testResult.message}\n\nKya aap phir bhi is URL ko save karna chahte hain?`);
+      if (!cont) return;
+    }
+
+    Store.saveCloudUrl(url);
+    this.updateCloudStatusUI();
+
+    alert("✅ Google Sheets Cloud Database kamyabi se connect ho gaya!\n\nAb aap 'Upload All to Google Sheet' button par click kar ke tamam mojooda products ko Google Sheet mein transfer kar dein.");
+  },
+
+  disconnectCloud: function () {
+    if (confirm("Kya aap waqai Google Sheets Database disconnect karna chahte hain? (Aapka local catalog mehfooz rahega).")) {
+      Store.saveCloudUrl("");
+      const input = document.getElementById("adminCloudUrlInput");
+      if (input) input.value = "";
+      this.updateCloudStatusUI();
+      alert("Cloud Database disconnect kar diya gaya hai. Ab changes sirf local browser mein save hongi.");
+    }
+  },
+
+  testCloudConnection: async function () {
+    const btn = document.getElementById("btnTestCloud");
+    const origHtml = btn ? btn.innerHTML : "";
+    if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-[#D4AF37]"></i> Testing...';
+
+    const res = await Store.testConnection();
+    if (btn) btn.innerHTML = origHtml;
+
+    if (res.success) {
+      alert(`✅ Connection Successful!\n\nGoogle Sheets Web App online hai aur theek tarah respond kar raha hai.\nTotal Cloud Products: ${res.productCount}`);
+    } else {
+      alert(`❌ Connection Error:\n\n${res.message}\n\nCheck karein ke Apps Script mein 'Who has access' ko 'Anyone' rakha gaya hai.`);
+    }
+  },
+
+  syncAllToGoogleSheets: async function () {
+    if (!Store.isCloudConnected()) {
+      alert("Pehle Google Apps Script Web App URL darj kar ke 'Save & Connect' karein.");
+      this.switchTab("cloud");
+      return;
+    }
+
+    const products = Store.getProducts();
+    if (!confirm(`Kya aap tamam ${products.length} products ko Google Sheet mein upload karna chahte hain?`)) {
+      return;
+    }
+
+    const btn = document.getElementById("btnSyncAllCloud");
+    const origHtml = btn ? btn.innerHTML : "";
+    if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading to Sheet...';
+
+    try {
+      const res = await Store.bulkSaveProductsToRemote(products);
+      if (btn) btn.innerHTML = origHtml;
+
+      if (res && res.success) {
+        alert(`✅ Kamyabi! Tamam ${products.length} products Google Sheet mein upload ho chuki hain.\n\nAb kisi bhi mobile ya computer par website kholne se yahi products nazar aayengi!`);
+      } else {
+        alert(`⚠️ Upload complete hua magar response mein yeh mila: ${JSON.stringify(res)}`);
+      }
+    } catch (e) {
+      if (btn) btn.innerHTML = origHtml;
+      alert("Upload mein error: " + e.message);
+    }
+  },
+
+  pullFromGoogleSheets: async function () {
+    if (!Store.isCloudConnected()) {
+      alert("Pehle Google Apps Script Web App URL darj kar ke 'Save & Connect' karein.");
+      return;
+    }
+
+    const btn = document.getElementById("btnPullCloud");
+    const origHtml = btn ? btn.innerHTML : "";
+    if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Syncing...';
+
+    try {
+      const remoteProducts = await Store.fetchRemoteProducts();
+      if (btn) btn.innerHTML = origHtml;
+      this.refreshDashboard();
+      alert(`✅ Google Sheet se latest ${remoteProducts.length} products download ho gayin aur catalog update ho gaya!`);
+    } catch (e) {
+      if (btn) btn.innerHTML = origHtml;
+      alert("Pull karne mein error: " + e.message);
+    }
+  },
+
+  refreshOrdersFromCloud: async function () {
+    const btn = document.getElementById("btnRefreshOrdersCloud");
+    const origHtml = btn ? btn.innerHTML : "";
+    if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading Orders...';
+
+    try {
+      const orders = await Store.fetchRemoteOrders();
+      if (btn) btn.innerHTML = origHtml;
+      this.renderOrdersTable(orders);
+      this.renderKPIs();
+      if (orders && orders.length > 0) {
+        alert(`✅ Google Sheet se ${orders.length} orders / WhatsApp bookings load ho chuki hain!`);
+      } else {
+        alert("Google Sheet 'Orders' tab mein abhi tak koi order record nahi mila.");
+      }
+    } catch (e) {
+      if (btn) btn.innerHTML = origHtml;
+      alert("Orders fetch karne mein error: " + e.message);
+    }
+  },
+
+  copyQuickConnectLink: function () {
+    const cloudUrl = Store.getCloudUrl();
+    if (!cloudUrl) {
+      alert("Pehle Google Apps Script URL save karein taake link ban sake.");
+      return;
+    }
+
+    const origin = window.location.origin + window.location.pathname.replace("admin.html", "index.html");
+    const quickLink = `${origin}?sheet_api=${encodeURIComponent(cloudUrl)}`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(quickLink).then(() => {
+        alert("✅ Mobile Quick Link copy ho gaya!\n\nYeh link WhatsApp par kisi bhi mobile ko bhejein. Jab woh link kholenge to unka phone khud-ba-khud Google Sheets se connect ho jayega:\n\n" + quickLink);
+      });
+    } else {
+      prompt("Mobile Auto-Sync Link copy karein:", quickLink);
+    }
+  },
+
+  copyBackendScriptCode: function () {
+    fetch("google_apps_script.js")
+      .then(res => res.text())
+      .then(code => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(code).then(() => {
+            alert("✅ Google Apps Script ka pura code clipboard par copy ho gaya hai!\n\nAb Google Sheets > Extensions > Apps Script mein ja kar paste kar dein aur Deploy kar dein.");
+          });
+        } else {
+          prompt("Copy Script Code:", code.substring(0, 500) + "...");
+        }
+      })
+      .catch(err => {
+        alert("File load nahi ho saki: " + err.message + ". Aap miss-collection folder se google_apps_script.js file open kar ke copy kar sakte hain.");
+      });
   }
 };

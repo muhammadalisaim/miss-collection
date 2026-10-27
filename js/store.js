@@ -14,7 +14,8 @@ const Store = {
     REVIEWS: "miss_collection_reviews_v2",
     NAV_ITEMS: "miss_collection_nav_items_v2",
     BANNERS: "miss_collection_banners_v2",
-    LOOKBOOK: "miss_collection_lookbook_v2"
+    LOOKBOOK: "miss_collection_lookbook_v2",
+    CLOUD_SCRIPT_URL: "miss_collection_google_sheet_url_v2"
   },
 
   // Available Promo Codes
@@ -31,6 +32,210 @@ const Store = {
   // WhatsApp Order Booking Contact
   WHATSAPP_NUMBER: "923266131394",
   WHATSAPP_DISPLAY: "+92 326 6131394",
+
+  // Default Cloud Script URL (Set here for automatic site-wide sync without manual admin input)
+  DEFAULT_CLOUD_URL: "",
+
+  // ==========================================
+  // GOOGLE SHEETS CLOUD DATABASE CONFIG & SYNC
+  // ==========================================
+  getCloudUrl: function() {
+    try {
+      // 1. Check if passed via URL parameter (?sheet_api=...)
+      if (typeof window !== "undefined" && window.location && window.location.search) {
+        const params = new URLSearchParams(window.location.search);
+        const paramUrl = params.get("sheet_api");
+        if (paramUrl && paramUrl.startsWith("https://script.google.com/")) {
+          localStorage.setItem(this.KEYS.CLOUD_SCRIPT_URL, paramUrl.trim());
+          return paramUrl.trim();
+        }
+      }
+
+      // 2. Check localStorage
+      const url = localStorage.getItem(this.KEYS.CLOUD_SCRIPT_URL);
+      if (url && url.trim()) return url.trim();
+    } catch (e) {
+      // Fall through
+    }
+
+    // 3. Check hardcoded fallback
+    return (this.DEFAULT_CLOUD_URL && this.DEFAULT_CLOUD_URL.trim()) ? this.DEFAULT_CLOUD_URL.trim() : "";
+  },
+
+  saveCloudUrl: function(url) {
+    const cleanUrl = (url || "").trim();
+    if (cleanUrl) {
+      localStorage.setItem(this.KEYS.CLOUD_SCRIPT_URL, cleanUrl);
+    } else {
+      localStorage.removeItem(this.KEYS.CLOUD_SCRIPT_URL);
+    }
+    window.dispatchEvent(new CustomEvent("cloud_config_updated", { detail: { url: cleanUrl } }));
+    return cleanUrl;
+  },
+
+  isCloudConnected: function() {
+    const url = this.getCloudUrl();
+    return !!(url && url.startsWith("https://script.google.com/macros/s/"));
+  },
+
+  testConnection: async function(testUrl = null) {
+    const targetUrl = testUrl || this.getCloudUrl();
+    if (!targetUrl) {
+      return { success: false, message: "Google Apps Script Web App URL provide nahi kiya gaya." };
+    }
+    if (!targetUrl.startsWith("https://script.google.com/macros/s/")) {
+      return { success: false, message: "URL format ghalat hai. URL 'https://script.google.com/macros/s/...' se shuru hona chahiye." };
+    }
+
+    try {
+      const pingUrl = targetUrl + (targetUrl.includes("?") ? "&" : "?") + "action=getProducts&_t=" + Date.now();
+      const res = await fetch(pingUrl, { method: "GET", mode: "cors" });
+      if (!res.ok) {
+        return { success: false, message: `Server ne error code ${res.status} return kiya.` };
+      }
+      const data = await res.json();
+      if (data && (data.success || Array.isArray(data.products))) {
+        return {
+          success: true,
+          message: "Google Sheets Cloud Database kamyabi se connect ho gaya!",
+          productCount: data.products ? data.products.length : 0
+        };
+      }
+      return { success: false, message: "Google Apps Script se unexpect response mila." };
+    } catch (e) {
+      return {
+        success: false,
+        message: "Connection failed. Please check karein ke deployment settings mein 'Who has access' ko 'Anyone' set kiya hai ya nahi: " + e.message
+      };
+    }
+  },
+
+  fetchRemoteProducts: async function() {
+    const url = this.getCloudUrl();
+    if (!url) return this.getProducts();
+
+    try {
+      const fetchUrl = url + (url.includes("?") ? "&" : "?") + "action=getProducts&_t=" + Date.now();
+      const res = await fetch(fetchUrl, { method: "GET", mode: "cors" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const json = await res.json();
+      if (json && json.success && Array.isArray(json.products) && json.products.length > 0) {
+        this.saveProducts(json.products);
+        return json.products;
+      }
+    } catch (e) {
+      console.warn("Could not sync remote products from Google Sheet, using local cache:", e);
+    }
+    return this.getProducts();
+  },
+
+  saveProductToRemote: async function(product) {
+    // 1. Save locally for instant UI update
+    let products = this.getProducts();
+    const idx = products.findIndex(p => p.id === product.id);
+    if (idx > -1) {
+      products[idx] = product;
+    } else {
+      products.unshift(product);
+    }
+    this.saveProducts(products);
+
+    // 2. Sync to Google Sheets if connected
+    const url = this.getCloudUrl();
+    if (!url) return { success: true, localOnly: true };
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "saveProduct", product: product })
+      });
+      return await res.json();
+    } catch (e) {
+      console.error("Error saving product to Google Sheet:", e);
+      return { success: false, error: e.toString() };
+    }
+  },
+
+  deleteProductFromRemote: async function(productId) {
+    // 1. Remove locally
+    let products = this.getProducts();
+    products = products.filter(p => p.id !== productId);
+    this.saveProducts(products);
+
+    // 2. Delete on Google Sheets
+    const url = this.getCloudUrl();
+    if (!url) return { success: true, localOnly: true };
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "deleteProduct", productId: productId })
+      });
+      return await res.json();
+    } catch (e) {
+      console.error("Error deleting product from Google Sheet:", e);
+      return { success: false, error: e.toString() };
+    }
+  },
+
+  bulkSaveProductsToRemote: async function(productsList) {
+    this.saveProducts(productsList);
+    const url = this.getCloudUrl();
+    if (!url) return { success: true, localOnly: true };
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "saveAllProducts", products: productsList })
+      });
+      return await res.json();
+    } catch (e) {
+      console.error("Error bulk saving products to Google Sheet:", e);
+      return { success: false, error: e.toString() };
+    }
+  },
+
+  logOrderToRemote: async function(orderData) {
+    const url = this.getCloudUrl();
+    if (!url) return { success: true, localOnly: true };
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "logOrder", order: orderData })
+      });
+      return await res.json();
+    } catch (e) {
+      console.warn("Could not log order to Google Sheet:", e);
+      return { success: false, error: e.toString() };
+    }
+  },
+
+  fetchRemoteOrders: async function() {
+    const url = this.getCloudUrl();
+    if (!url) return this.getOrders();
+
+    try {
+      const fetchUrl = url + (url.includes("?") ? "&" : "?") + "action=getOrders&_t=" + Date.now();
+      const res = await fetch(fetchUrl, { method: "GET", mode: "cors" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const json = await res.json();
+      if (json && json.success && Array.isArray(json.orders)) {
+        return json.orders;
+      }
+    } catch (e) {
+      console.warn("Could not fetch remote orders from Google Sheet:", e);
+    }
+    return this.getOrders();
+  },
 
   // Initialize or fetch products
   getProducts: function() {
