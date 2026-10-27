@@ -269,7 +269,11 @@ const Store = {
   },
 
   saveProducts: function(products) {
-    localStorage.setItem(this.KEYS.PRODUCTS, JSON.stringify(products));
+    try {
+      localStorage.setItem(this.KEYS.PRODUCTS, JSON.stringify(products));
+    } catch (e) {
+      console.error("Error saving products to localStorage:", e);
+    }
     window.dispatchEvent(new CustomEvent("products_updated", { detail: products }));
   },
 
@@ -828,7 +832,13 @@ const Store = {
   },
 
   saveBanners: function(banners) {
-    localStorage.setItem(this.KEYS.BANNERS, JSON.stringify(banners));
+    try {
+      localStorage.setItem(this.KEYS.BANNERS, JSON.stringify(banners));
+    } catch (e) {
+      console.error("Error saving banners to localStorage:", e);
+      // If quota exceeded, alert clear guidance
+      throw new Error("Browser memory full ho gayi hai! Image ka size chota karein.");
+    }
     window.dispatchEvent(new CustomEvent("banners_updated", { detail: banners }));
   },
 

@@ -59,13 +59,23 @@ const AdminApp = {
       });
     }
 
-    // Tab Switching
-    document.querySelectorAll("[data-admin-tab]").forEach(btn => {
-      btn.addEventListener("click", function () {
-        const tab = this.getAttribute("data-admin-tab");
-        self.switchTab(tab);
+    // Banner Form
+    const bannerForm = document.getElementById("adminBannerForm");
+    if (bannerForm) {
+      bannerForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        self.handleBannerFormSubmit(e);
       });
-    });
+    }
+
+    // Lookbook Form
+    const lookbookForm = document.getElementById("adminLookbookForm");
+    if (lookbookForm) {
+      lookbookForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        self.handleSaveLookbook(e);
+      });
+    }
 
     // Cloud Database updates
     window.addEventListener("cloud_config_updated", () => self.updateCloudStatusUI());
@@ -357,6 +367,49 @@ const AdminApp = {
     }
   },
 
+  // Reusable Image Compression Helper (Prevents LocalStorage Quota Crashes)
+  compressImage: function (file, maxWidth, maxHeight, quality, callback) {
+    if (!file || !file.type.startsWith("image/")) {
+      return callback(null);
+    }
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = new Image();
+      img.onload = function () {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width = Math.round((width * maxHeight) / height);
+          height = maxHeight;
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressedDataUrl = canvas.toDataURL("image/jpeg", quality || 0.82);
+        callback(compressedDataUrl);
+      };
+      img.onerror = function () {
+        callback(e.target.result);
+      };
+      img.src = e.target.result;
+    };
+    reader.onerror = function () {
+      callback(null);
+    };
+    reader.readAsDataURL(file);
+  },
+
   handleImageFileUpload: function (e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
@@ -366,20 +419,21 @@ const AdminApp = {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (uploadEvent) => {
-      const dataUrl = uploadEvent.target.result;
-      this.currentUploadedImage = dataUrl;
+    const preview = document.getElementById("adminProductImagePreview");
+    const placeholderIcon = document.getElementById("adminProductImagePlaceholderIcon");
+    if (placeholderIcon) {
+      placeholderIcon.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-2xl text-[#D4AF37] mb-1 block"></i><span class="text-[9px] block">Optimizing...</span>';
+    }
 
-      const preview = document.getElementById("adminProductImagePreview");
-      const placeholderIcon = document.getElementById("adminProductImagePlaceholderIcon");
+    this.compressImage(file, 1000, 1200, 0.82, (dataUrl) => {
+      this.currentUploadedImage = dataUrl;
       if (preview && placeholderIcon) {
         preview.src = dataUrl;
         preview.classList.remove("hidden");
         placeholderIcon.classList.add("hidden");
+        placeholderIcon.innerHTML = '<i class="fa-solid fa-cloud-arrow-up text-2xl text-[#D4AF37] mb-1 block"></i><span class="text-[9px] block">No Photo</span>';
       }
-    };
-    reader.readAsDataURL(file);
+    });
   },
 
   handleImageUrlInput: function (url) {
@@ -829,12 +883,22 @@ const AdminApp = {
     const form = document.getElementById("adminBannerForm");
     if (!modal || !form) return;
     form.reset();
-    form.id.value = "";
+    const idInput = document.getElementById("adminBannerModalId");
+    if (idInput) idInput.value = "";
     this.currentUploadedBannerImage = null;
     const preview = document.getElementById("adminBannerImagePreview");
     const placeholder = document.getElementById("adminBannerPlaceholderIcon");
-    if (preview) preview.classList.add("hidden");
-    if (placeholder) placeholder.classList.remove("hidden");
+    if (preview) {
+      preview.src = "";
+      preview.classList.add("hidden");
+    }
+    if (placeholder) {
+      placeholder.innerHTML = '<i class="fa-solid fa-panorama text-2xl text-[#D4AF37] mb-1 block"></i><span class="text-[9px] block">No Photo</span>';
+      placeholder.classList.remove("hidden");
+    }
+    const urlInput = document.getElementById("adminBannerUrlInput");
+    if (urlInput) urlInput.value = "";
+
     document.getElementById("adminBannerModalTitle").textContent = "Add New Hero Banner Slide";
     modal.classList.remove("hidden");
   },
@@ -848,14 +912,16 @@ const AdminApp = {
     const banner = banners.find(b => b.id === id);
     if (!banner) return;
 
-    form.id.value = banner.id;
-    form.title.value = banner.title || "";
-    form.badge.value = banner.badge || "";
-    form.badgeColor.value = banner.badgeColor || "rose";
-    form.subtitle.value = banner.subtitle || "";
-    form.btnText.value = banner.btnText || "";
-    form.btnCategory.value = banner.btnCategory || "bras";
-    form.active.checked = banner.active !== false;
+    const idInput = document.getElementById("adminBannerModalId");
+    if (idInput) idInput.value = banner.id;
+
+    if (form.title) form.title.value = banner.title || "";
+    if (form.badge) form.badge.value = banner.badge || "";
+    if (form.badgeColor) form.badgeColor.value = banner.badgeColor || "rose";
+    if (form.subtitle) form.subtitle.value = banner.subtitle || "";
+    if (form.btnText) form.btnText.value = banner.btnText || "";
+    if (form.btnCategory) form.btnCategory.value = banner.btnCategory || "bras";
+    if (form.active) form.active.checked = banner.active !== false;
 
     const img = banner.imageUrl || "";
     this.currentUploadedBannerImage = img;
@@ -893,22 +959,34 @@ const AdminApp = {
       return;
     }
 
-    const reader = new FileReader();
-    const self = this;
-    reader.onload = function (e) {
-      const dataUrl = e.target.result;
-      self.currentUploadedBannerImage = dataUrl;
-      const preview = document.getElementById("adminBannerImagePreview");
-      const placeholder = document.getElementById("adminBannerPlaceholderIcon");
+    const preview = document.getElementById("adminBannerImagePreview");
+    const placeholder = document.getElementById("adminBannerPlaceholderIcon");
+    const urlInput = document.getElementById("adminBannerUrlInput");
+
+    if (placeholder) {
+      placeholder.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-2xl text-[#D4AF37] mb-1 block"></i><span class="text-[9px] block">Optimizing Photo...</span>';
+      placeholder.classList.remove("hidden");
+    }
+    if (preview) preview.classList.add("hidden");
+
+    this.compressImage(file, 1600, 900, 0.82, (dataUrl) => {
+      if (!dataUrl) {
+        alert("Image process karne mein issue aaya. Barah-e-karam dobara koshish karein.");
+        if (placeholder) {
+          placeholder.innerHTML = '<i class="fa-solid fa-panorama text-2xl text-[#D4AF37] mb-1 block"></i><span class="text-[9px] block">No Photo</span>';
+        }
+        return;
+      }
+
+      this.currentUploadedBannerImage = dataUrl;
       if (preview && placeholder) {
         preview.src = dataUrl;
         preview.classList.remove("hidden");
         placeholder.classList.add("hidden");
+        placeholder.innerHTML = '<i class="fa-solid fa-panorama text-2xl text-[#D4AF37] mb-1 block"></i><span class="text-[9px] block">No Photo</span>';
       }
-      const urlInput = document.getElementById("adminBannerUrlInput");
       if (urlInput) urlInput.value = "";
-    };
-    reader.readAsDataURL(file);
+    });
   },
 
   handleBannerImageUrlInput: function (url) {
@@ -925,40 +1003,60 @@ const AdminApp = {
   },
 
   handleBannerFormSubmit: function (e) {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     const form = document.getElementById("adminBannerForm");
     if (!form) return;
 
-    const id = form.id.value;
-    const title = form.title.value.trim();
-    const badge = form.badge.value.trim();
-    const badgeColor = form.badgeColor.value;
-    const subtitle = form.subtitle.value.trim();
-    const btnText = form.btnText.value.trim();
-    const btnCategory = form.btnCategory.value;
-    const active = form.active.checked;
+    const idInput = document.getElementById("adminBannerModalId");
+    const id = idInput ? idInput.value : (form.elements["id"] ? form.elements["id"].value : "");
+
+    const titleInput = document.getElementById("adminBannerTitleInput") || (form.title);
+    const title = titleInput ? titleInput.value.trim() : "";
+    const badge = form.badge ? form.badge.value.trim() : "";
+    const badgeColor = form.badgeColor ? form.badgeColor.value : "rose";
+    const subtitle = form.subtitle ? form.subtitle.value.trim() : "";
+    const btnText = form.btnText ? form.btnText.value.trim() : "";
+    const btnCategory = form.btnCategory ? form.btnCategory.value : "bras";
+    const active = form.active ? form.active.checked : true;
 
     const fallbackImg = "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=1800&q=85";
     const imageUrl = this.currentUploadedBannerImage || (form.imageUrl && form.imageUrl.value.trim()) || fallbackImg;
 
     if (!title) {
-      alert("Please provide a Slide Headline!");
+      alert("Barah-e-karam Slide Headline / Main Title lazmi darj karein!");
       return;
     }
 
-    if (id) {
-      Store.updateBanner(id, {
-        title, badge, badgeColor, imageUrl, subtitle, btnText, btnCategory, active
-      });
-    } else {
-      Store.addBanner({
-        title, badge, badgeColor, imageUrl, subtitle, btnText, btnCategory, active
-      });
+    const saveBtn = document.getElementById("adminSaveBannerBtn");
+    const origBtnHtml = saveBtn ? saveBtn.innerHTML : "Save Banner Slide";
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Saving Slide...';
     }
 
-    this.closeBannerModal();
-    this.renderBannersTable();
-    alert("Hero banner saved successfully!");
+    try {
+      if (id) {
+        Store.updateBanner(id, {
+          title, badge, badgeColor, imageUrl, subtitle, btnText, btnCategory, active
+        });
+      } else {
+        Store.addBanner({
+          title, badge, badgeColor, imageUrl, subtitle, btnText, btnCategory, active
+        });
+      }
+
+      this.closeBannerModal();
+      this.renderBannersTable();
+      alert("✅ Hero banner slide kamyabi se save ho gayi! Homepage par ab yeh banner active hai.");
+    } catch (err) {
+      console.error("Banner save error:", err);
+      alert("⚠️ Banner save karne mein error: " + err.message);
+    } finally {
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = origBtnHtml;
+      }
+    }
   },
 
   deleteBanner: function (id) {
@@ -1101,22 +1199,24 @@ const AdminApp = {
       return;
     }
 
-    const reader = new FileReader();
-    const self = this;
-    reader.onload = function (e) {
-      const dataUrl = e.target.result;
-      self.currentUploadedLookbookImage = dataUrl;
-      const preview = document.getElementById("adminLookbookImagePreview");
-      const placeholder = document.getElementById("adminLookbookPlaceholderIcon");
+    const preview = document.getElementById("adminLookbookImagePreview");
+    const placeholder = document.getElementById("adminLookbookPlaceholderIcon");
+    const urlInput = document.getElementById("adminLookbookUrlInput");
+
+    if (placeholder) {
+      placeholder.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-2xl text-[#D4AF37] mb-1 block"></i><span class="text-[9px] block">Optimizing...</span>';
+    }
+
+    this.compressImage(file, 1200, 1000, 0.82, (dataUrl) => {
+      this.currentUploadedLookbookImage = dataUrl;
       if (preview && placeholder) {
         preview.src = dataUrl;
         preview.classList.remove("hidden");
         placeholder.classList.add("hidden");
+        placeholder.innerHTML = '<i class="fa-solid fa-camera text-2xl text-[#D4AF37] mb-1 block"></i><span class="text-[9px] block">No Photo</span>';
       }
-      const urlInput = document.getElementById("adminLookbookUrlInput");
       if (urlInput) urlInput.value = "";
-    };
-    reader.readAsDataURL(file);
+    });
   },
 
   handleLookbookImageUrlInput: function (url) {

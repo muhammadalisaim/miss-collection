@@ -760,11 +760,11 @@ const App = {
       });
       dots.forEach((dot, idx) => {
         if (idx === index) {
-          dot.classList.add("bg-rose-600", "w-8");
-          dot.classList.remove("bg-white/60", "w-2.5");
+          dot.classList.add("bg-[#D4AF37]", "w-8");
+          dot.classList.remove("bg-white/40", "w-2.5");
         } else {
-          dot.classList.remove("bg-rose-600", "w-8");
-          dot.classList.add("bg-white/60", "w-2.5");
+          dot.classList.remove("bg-[#D4AF37]", "w-8");
+          dot.classList.add("bg-white/40", "w-2.5");
         }
       });
       currentSlide = index;

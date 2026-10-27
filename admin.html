@@ -752,11 +752,11 @@
       </div>
 
       <form id="adminBannerForm" onsubmit="AdminApp.handleBannerFormSubmit(event)" class="mt-4 space-y-4 text-xs">
-        <input type="hidden" name="id" />
+        <input type="hidden" id="adminBannerModalId" name="id" value="" />
 
         <div>
           <label class="block font-bold text-stone-700 mb-1">Slide Headline / Main Title *</label>
-          <input type="text" name="title" required placeholder="e.g. Zero Pressure. Feather-Light Comfort" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500 font-semibold" />
+          <input type="text" name="title" id="adminBannerTitleInput" required placeholder="e.g. Zero Pressure. Feather-Light Comfort" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500 font-semibold" />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
@@ -851,7 +851,7 @@
           <button type="button" onclick="AdminApp.closeBannerModal()" class="px-4 py-2 border border-stone-300 rounded text-stone-700 font-bold hover:bg-stone-100 transition">
             Cancel
           </button>
-          <button type="submit" class="px-5 py-2 bg-stone-900 hover:bg-[#B4640A] text-white rounded font-bold uppercase tracking-wider transition">
+          <button type="submit" id="adminSaveBannerBtn" class="px-5 py-2 bg-stone-900 hover:bg-[#B4640A] text-white rounded font-bold uppercase tracking-wider transition shadow-sm">
             Save Banner Slide
           </button>
         </div>
