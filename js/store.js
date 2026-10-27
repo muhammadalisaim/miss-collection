@@ -33,8 +33,9 @@ const Store = {
   WHATSAPP_NUMBER: "923266131394",
   WHATSAPP_DISPLAY: "+92 326 6131394",
 
-  // Default Cloud Script URL (Set here for automatic site-wide sync without manual admin input)
-  DEFAULT_CLOUD_URL: "",
+  // Default Cloud Script URL (Permanently attached Google Sheets Web App Backend)
+  DEFAULT_CLOUD_URL: "https://script.google.com/macros/s/AKfycbzm5QHqhdT_4v9gcMPvwK00A27nshn4yHy4McPvn2glvHDuRwKQRHCqbKMjc7lXlP2x/exec",
+  GOOGLE_SHEET_VIEW_URL: "https://docs.google.com/spreadsheets/d/1IgsyvjXVkmKDuU9AL6u_wLGbpKRDz9N3pRN6Zo3MJZI/edit?usp=sharing",
 
   // ==========================================
   // GOOGLE SHEETS CLOUD DATABASE CONFIG & SYNC
