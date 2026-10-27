@@ -140,11 +140,14 @@
           <button data-admin-tab="orders" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
             <i class="fa-solid fa-truck-ramp-box mr-1"></i> Customer Orders
           </button>
-          <button data-admin-tab="navigation" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
-            <i class="fa-solid fa-bars mr-1"></i> Header Menu
+          <button data-admin-tab="lookbook" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
+            <i class="fa-solid fa-camera-retro mr-1"></i> The Lookbook Edit
           </button>
           <button data-admin-tab="banners" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
             <i class="fa-solid fa-panorama mr-1"></i> Hero Banners
+          </button>
+          <button data-admin-tab="navigation" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
+            <i class="fa-solid fa-bars mr-1"></i> Header Menu
           </button>
         </div>
 
@@ -258,6 +261,23 @@
 
         <div id="adminBannersGrid" class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           <!-- Rendered via AdminApp.renderBannersTable() -->
+        </div>
+      </div>
+
+      <!-- TAB 5: THE LOOKBOOK EDIT (CURATED SEASONAL EDITS) MANAGER -->
+      <div id="tabContent-lookbook" class="admin-tab-content hidden bg-white rounded-xl border border-stone-200 shadow-xs overflow-hidden">
+        <div class="p-4 border-b border-stone-100 flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h3 class="font-bold text-sm text-stone-900 font-serif-luxury">The Lookbook Edit & Curated Seasonal Edits (سیزنل لوک بُک ایڈیٹر)</h3>
+            <span class="text-xs text-stone-500">Homepage par 'The Lookbook Edit' ki 3 mukhtalif tasweerein, titles, aur categories yahan se badlein</span>
+          </div>
+          <button onclick="AdminApp.resetLookbookDefaults()" class="px-3 py-1.5 border border-stone-300 hover:bg-stone-100 text-stone-600 rounded-lg text-xs font-bold uppercase tracking-wider transition flex items-center gap-1.5 shadow-xs">
+            <i class="fa-solid fa-rotate text-[10px]"></i> Reset Lookbook to Defaults
+          </button>
+        </div>
+
+        <div id="adminLookbookGrid" class="p-5 grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Rendered via AdminApp.renderLookbookGrid() -->
         </div>
       </div>
 
@@ -599,9 +619,43 @@
         </div>
 
         <div>
-          <label class="block font-bold text-stone-700 mb-1">High-Res Banner Image URL *</label>
-          <input type="url" name="imageUrl" required placeholder="https://images.unsplash.com/..." class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
-          <span class="text-[10px] text-stone-400 block mt-1">Recommended aspect ratio: 16:9 or 21:9 landscape high-definition photograph</span>
+          <label class="block font-bold text-stone-800 mb-1">
+            Banner Image (تصویر منتخب کریں) *
+          </label>
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <div class="w-full sm:w-36 h-24 bg-stone-900 rounded-xl overflow-hidden border border-stone-200 shrink-0 flex items-center justify-center relative">
+              <img id="adminBannerImagePreview" src="" alt="Banner Preview" class="w-full h-full object-cover hidden" />
+              <div id="adminBannerPlaceholderIcon" class="text-center text-stone-400 p-2">
+                <i class="fa-solid fa-panorama text-2xl text-[#D4AF37] mb-1 block"></i>
+                <span class="text-[9px] block">No Photo</span>
+              </div>
+            </div>
+
+            <div class="flex-1 w-full space-y-2">
+              <label class="block w-full py-2.5 px-3 bg-[#181716] hover:bg-[#252422] text-[#D4AF37] border border-[#D4AF37]/40 rounded-lg text-center cursor-pointer transition font-bold text-xs shadow-xs">
+                <i class="fa-solid fa-cloud-arrow-up mr-1.5"></i> Upload Banner from Device / Computer
+                <input 
+                  type="file" 
+                  id="adminBannerFileInput" 
+                  accept="image/*" 
+                  class="hidden" 
+                  onchange="AdminApp.handleBannerImageFileUpload(event)" 
+                />
+              </label>
+              
+              <div class="relative">
+                <span class="text-[10px] text-stone-400 block mb-0.5">Or paste direct Image URL:</span>
+                <input 
+                  type="url" 
+                  id="adminBannerUrlInput"
+                  name="imageUrl" 
+                  placeholder="https://images.unsplash.com/..." 
+                  oninput="AdminApp.handleBannerImageUrlInput(this.value)"
+                  class="w-full border border-stone-300 rounded px-3 py-1.5 focus:outline-none focus:border-stone-900 text-xs" 
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div>
@@ -639,8 +693,115 @@
           <button type="button" onclick="AdminApp.closeBannerModal()" class="px-4 py-2 border border-stone-300 rounded text-stone-700 font-bold hover:bg-stone-100 transition">
             Cancel
           </button>
-          <button type="submit" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded font-bold uppercase tracking-wider transition">
+          <button type="submit" class="px-5 py-2 bg-stone-900 hover:bg-[#B4640A] text-white rounded font-bold uppercase tracking-wider transition">
             Save Banner Slide
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       6. EDIT LOOKBOOK TILE MODAL
+       ========================================== -->
+  <div id="adminLookbookModal" class="hidden fixed inset-0 bg-stone-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 border border-stone-200">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+        <div>
+          <h3 id="adminLookbookModalTitle" class="text-base font-bold text-stone-900 font-serif-luxury">
+            Edit Lookbook Tile (لوک بُک کارڈ تبدیل کریں)
+          </h3>
+          <span class="text-[11px] text-stone-500">Update photo, headline, and target category</span>
+        </div>
+        <button onclick="AdminApp.closeLookbookModal()" class="w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-500">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <form id="adminLookbookForm" onsubmit="AdminApp.handleSaveLookbook(event)" class="mt-4 space-y-4 text-xs">
+        <input type="hidden" id="adminLookbookTileId" name="id" />
+
+        <!-- Picture Upload Section -->
+        <div>
+          <label class="block font-bold text-stone-800 mb-1">
+            Tile Picture (تصویر منتخب کریں) *
+          </label>
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <div class="w-full sm:w-32 h-36 bg-stone-900 rounded-xl overflow-hidden border border-stone-200 shrink-0 flex items-center justify-center relative">
+              <img id="adminLookbookImagePreview" src="" alt="Lookbook Preview" class="w-full h-full object-cover hidden" />
+              <div id="adminLookbookPlaceholderIcon" class="text-center text-stone-400 p-2">
+                <i class="fa-solid fa-camera text-2xl text-[#D4AF37] mb-1 block"></i>
+                <span class="text-[9px] block">No Photo</span>
+              </div>
+            </div>
+
+            <div class="flex-1 w-full space-y-2">
+              <label class="block w-full py-2.5 px-3 bg-[#181716] hover:bg-[#252422] text-[#D4AF37] border border-[#D4AF37]/40 rounded-lg text-center cursor-pointer transition font-bold text-xs shadow-xs">
+                <i class="fa-solid fa-cloud-arrow-up mr-1.5"></i> Upload from Device / Computer
+                <input 
+                  type="file" 
+                  id="adminLookbookFileInput" 
+                  accept="image/*" 
+                  class="hidden" 
+                  onchange="AdminApp.handleLookbookImageFileUpload(event)" 
+                />
+              </label>
+              
+              <div class="relative">
+                <span class="text-[10px] text-stone-400 block mb-0.5">Or paste direct Image URL:</span>
+                <input 
+                  type="url" 
+                  id="adminLookbookUrlInput"
+                  name="imageUrl" 
+                  placeholder="https://images.unsplash.com/..." 
+                  oninput="AdminApp.handleLookbookImageUrlInput(this.value)"
+                  class="w-full border border-stone-300 rounded px-3 py-1.5 focus:outline-none focus:border-stone-900 text-xs" 
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-stone-700 mb-1">Headline / Title *</label>
+          <input type="text" id="adminLookbookTitle" name="title" required placeholder="e.g. The Basics: Zero-Wire Comfort" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-stone-900 font-semibold" />
+        </div>
+
+        <div>
+          <label class="block font-bold text-stone-700 mb-1">Tagline / Micro-badge</label>
+          <input type="text" id="adminLookbookTagline" name="tagline" placeholder="e.g. Signature Silhouette / Haute Trousseau" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-stone-900" />
+        </div>
+
+        <div id="adminLookbookDescGroup">
+          <label class="block font-bold text-stone-700 mb-1">Short Description (for Large Tile)</label>
+          <textarea id="adminLookbookDesc" name="description" rows="2" placeholder="e.g. Buttery micro-modal fabric engineered for cloud-like invisible support..." class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-stone-900"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Button CTA Text</label>
+            <input type="text" id="adminLookbookBtnText" name="buttonText" placeholder="e.g. Shop Seamless Bras →" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-stone-900 font-semibold" />
+          </div>
+
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Target Category Filter *</label>
+            <select id="adminLookbookCategory" name="category" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-stone-900 font-semibold">
+              <option value="bras">Bras & Bralettes</option>
+              <option value="panties">Panties & Briefs</option>
+              <option value="bridal">Bridal Lingerie</option>
+              <option value="nightwear">Satin Nightwear</option>
+              <option value="shapewear">Shapewear</option>
+              <option value="all">All Silhouettes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-stone-200 flex justify-end gap-2">
+          <button type="button" onclick="AdminApp.closeLookbookModal()" class="px-4 py-2 border border-stone-300 rounded text-stone-700 font-bold hover:bg-stone-100 transition">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2 bg-stone-900 hover:bg-[#B4640A] text-white font-bold rounded transition shadow-sm">
+            Save Lookbook Tile (محفوظ کریں)
           </button>
         </div>
       </form>

@@ -108,6 +108,7 @@ const AdminApp = {
       if (tabName === "catalog") addBtnText.textContent = "Add Product";
       else if (tabName === "navigation") addBtnText.textContent = "Add Menu Item";
       else if (tabName === "banners") addBtnText.textContent = "Add Slide";
+      else if (tabName === "lookbook") addBtnText.textContent = "Edit Lookbook";
       else addBtnText.textContent = "New Item";
     }
   },
@@ -117,6 +118,8 @@ const AdminApp = {
       this.openAddNavModal();
     } else if (this.currentTab === "banners") {
       this.openAddBannerModal();
+    } else if (this.currentTab === "lookbook") {
+      this.openEditLookbookModal("lookbook-1");
     } else {
       this.openAddProductModal();
     }
@@ -128,6 +131,7 @@ const AdminApp = {
     this.renderOrdersTable();
     this.renderNavigationTable();
     this.renderBannersTable();
+    this.renderLookbookGrid();
   },
 
   renderKPIs: function () {
@@ -740,12 +744,19 @@ const AdminApp = {
     `).join("");
   },
 
+  currentUploadedBannerImage: null,
+
   openAddBannerModal: function () {
     const modal = document.getElementById("adminBannerModal");
     const form = document.getElementById("adminBannerForm");
     if (!modal || !form) return;
     form.reset();
     form.id.value = "";
+    this.currentUploadedBannerImage = null;
+    const preview = document.getElementById("adminBannerImagePreview");
+    const placeholder = document.getElementById("adminBannerPlaceholderIcon");
+    if (preview) preview.classList.add("hidden");
+    if (placeholder) placeholder.classList.remove("hidden");
     document.getElementById("adminBannerModalTitle").textContent = "Add New Hero Banner Slide";
     modal.classList.remove("hidden");
   },
@@ -763,11 +774,27 @@ const AdminApp = {
     form.title.value = banner.title || "";
     form.badge.value = banner.badge || "";
     form.badgeColor.value = banner.badgeColor || "rose";
-    form.imageUrl.value = banner.imageUrl || "";
     form.subtitle.value = banner.subtitle || "";
     form.btnText.value = banner.btnText || "";
     form.btnCategory.value = banner.btnCategory || "bras";
     form.active.checked = banner.active !== false;
+
+    const img = banner.imageUrl || "";
+    this.currentUploadedBannerImage = img;
+    const preview = document.getElementById("adminBannerImagePreview");
+    const placeholder = document.getElementById("adminBannerPlaceholderIcon");
+    const urlInput = document.getElementById("adminBannerUrlInput");
+
+    if (img && preview && placeholder) {
+      preview.src = img;
+      preview.classList.remove("hidden");
+      placeholder.classList.add("hidden");
+      if (urlInput) urlInput.value = img.startsWith("data:") ? "" : img;
+    } else {
+      if (preview) preview.classList.add("hidden");
+      if (placeholder) placeholder.classList.remove("hidden");
+      if (urlInput) urlInput.value = "";
+    }
 
     document.getElementById("adminBannerModalTitle").textContent = "Edit Banner Slide: " + banner.title;
     modal.classList.remove("hidden");
@@ -776,6 +803,47 @@ const AdminApp = {
   closeBannerModal: function () {
     const modal = document.getElementById("adminBannerModal");
     if (modal) modal.classList.add("hidden");
+    this.currentUploadedBannerImage = null;
+  },
+
+  handleBannerImageFileUpload: function (event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please choose a valid image file (JPG, PNG, WEBP, etc.)");
+      return;
+    }
+
+    const reader = new FileReader();
+    const self = this;
+    reader.onload = function (e) {
+      const dataUrl = e.target.result;
+      self.currentUploadedBannerImage = dataUrl;
+      const preview = document.getElementById("adminBannerImagePreview");
+      const placeholder = document.getElementById("adminBannerPlaceholderIcon");
+      if (preview && placeholder) {
+        preview.src = dataUrl;
+        preview.classList.remove("hidden");
+        placeholder.classList.add("hidden");
+      }
+      const urlInput = document.getElementById("adminBannerUrlInput");
+      if (urlInput) urlInput.value = "";
+    };
+    reader.readAsDataURL(file);
+  },
+
+  handleBannerImageUrlInput: function (url) {
+    const trimmed = (url || "").trim();
+    if (!trimmed) return;
+    this.currentUploadedBannerImage = trimmed;
+    const preview = document.getElementById("adminBannerImagePreview");
+    const placeholder = document.getElementById("adminBannerPlaceholderIcon");
+    if (preview && placeholder) {
+      preview.src = trimmed;
+      preview.classList.remove("hidden");
+      placeholder.classList.add("hidden");
+    }
   },
 
   handleBannerFormSubmit: function (e) {
@@ -787,14 +855,16 @@ const AdminApp = {
     const title = form.title.value.trim();
     const badge = form.badge.value.trim();
     const badgeColor = form.badgeColor.value;
-    const imageUrl = form.imageUrl.value.trim();
     const subtitle = form.subtitle.value.trim();
     const btnText = form.btnText.value.trim();
     const btnCategory = form.btnCategory.value;
     const active = form.active.checked;
 
-    if (!title || !imageUrl) {
-      alert("Please provide both a Slide Headline and Image URL!");
+    const fallbackImg = "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=1800&q=85";
+    const imageUrl = this.currentUploadedBannerImage || (form.imageUrl && form.imageUrl.value.trim()) || fallbackImg;
+
+    if (!title) {
+      alert("Please provide a Slide Headline!");
       return;
     }
 
@@ -836,8 +906,188 @@ const AdminApp = {
       if (Store.DEFAULT_BANNERS) {
         Store.saveBanners(Store.DEFAULT_BANNERS);
       }
+      if (Store.DEFAULT_LOOKBOOK) {
+        Store.resetLookbookDefaults();
+      }
       this.refreshDashboard();
       alert("Restored factory catalog, navigation, and hero banners successfully.");
+    }
+  },
+
+  // ==========================================
+  // CURATED SEASONAL LOOKBOOK (The Lookbook Edit)
+  // ==========================================
+  currentUploadedLookbookImage: null,
+
+  renderLookbookGrid: function () {
+    const grid = document.getElementById("adminLookbookGrid");
+    if (!grid) return;
+
+    const list = Store.getLookbook();
+    const tileLabels = [
+      "Tile #1 • Large 7-Column Editorial Look (بائیں طرف بڑا کارڈ)",
+      "Tile #2 • Top-Right Look (دائیں اوپر والا کارڈ)",
+      "Tile #3 • Bottom-Right Look (دائیں نیچے والا کارڈ)"
+    ];
+
+    grid.innerHTML = list.map((item, idx) => {
+      return `
+        <div class="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-xs flex flex-col group">
+          <div class="relative h-56 bg-stone-900 overflow-hidden">
+            <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-stone-950/20 to-transparent"></div>
+            <div class="absolute top-3 left-3">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-stone-900/90 text-[#D4AF37] border border-[#D4AF37]/30">
+                ${tileLabels[idx] || `Tile #${idx + 1}`}
+              </span>
+            </div>
+            <div class="absolute bottom-3 left-3 right-3 text-white">
+              <span class="text-[9px] uppercase font-bold text-[#D4AF37] block tracking-widest">${item.tagline || "Curated Edit"}</span>
+              <h4 class="text-sm font-bold leading-tight truncate">${item.title}</h4>
+            </div>
+          </div>
+
+          <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              ${item.description ? `<p class="text-xs text-stone-600 line-clamp-2 mb-2">${item.description}</p>` : ""}
+              <div class="space-y-1 text-[11px] text-stone-500">
+                <div><strong class="text-stone-700">Category Filter:</strong> <span class="capitalize font-semibold text-rose-600">${item.category}</span></div>
+                <div><strong class="text-stone-700">Button CTA:</strong> ${item.buttonText || "Shop Collection →"}</div>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
+              <button 
+                type="button"
+                onclick="AdminApp.openEditLookbookModal('${item.id}')" 
+                class="w-full py-2 bg-stone-900 hover:bg-[#B4640A] text-white rounded-lg text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-xs"
+              >
+                <i class="fa-solid fa-pen-to-square text-[11px]"></i> Edit This Look (تبدیل کریں)
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  },
+
+  openEditLookbookModal: function (id) {
+    const modal = document.getElementById("adminLookbookModal");
+    const form = document.getElementById("adminLookbookForm");
+    if (!modal || !form) return;
+
+    const list = Store.getLookbook();
+    const item = list.find(t => t.id === id) || list[0];
+    if (!item) return;
+
+    document.getElementById("adminLookbookTileId").value = item.id;
+    document.getElementById("adminLookbookTitle").value = item.title || "";
+    document.getElementById("adminLookbookTagline").value = item.tagline || "";
+    document.getElementById("adminLookbookDesc").value = item.description || "";
+    document.getElementById("adminLookbookBtnText").value = item.buttonText || "";
+    document.getElementById("adminLookbookCategory").value = item.category || "bras";
+
+    // Image preview
+    const img = item.imageUrl || "";
+    this.currentUploadedLookbookImage = img;
+    const preview = document.getElementById("adminLookbookImagePreview");
+    const placeholderIcon = document.getElementById("adminLookbookPlaceholderIcon");
+    const urlInput = document.getElementById("adminLookbookUrlInput");
+
+    if (img && preview && placeholderIcon) {
+      preview.src = img;
+      preview.classList.remove("hidden");
+      placeholderIcon.classList.add("hidden");
+      if (urlInput) urlInput.value = img.startsWith("data:") ? "" : img;
+    } else {
+      if (preview) preview.classList.add("hidden");
+      if (placeholderIcon) placeholderIcon.classList.remove("hidden");
+      if (urlInput) urlInput.value = "";
+    }
+
+    modal.classList.remove("hidden");
+  },
+
+  closeLookbookModal: function () {
+    const modal = document.getElementById("adminLookbookModal");
+    if (modal) modal.classList.add("hidden");
+    this.currentUploadedLookbookImage = null;
+  },
+
+  handleLookbookImageFileUpload: function (event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please choose a valid image file (JPG, PNG, WEBP, etc.)");
+      return;
+    }
+
+    const reader = new FileReader();
+    const self = this;
+    reader.onload = function (e) {
+      const dataUrl = e.target.result;
+      self.currentUploadedLookbookImage = dataUrl;
+      const preview = document.getElementById("adminLookbookImagePreview");
+      const placeholder = document.getElementById("adminLookbookPlaceholderIcon");
+      if (preview && placeholder) {
+        preview.src = dataUrl;
+        preview.classList.remove("hidden");
+        placeholder.classList.add("hidden");
+      }
+      const urlInput = document.getElementById("adminLookbookUrlInput");
+      if (urlInput) urlInput.value = "";
+    };
+    reader.readAsDataURL(file);
+  },
+
+  handleLookbookImageUrlInput: function (url) {
+    const trimmed = (url || "").trim();
+    if (!trimmed) return;
+    this.currentUploadedLookbookImage = trimmed;
+    const preview = document.getElementById("adminLookbookImagePreview");
+    const placeholder = document.getElementById("adminLookbookPlaceholderIcon");
+    if (preview && placeholder) {
+      preview.src = trimmed;
+      preview.classList.remove("hidden");
+      placeholder.classList.add("hidden");
+    }
+  },
+
+  handleSaveLookbook: function (event) {
+    event.preventDefault();
+    const form = event.target;
+    const id = document.getElementById("adminLookbookTileId").value;
+    if (!id) return;
+
+    const title = form.title.value.trim();
+    const tagline = form.tagline.value.trim();
+    const description = form.description ? form.description.value.trim() : "";
+    const buttonText = form.buttonText.value.trim();
+    const category = form.category.value;
+
+    const fallbackImg = "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=1200&q=85";
+    const imageUrl = this.currentUploadedLookbookImage || (form.imageUrl && form.imageUrl.value.trim()) || fallbackImg;
+
+    Store.updateLookbookTile(id, {
+      title,
+      tagline,
+      description,
+      buttonText,
+      category,
+      imageUrl
+    });
+
+    this.closeLookbookModal();
+    this.renderLookbookGrid();
+    alert("The Lookbook Edit tile updated successfully! Changes are live on the homepage.");
+  },
+
+  resetLookbookDefaults: function () {
+    if (confirm("Reset 'The Lookbook Edit' to original seasonal defaults?")) {
+      Store.resetLookbookDefaults();
+      this.renderLookbookGrid();
+      alert("Lookbook restored to default seasonal styling.");
     }
   }
 };

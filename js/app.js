@@ -27,6 +27,7 @@ const App = {
     this.bindEvents();
     this.renderNavigation();
     this.renderHeroSlider();
+    this.renderLookbook();
     this.renderCategoryCircles();
     this.renderProducts();
     this.updateCartUI();
@@ -51,12 +52,15 @@ const App = {
     window.addEventListener("reviews_updated", () => self.renderReviewsSection());
     window.addEventListener("nav_items_updated", () => self.renderNavigation());
     window.addEventListener("banners_updated", () => self.renderHeroSlider());
+    window.addEventListener("lookbook_updated", () => self.renderLookbook());
     window.addEventListener("storage", (e) => {
       if (typeof Store !== "undefined" && Store.KEYS) {
         if (e.key === Store.KEYS.NAV_ITEMS) {
           self.renderNavigation();
         } else if (e.key === Store.KEYS.BANNERS) {
           self.renderHeroSlider();
+        } else if (e.key === Store.KEYS.LOOKBOOK) {
+          self.renderLookbook();
         } else if (e.key === Store.KEYS.PRODUCTS) {
           self.renderProducts();
         }
@@ -784,6 +788,63 @@ const App = {
         showSlide(next);
       }, 5500);
     }
+  },
+
+  renderLookbook: function () {
+    const grid = document.getElementById("homepageLookbookGrid");
+    if (!grid) return;
+
+    const list = (typeof Store !== "undefined" && Store.getLookbook) 
+      ? Store.getLookbook() 
+      : [];
+
+    if (!list || list.length < 3) return;
+
+    const tile1 = list[0]; // Large 7-col tile
+    const tile2 = list[1]; // Top-right 5-col tile
+    const tile3 = list[2]; // Bottom-right 5-col tile
+
+    grid.innerHTML = `
+      <!-- Large Left Editorial Look (7 Cols) -->
+      <div class="md:col-span-7 lookbook-tile min-h-[380px] sm:min-h-[460px]" onclick="App.filterByCategory('${tile1.category || 'bras'}')">
+        <img src="${tile1.imageUrl}" alt="${tile1.title}" loading="lazy" />
+        <div class="lookbook-overlay">
+          ${tile1.tagline ? `<span class="text-xs font-bold uppercase tracking-widest text-[#D4AF37] mb-1">${tile1.tagline}</span>` : ""}
+          <h4 class="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-white mb-2">${tile1.title}</h4>
+          ${tile1.description ? `<p class="text-xs sm:text-sm text-stone-300 max-w-md mb-4 hidden sm:block">${tile1.description}</p>` : ""}
+          <span class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white border-b border-[#D4AF37] pb-1 w-fit hover:text-[#D4AF37] transition">
+            ${tile1.buttonText || "Shop Seamless Bras →"}
+          </span>
+        </div>
+      </div>
+
+      <!-- Stacked Right Editorial Looks (5 Cols) -->
+      <div class="md:col-span-5 grid grid-rows-2 gap-4 sm:gap-6">
+        <!-- Top Right -->
+        <div class="lookbook-tile min-h-[180px] sm:min-h-[215px]" onclick="App.filterByCategory('${tile2.category || 'bridal'}')">
+          <img src="${tile2.imageUrl}" alt="${tile2.title}" loading="lazy" />
+          <div class="lookbook-overlay p-4 sm:p-5">
+            ${tile2.tagline ? `<span class="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37] mb-0.5">${tile2.tagline}</span>` : ""}
+            <h5 class="text-lg sm:text-xl font-bold uppercase text-white mb-1">${tile2.title}</h5>
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase text-white hover:text-[#D4AF37] transition">
+              ${tile2.buttonText || "Explore Trousseau →"}
+            </span>
+          </div>
+        </div>
+
+        <!-- Bottom Right -->
+        <div class="lookbook-tile min-h-[180px] sm:min-h-[215px]" onclick="App.filterByCategory('${tile3.category || 'nightwear'}')">
+          <img src="${tile3.imageUrl}" alt="${tile3.title}" loading="lazy" />
+          <div class="lookbook-overlay p-4 sm:p-5">
+            ${tile3.tagline ? `<span class="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37] mb-0.5">${tile3.tagline}</span>` : ""}
+            <h5 class="text-lg sm:text-xl font-bold uppercase text-white mb-1">${tile3.title}</h5>
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase text-white hover:text-[#D4AF37] transition">
+              ${tile3.buttonText || "Shop Loungewear →"}
+            </span>
+          </div>
+        </div>
+      </div>
+    `;
   },
 
   renderCategoryCircles: function () {

@@ -13,7 +13,8 @@ const Store = {
     COUPON: "miss_collection_active_coupon_v2",
     REVIEWS: "miss_collection_reviews_v2",
     NAV_ITEMS: "miss_collection_nav_items_v2",
-    BANNERS: "miss_collection_banners_v2"
+    BANNERS: "miss_collection_banners_v2",
+    LOOKBOOK: "miss_collection_lookbook_v2"
   },
 
   // Available Promo Codes
@@ -634,6 +635,85 @@ const Store = {
       return banner.active;
     }
     return null;
+  },
+
+  // ==========================================
+  // CURATED SEASONAL LOOKBOOK (The Lookbook Edit)
+  // ==========================================
+  DEFAULT_LOOKBOOK: [
+    {
+      id: "lookbook-1",
+      tagline: "Signature Silhouette",
+      title: "The Basics: Zero-Wire Comfort",
+      description: "Buttery micro-modal fabric engineered for cloud-like invisible support under Pakistani lawn suits & kurtis.",
+      buttonText: "Shop Seamless Bras →",
+      category: "bras",
+      imageUrl: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=1200&q=85",
+      type: "large"
+    },
+    {
+      id: "lookbook-2",
+      tagline: "Haute Trousseau",
+      title: "Luxury Bridal Edit",
+      description: "Exquisite Chantilly lace & silk corsetry for wedding trousseau.",
+      buttonText: "Explore Trousseau →",
+      category: "bridal",
+      imageUrl: "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=85",
+      type: "small-top"
+    },
+    {
+      id: "lookbook-3",
+      tagline: "Special Price",
+      title: "Satin Nightwear & Sets",
+      description: "Luxe satin slips and delicate lace chemises.",
+      buttonText: "Shop Loungewear →",
+      category: "nightwear",
+      imageUrl: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=85",
+      type: "small-bottom"
+    }
+  ],
+
+  getLookbook: function() {
+    try {
+      const stored = localStorage.getItem(this.KEYS.LOOKBOOK);
+      if (stored !== null) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn("Error reading stored lookbook", e);
+    }
+    this.saveLookbook(this.DEFAULT_LOOKBOOK);
+    return this.DEFAULT_LOOKBOOK;
+  },
+
+  saveLookbook: function(items) {
+    try {
+      localStorage.setItem(this.KEYS.LOOKBOOK, JSON.stringify(items));
+      if (typeof window !== "undefined" && window.dispatchEvent) {
+        window.dispatchEvent(new CustomEvent("lookbook_updated", { detail: items }));
+      }
+      return true;
+    } catch (e) {
+      console.error("Error saving lookbook", e);
+      return false;
+    }
+  },
+
+  updateLookbookTile: function(id, data) {
+    const list = this.getLookbook();
+    const index = list.findIndex(item => item.id === id);
+    if (index > -1) {
+      list[index] = { ...list[index], ...data };
+      this.saveLookbook(list);
+      return list[index];
+    }
+    return null;
+  },
+
+  resetLookbookDefaults: function() {
+    this.saveLookbook(this.DEFAULT_LOOKBOOK);
+    return this.DEFAULT_LOOKBOOK;
   },
 
   // Price Formatter Helper
