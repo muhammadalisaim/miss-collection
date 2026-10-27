@@ -73,6 +73,46 @@ const Store = {
     return products.find(p => p.id === id) || null;
   },
 
+  getAllCategories: function() {
+    const products = this.getProducts();
+    const catMap = new Map();
+
+    const KNOWN_INFO = {
+      "bras": { name: "Luxury Bras", subtitle: "Seamless & Lace Lift", defaultImg: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=400&q=80" },
+      "panties": { name: "Comfort Panties", subtitle: "No-Show & Cotton", defaultImg: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=400&q=80" },
+      "bridal": { name: "Bridal Trousseau", subtitle: "Royal Velvet & Chantilly", defaultImg: "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=400&q=80" },
+      "nightwear": { name: "Silky Sleepwear", subtitle: "Satin & Silk PJ Sets", defaultImg: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=400&q=80" },
+      "shapewear": { name: "Hourglass Shapewear", subtitle: "Firm Tummy Sculpt", defaultImg: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=400&q=80" }
+    };
+
+    products.forEach(p => {
+      const rawCat = (p.category || "general").toLowerCase().trim();
+      const info = KNOWN_INFO[rawCat] || {
+        name: rawCat.split(/[-_ ]+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+        subtitle: "Couture Silhouette",
+        defaultImg: (p.images && p.images[0]) ? p.images[0] : "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=400&q=80"
+      };
+
+      if (!catMap.has(rawCat)) {
+        catMap.set(rawCat, {
+          id: rawCat,
+          name: info.name,
+          subtitle: info.subtitle,
+          img: (p.images && p.images[0]) ? p.images[0] : info.defaultImg,
+          count: 1
+        });
+      } else {
+        const entry = catMap.get(rawCat);
+        entry.count += 1;
+        if ((!entry.img || entry.img.includes("unsplash.com")) && p.images && p.images[0]) {
+          entry.img = p.images[0];
+        }
+      }
+    });
+
+    return Array.from(catMap.values());
+  },
+
   // Cart Management
   getCart: function() {
     try {

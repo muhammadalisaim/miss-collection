@@ -29,6 +29,7 @@ const App = {
     this.renderHeroSlider();
     this.renderLookbook();
     this.renderCategoryCircles();
+    this.renderCategoryFilterPills();
     this.renderProducts();
     this.updateCartUI();
     this.updateWishlistUI();
@@ -46,7 +47,11 @@ const App = {
       self.updateWishlistUI();
       self.renderProducts();
     });
-    window.addEventListener("products_updated", () => self.renderProducts());
+    window.addEventListener("products_updated", () => {
+      self.renderCategoryCircles();
+      self.renderCategoryFilterPills();
+      self.renderProducts();
+    });
     window.addEventListener("coupon_applied", () => self.updateCartUI());
     window.addEventListener("coupon_removed", () => self.updateCartUI());
     window.addEventListener("reviews_updated", () => self.renderReviewsSection());
@@ -62,6 +67,8 @@ const App = {
         } else if (e.key === Store.KEYS.LOOKBOOK) {
           self.renderLookbook();
         } else if (e.key === Store.KEYS.PRODUCTS) {
+          self.renderCategoryCircles();
+          self.renderCategoryFilterPills();
           self.renderProducts();
         }
       }
@@ -847,29 +854,107 @@ const App = {
     `;
   },
 
+  // View Mode: 'slide' (horizontal sliding rows) or 'grid' (standard multi-column grid)
+  viewMode: "slide",
+
+  setViewMode: function (mode) {
+    this.viewMode = mode;
+    const slideBtn = document.getElementById("viewModeSlideBtn");
+    const gridBtn = document.getElementById("viewModeGridBtn");
+
+    if (mode === "slide") {
+      if (slideBtn) {
+        slideBtn.className = "px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider transition flex items-center gap-1.5 bg-[#D4AF37] text-[#0A0908]";
+      }
+      if (gridBtn) {
+        gridBtn.className = "px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider transition flex items-center gap-1.5 text-stone-300 hover:text-white";
+      }
+    } else {
+      if (gridBtn) {
+        gridBtn.className = "px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider transition flex items-center gap-1.5 bg-[#D4AF37] text-[#0A0908]";
+      }
+      if (slideBtn) {
+        slideBtn.className = "px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider transition flex items-center gap-1.5 text-stone-300 hover:text-white";
+      }
+    }
+
+    this.renderProducts();
+  },
+
+  slideCategories: function (direction) {
+    const el = document.getElementById("categoryCirclesContainer");
+    if (el) {
+      el.scrollBy({ left: direction * 300, behavior: "smooth" });
+    }
+  },
+
+  slideCategoryRow: function (catId, direction) {
+    const el = document.getElementById(`slider-cat-${catId}`);
+    if (el) {
+      el.scrollBy({ left: direction * 320, behavior: "smooth" });
+    }
+  },
+
   renderCategoryCircles: function () {
     const container = document.getElementById("categoryCirclesContainer");
     if (!container) return;
 
-    const categories = [
-      { id: "all", name: "All Silhouettes", img: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=300&q=80", count: "22+ Designs" },
-      { id: "bras", name: "Luxury Bras", img: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=300&q=80", count: "Seamless & Lace" },
-      { id: "panties", name: "Comfort Panties", img: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=300&q=80", count: "No-Show & Cotton" },
-      { id: "bridal", name: "Bridal Trousseau", img: "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=300&q=80", count: "Royal Velvet" },
-      { id: "nightwear", name: "Silky Sleepwear", img: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=300&q=80", count: "Satin PJ Sets" },
-      { id: "shapewear", name: "Tummy Shapewear", img: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=300&q=80", count: "Hourglass Fit" },
-      { id: "accessories", name: "Intimate Care", img: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=300&q=80", count: "Pasties & Bags" }
-    ];
+    const categories = (typeof Store !== "undefined" && Store.getAllCategories)
+      ? Store.getAllCategories()
+      : [];
 
-    container.innerHTML = categories.map(cat => `
-      <div class="category-circle-item shrink-0 text-center select-none" onclick="App.filterByCategory('${cat.id}')">
+    const allCircle = `
+      <div class="category-circle-item shrink-0 text-center select-none cursor-pointer" onclick="App.filterByCategory('all')">
+        <div class="category-circle-img-wrapper p-1 rounded-full border-2 ${this.currentCategory === 'all' ? 'border-[#D4AF37] ring-2 ring-[#D4AF37]/30' : 'border-white/10 hover:border-[#D4AF37]/50'} transition-all">
+          <img src="https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=300&q=80" alt="All Silhouettes" class="category-circle-img" loading="lazy" />
+        </div>
+        <span class="text-xs font-semibold text-stone-200 tracking-tight block mt-1">All Silhouettes</span>
+        <span class="text-[10px] text-stone-400 block -mt-1 font-medium">Full Collection</span>
+      </div>
+    `;
+
+    const dynamicCircles = categories.map(cat => `
+      <div class="category-circle-item shrink-0 text-center select-none cursor-pointer" onclick="App.filterByCategory('${cat.id}')">
         <div class="category-circle-img-wrapper p-1 rounded-full border-2 ${this.currentCategory === cat.id ? 'border-[#D4AF37] ring-2 ring-[#D4AF37]/30' : 'border-white/10 hover:border-[#D4AF37]/50'} transition-all">
           <img src="${cat.img}" alt="${cat.name}" class="category-circle-img" loading="lazy" />
         </div>
         <span class="text-xs font-semibold text-stone-200 tracking-tight block mt-1">${cat.name}</span>
-        <span class="text-[10px] text-stone-400 block -mt-1 font-medium">${cat.count}</span>
+        <span class="text-[10px] text-stone-400 block -mt-1 font-medium">${cat.count} Designs</span>
       </div>
     `).join("");
+
+    container.innerHTML = allCircle + dynamicCircles;
+  },
+
+  renderCategoryFilterPills: function () {
+    const container = document.getElementById("categoryFilterPillsContainer");
+    if (!container) return;
+
+    const categories = (typeof Store !== "undefined" && Store.getAllCategories)
+      ? Store.getAllCategories()
+      : [];
+
+    const allPill = `
+      <button 
+        type="button"
+        onclick="App.filterByCategory('all')" 
+        class="filter-pill-khaadi ${this.currentCategory === 'all' ? 'active' : ''} shrink-0"
+      >
+        All Silhouettes
+      </button>
+    `;
+
+    const dynamicPills = categories.map(cat => `
+      <button 
+        type="button"
+        onclick="App.filterByCategory('${cat.id}')" 
+        class="filter-pill-khaadi ${this.currentCategory === cat.id ? 'active' : ''} shrink-0"
+      >
+        ${cat.name} (${cat.count})
+      </button>
+    `).join("");
+
+    container.innerHTML = allPill + dynamicPills;
   },
 
   closeMegaMenus: function () {
@@ -913,34 +998,14 @@ const App = {
 
     // Reset cup/band filters if switching to a non-bra category
     if (categoryId !== "bras" && categoryId !== "all") {
-      this.activeFilters.cup = "all";
-      this.activeFilters.band = "all";
+      this.activeFilters.cup = null;
+      this.activeFilters.band = null;
     }
 
-    // Update filter pills
-    document.querySelectorAll("[data-category-filter]").forEach(b => {
-      const bCat = b.getAttribute("data-category-filter");
-      if (bCat === categoryId) {
-        b.classList.add("active", "bg-rose-600", "text-white");
-        b.classList.remove("bg-white", "text-stone-700");
-      } else {
-        b.classList.remove("active", "bg-rose-600", "text-white");
-        b.classList.add("bg-white", "text-stone-700");
-      }
-    });
-
-    // Update top desktop navigation bar active indicators
-    document.querySelectorAll(".nav-link").forEach(link => {
-      const onclick = link.getAttribute("onclick") || "";
-      if (onclick.includes(`'${categoryId}'`)) {
-        link.classList.add("active");
-      } else if (!onclick.includes("openBraCalculatorModal") && !onclick.includes("openOrderTrackingModal")) {
-        link.classList.remove("active");
-      }
-    });
-
+    this.renderCategoryFilterPills();
     this.renderCategoryCircles();
     this.renderProducts();
+
     const catalogEl = document.getElementById("catalogSection");
     if (catalogEl) {
       catalogEl.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -955,48 +1020,43 @@ const App = {
 
     let products = Store.getProducts();
 
-    // 1. Category Filter
-    if (this.currentCategory !== "all") {
-      products = products.filter(p => p.category === this.currentCategory);
-    }
+    const hasSubFilters = !!(
+      this.activeFilters.cup ||
+      this.activeFilters.band ||
+      this.activeFilters.maxPrice ||
+      this.activeFilters.inStockOnly ||
+      this.activeFilters.fabric ||
+      this.activeFilters.search
+    );
 
-    // 2. Cup Filter
+    // Apply subfilters
     if (this.activeFilters.cup) {
       products = products.filter(p => p.cupSizes && p.cupSizes.includes(this.activeFilters.cup));
     }
-
-    // 3. Band Filter
     if (this.activeFilters.band) {
       products = products.filter(p => p.bandSizes && p.bandSizes.includes(this.activeFilters.band));
     }
-
-    // 4. Max Price Filter
     if (this.activeFilters.maxPrice) {
       products = products.filter(p => p.price <= this.activeFilters.maxPrice);
     }
-
-    // 5. In-Stock Only
     if (this.activeFilters.inStockOnly) {
       products = products.filter(p => p.inStock);
     }
-
-    // 6. Fabric Filter
     if (this.activeFilters.fabric) {
       products = products.filter(p => p.fabric && p.fabric.toLowerCase().includes(this.activeFilters.fabric.toLowerCase()));
     }
-
-    // 7. Search Filter
     if (this.activeFilters.search) {
       const q = this.activeFilters.search.toLowerCase();
       products = products.filter(p => 
         p.title.toLowerCase().includes(q) ||
-        p.subCategory.toLowerCase().includes(q) ||
-        p.fabric.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q)
+        (p.subCategory && p.subCategory.toLowerCase().includes(q)) ||
+        (p.category && p.category.toLowerCase().includes(q)) ||
+        (p.fabric && p.fabric.toLowerCase().includes(q)) ||
+        (p.description && p.description.toLowerCase().includes(q))
       );
     }
 
-    // 8. Sorting
+    // Sorting
     if (this.activeFilters.sort === "price-low") {
       products.sort((a, b) => a.price - b.price);
     } else if (this.activeFilters.sort === "price-high") {
@@ -1015,14 +1075,15 @@ const App = {
     }
 
     if (products.length === 0) {
+      grid.className = "w-full py-16 text-center";
       grid.innerHTML = `
-        <div class="col-span-full py-16 text-center">
-          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 text-2xl">
+        <div class="max-w-md mx-auto py-12 text-center text-white">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-white/10 flex items-center justify-center text-[#D4AF37] text-2xl">
             <i class="fa-solid fa-sparkles"></i>
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-stone-900 font-serif-luxury">No intimates found matching your criteria</h3>
-          <p class="text-xs text-stone-500 mt-1 max-w-sm mx-auto">Try clearing selected filters or searching for terms like "seamless", "lace", or "cotton".</p>
-          <button onclick="App.resetFilters()" class="mt-4 px-5 py-2.5 bg-stone-900 text-white text-xs font-bold rounded-lg uppercase tracking-wider hover:bg-rose-600 transition shadow-md">
+          <h3 class="text-base sm:text-lg font-bold text-white font-serif-luxury">No intimates found matching your criteria</h3>
+          <p class="text-xs text-stone-400 mt-1 max-w-sm mx-auto">Try selecting another category or adding new products from Admin Panel.</p>
+          <button onclick="App.resetFilters()" class="mt-4 px-5 py-2.5 bg-[#D4AF37] text-[#0A0908] text-xs font-bold rounded-lg uppercase tracking-wider hover:bg-[#c49f2e] transition shadow-md">
             Reset All Filters
           </button>
         </div>
@@ -1030,7 +1091,86 @@ const App = {
       return;
     }
 
-    grid.innerHTML = products.map(p => this.generateProductCardHTML(p)).join("");
+    // 1. Sliding Showcase Mode (Default)
+    if (this.viewMode === "slide" && !hasSubFilters) {
+      const allCategories = Store.getAllCategories();
+      const categories = this.currentCategory === "all"
+        ? allCategories
+        : allCategories.filter(c => c.id.toLowerCase() === this.currentCategory.toLowerCase());
+
+      grid.className = "w-full space-y-12 pt-4";
+
+      grid.innerHTML = categories.map(cat => {
+        let catProducts = products.filter(p => (p.category || "").toLowerCase() === cat.id.toLowerCase());
+        if (catProducts.length === 0) return "";
+
+        return `
+          <div class="category-slide-showcase-row">
+            <!-- Row Header with Title & Left/Right Slide Controls -->
+            <div class="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-[#D4AF37] block">${cat.subtitle || 'Silhouette Collection'}</span>
+                <h3 class="text-xl sm:text-2xl font-serif-luxury text-white flex items-center gap-2">
+                  <span>${cat.name}</span>
+                  <span class="text-xs font-normal text-stone-400 font-sans">(${catProducts.length} Designs)</span>
+                </h3>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button 
+                  type="button" 
+                  onclick="App.slideCategoryRow('${cat.id}', -1)" 
+                  class="w-8 h-8 rounded-full border border-white/20 bg-[#181716] text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A0908] transition flex items-center justify-center text-xs shadow-sm" 
+                  title="Slide Left"
+                >
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="App.slideCategoryRow('${cat.id}', 1)" 
+                  class="w-8 h-8 rounded-full border border-white/20 bg-[#181716] text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A0908] transition flex items-center justify-center text-xs shadow-sm" 
+                  title="Slide Right"
+                >
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+                ${this.currentCategory === "all" ? `
+                <button 
+                  type="button" 
+                  onclick="App.filterByCategory('${cat.id}')" 
+                  class="text-xs text-[#D4AF37] hover:underline font-bold tracking-wider uppercase ml-1 hidden sm:inline"
+                >
+                  View All &rarr;
+                </button>
+                ` : `
+                <button 
+                  type="button" 
+                  onclick="App.filterByCategory('all')" 
+                  class="text-xs text-[#D4AF37] hover:underline font-bold tracking-wider uppercase ml-1 hidden sm:inline"
+                >
+                  Show All &rarr;
+                </button>
+                `}
+              </div>
+            </div>
+
+            <!-- Horizontal Sliding Cards Container ("through sides / slides") -->
+            <div id="slider-cat-${cat.id}" class="flex gap-4 sm:gap-6 overflow-x-auto pb-4 scrollbar-hide scroll-smooth snap-x">
+              ${catProducts.map(p => this.generateProductCardHTML(p, true)).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      return;
+    }
+
+    // 2. Specific Category Selected or Grid View Mode
+    if (this.currentCategory !== "all") {
+      products = products.filter(p => (p.category || "").toLowerCase() === this.currentCategory.toLowerCase());
+    }
+
+    grid.className = "grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 pt-4";
+    grid.innerHTML = products.map(p => this.generateProductCardHTML(p, false)).join("");
   },
 
   quickSelectSizeAndAdd: function (productId, size) {
@@ -1043,7 +1183,7 @@ const App = {
   },
 
   // Dual-Image 3:4 Vertical Card HTML with Hover Look Swap & Quick-Size Selector Chips
-  generateProductCardHTML: function (p) {
+  generateProductCardHTML: function (p, isSlide = false) {
     const isWishlisted = Store.isInWishlist(p.id);
     const discountPercent = p.originalPrice ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
     const badgeColorClass = p.badgeColor === "red" 
@@ -1063,8 +1203,12 @@ const App = {
       >${sz}</button>
     `).join("");
 
+    const cardClasses = isSlide 
+      ? "product-card product-card-slide group flex flex-col justify-between" 
+      : "product-card group flex flex-col justify-between";
+
     return `
-      <div class="product-card group flex flex-col justify-between" data-product-id="${p.id}">
+      <div class="${cardClasses}" data-product-id="${p.id}">
         <!-- 3:4 Vertical Image & Dual Look Swap -->
         <div class="product-card-img-wrapper" onclick="App.openQuickView('${p.id}')">
           <img src="${img1}" alt="${p.title}" class="product-card-img-primary" loading="lazy" />

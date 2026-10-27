@@ -258,12 +258,23 @@
        ========================================================================= -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-xs font-bold uppercase tracking-widest text-stone-400 font-heading">Shop By Silhouette</h3>
-      <span class="text-xs text-[#D4AF37] font-bold cursor-pointer hover:underline uppercase tracking-wider" onclick="App.filterByCategory('all')">
-        View All &rarr;
-      </span>
+      <div>
+        <span class="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D4AF37] block">Couture Categories</span>
+        <h3 class="text-xl sm:text-2xl font-serif-luxury text-white">Explore by Silhouette</h3>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="App.slideCategories(-1)" class="w-8 h-8 rounded-full border border-white/20 bg-[#181716] text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A0908] transition flex items-center justify-center text-xs" title="Slide Left">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button onclick="App.slideCategories(1)" class="w-8 h-8 rounded-full border border-white/20 bg-[#181716] text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A0908] transition flex items-center justify-center text-xs" title="Slide Right">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <span class="text-xs text-[#D4AF37] font-bold cursor-pointer hover:underline uppercase tracking-wider ml-2 hidden sm:inline" onclick="App.filterByCategory('all')">
+          View All &rarr;
+        </span>
+      </div>
     </div>
-    <div id="categoryCirclesContainer" class="flex gap-4 sm:gap-7 overflow-x-auto pb-3 scrollbar-none">
+    <div id="categoryCirclesContainer" class="flex gap-4 sm:gap-6 overflow-x-auto pb-3 scrollbar-hide scroll-smooth snap-x">
       <!-- Injected via App.renderCategoryCircles() -->
     </div>
   </section>
@@ -282,19 +293,39 @@
         </h2>
       </div>
 
-      <div class="flex items-center justify-between sm:justify-end gap-3">
+      <div class="flex items-center justify-between sm:justify-end gap-3 flex-wrap">
         <span id="productCountDisplay" class="text-xs text-stone-400 font-medium">Showing Items</span>
         
+        <!-- View Mode Switcher (Slides vs Grid) -->
+        <div class="flex items-center bg-[#181716] border border-white/10 rounded-lg p-0.5">
+          <button 
+            id="viewModeSlideBtn" 
+            onclick="App.setViewMode('slide')" 
+            class="px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider transition flex items-center gap-1.5 bg-[#D4AF37] text-[#0A0908]"
+            title="Horizontal Sliding Showcase"
+          >
+            <i class="fa-solid fa-sliders"></i> Slides
+          </button>
+          <button 
+            id="viewModeGridBtn" 
+            onclick="App.setViewMode('grid')" 
+            class="px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider transition flex items-center gap-1.5 text-stone-300 hover:text-white"
+            title="Standard 4-Column Grid"
+          >
+            <i class="fa-solid fa-table-cells"></i> Grid
+          </button>
+        </div>
+
         <!-- Mobile Filter Button Trigger -->
         <button 
           onclick="App.openFilterDrawer()" 
-          class="sm:hidden px-3.5 py-2 bg-[#181716] border border-white/10 text-white text-xs font-bold rounded flex items-center gap-1.5 shadow-sm uppercase tracking-wider hover:border-[#D4AF37]/50"
+          class="sm:hidden px-3.5 py-1.5 bg-[#181716] border border-white/10 text-white text-xs font-bold rounded flex items-center gap-1.5 shadow-sm uppercase tracking-wider hover:border-[#D4AF37]/50"
         >
           <i class="fa-solid fa-sliders text-[#D4AF37]"></i> Filters <span id="mobileFilterBtnCount" class="text-[#D4AF37] font-normal"></span>
         </button>
 
         <!-- Sorting dropdown (Khaadi style) -->
-        <select id="catalogSortSelect" class="text-xs font-semibold bg-[#181716] border border-white/10 rounded px-3 py-2 text-stone-200 focus:outline-none focus:border-[#D4AF37]">
+        <select id="catalogSortSelect" class="text-xs font-semibold bg-[#181716] border border-white/10 rounded px-3 py-1.5 text-stone-200 focus:outline-none focus:border-[#D4AF37]">
           <option value="featured">Featured Intimates</option>
           <option value="price-low">Price: Low to High</option>
           <option value="price-high">Price: High to Low</option>
@@ -304,29 +335,9 @@
       </div>
     </div>
 
-    <!-- Category Filter Tabs (Khaadi Horizontal Pill Strip) -->
-    <div class="flex items-center gap-2 overflow-x-auto py-4 scrollbar-none border-b border-white/10">
-      <button data-category-filter="all" class="filter-pill-khaadi active shrink-0">
-        All Styles
-      </button>
-      <button data-category-filter="bras" class="filter-pill-khaadi shrink-0">
-        Bras & Bralettes
-      </button>
-      <button data-category-filter="panties" class="filter-pill-khaadi shrink-0">
-        Seamless Panties
-      </button>
-      <button data-category-filter="bridal" class="filter-pill-khaadi shrink-0">
-        Bridal Sets
-      </button>
-      <button data-category-filter="nightwear" class="filter-pill-khaadi shrink-0">
-        Silky Sleepwear
-      </button>
-      <button data-category-filter="shapewear" class="filter-pill-khaadi shrink-0">
-        Shapewear
-      </button>
-      <button data-category-filter="accessories" class="filter-pill-khaadi shrink-0">
-        Accessories
-      </button>
+    <!-- Category Filter Tabs (Khaadi Dynamic Horizontal Pill Strip) -->
+    <div id="categoryFilterPillsContainer" class="flex items-center gap-2 overflow-x-auto py-4 scrollbar-none border-b border-white/10">
+      <!-- Injected dynamically via App.renderCategoryFilterPills() -->
     </div>
 
     <!-- Sub-Filter Bar (Cup Sizes & Reset) -->

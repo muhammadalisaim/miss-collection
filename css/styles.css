@@ -594,6 +594,37 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   }
 }
 
+/* Horizontal Sliding Showcase Card & Utility */
+.product-card-slide {
+  width: 245px;
+  min-width: 245px;
+  max-width: 245px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+@media (min-width: 640px) {
+  .product-card-slide {
+    width: 270px;
+    min-width: 270px;
+    max-width: 270px;
+  }
+}
+@media (min-width: 1024px) {
+  .product-card-slide {
+    width: 290px;
+    min-width: 290px;
+    max-width: 290px;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Product Card Details Typography */
 .card-fabric-line {
   font-family: var(--font-sans);
