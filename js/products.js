@@ -23,16 +23,16 @@ const DEFAULT_PRODUCTS = [
     description: "Designed for all-day cloud-like comfort. Made with buttery-soft micro-modal fabric, molded wireless cups, and ultra-smooth zero-dig underband. 100% invisible under tight t-shirts and kurtis.",
     fabric: "85% Micro-Modal, 15% Elastane",
     colors: [
-      { name: "Blush Pink", hex: "#f3c5c9", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" },
-      { name: "Nude Skin", hex: "#deb89d", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" },
-      { name: "Midnight Black", hex: "#1f1f21", image: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" }
+      { name: "Blush Pink", hex: "#f3c5c9", image: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" },
+      { name: "Nude Skin", hex: "#deb89d", image: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" },
+      { name: "Midnight Black", hex: "#1f1f21", image: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["32B", "34B", "34C", "36B", "36C", "38B", "38C", "40C"],
     cupSizes: ["B", "C"],
     bandSizes: ["32", "34", "36", "38", "40"],
     images: [
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-acc-01", "mc-acc-02"]
   },
@@ -53,16 +53,16 @@ const DEFAULT_PRODUCTS = [
     description: "Exquisite French-inspired scalloped floral lace with gentle contoured push-up padding. Provides natural lift, stunning cleavage, and plush underwire support wrapped in velvet comfort channel.",
     fabric: "78% Polyamide Lace, 22% Spandex",
     colors: [
-      { name: "Crimson Maroon", hex: "#8b1538", image: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80" },
-      { name: "Onyx Black", hex: "#111111", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" },
-      { name: "Bridal Ivory", hex: "#fcf8f2", image: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" }
+      { name: "Crimson Maroon", hex: "#8b1538", image: "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=80" },
+      { name: "Onyx Black", hex: "#111111", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" },
+      { name: "Bridal Ivory", hex: "#fcf8f2", image: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["32B", "34B", "34C", "36B", "36C", "38C"],
     cupSizes: ["B", "C"],
     bandSizes: ["32", "34", "36", "38"],
     images: [
-      "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-panty-03", "mc-acc-02"]
   },
@@ -83,16 +83,16 @@ const DEFAULT_PRODUCTS = [
     description: "The quintessential daily wardrobe essential. Smooth micro-knit cups provide full coverage with non-bulky modesty lining and non-slip adjustable convertible straps.",
     fabric: "90% Nylon Microfiber, 10% Spandex",
     colors: [
-      { name: "Warm Beige", hex: "#e5cbb5", image: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" },
-      { name: "Mocha", hex: "#9e7762", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" },
-      { name: "Pearl White", hex: "#ffffff", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" }
+      { name: "Warm Beige", hex: "#e5cbb5", image: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80" },
+      { name: "Mocha", hex: "#9e7762", image: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" },
+      { name: "Pearl White", hex: "#ffffff", image: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["32B", "34B", "34C", "36B", "36C", "38B", "38C", "38D", "40C", "40D"],
     cupSizes: ["B", "C", "D"],
     bandSizes: ["32", "34", "36", "38", "40"],
     images: [
-      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-acc-02", "mc-acc-03"]
   },
@@ -113,15 +113,15 @@ const DEFAULT_PRODUCTS = [
     description: "Specially engineered for heavier bust sizes (C to DD). Reduces bust projection by up to 1.5 inches while providing high lift, wide side wings to eliminate back bulge, and cushioned shoulder straps.",
     fabric: "82% Polyamide, 18% Spandex Power-Mesh",
     colors: [
-      { name: "Almond Nude", hex: "#d8b295", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" },
-      { name: "Slate Black", hex: "#222222", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Almond Nude", hex: "#d8b295", image: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" },
+      { name: "Slate Black", hex: "#222222", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["34C", "34D", "36C", "36D", "38C", "38D", "40C", "40D", "42D"],
     cupSizes: ["C", "D"],
     bandSizes: ["34", "36", "38", "40", "42"],
     images: [
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-acc-02", "mc-acc-03"]
   },
@@ -142,16 +142,16 @@ const DEFAULT_PRODUCTS = [
     description: "Pure combed organic cotton bra designed for hot Pakistani summers. Double layered non-padded cups without wires for total skin breathability and all-day sweat-wicking comfort.",
     fabric: "95% Combed Organic Cotton, 5% Lycra",
     colors: [
-      { name: "Pure White", hex: "#ffffff", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" },
-      { name: "Skin Beige", hex: "#deb89d", image: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" },
-      { name: "Soft Lilac", hex: "#d8c4d8", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" }
+      { name: "Pure White", hex: "#ffffff", image: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" },
+      { name: "Skin Beige", hex: "#deb89d", image: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80" },
+      { name: "Soft Lilac", hex: "#d8c4d8", image: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["32B", "34B", "34C", "36B", "36C", "38B", "38C", "40B", "40C"],
     cupSizes: ["B", "C"],
     bandSizes: ["32", "34", "36", "38", "40"],
     images: [
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-panty-02", "mc-acc-03"]
   },
@@ -172,15 +172,15 @@ const DEFAULT_PRODUCTS = [
     description: "Maximum bounce control with compression cups, breathable mesh back panel, and wide ergonomic shoulder straps. Perfect for workouts, jogging, and yoga.",
     fabric: "75% Polyester, 25% Spandex Quick-Dry Tech",
     colors: [
-      { name: "Onyx Black", hex: "#1a1a1a", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" },
-      { name: "Rose Plum", hex: "#834053", image: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80" }
+      { name: "Onyx Black", hex: "#1a1a1a", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" },
+      { name: "Rose Plum", hex: "#834053", image: "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["32B", "34B", "34C", "36B", "36C", "38C"],
     cupSizes: ["B", "C"],
     bandSizes: ["32", "34", "36", "38"],
     images: [
-      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-acc-01", "mc-acc-03"]
   },
@@ -203,12 +203,12 @@ const DEFAULT_PRODUCTS = [
     description: "Zero panty lines guaranteed. Ultra-thin laser-cut edges with bonded seams, moisture-wicking stretch fabric, and a 100% natural cotton gusset for optimal hygiene.",
     fabric: "80% Nylon, 20% Elastane with 100% Cotton Gusset",
     colors: [
-      { name: "Nude, Black & Rose Set", hex: "#deb89d", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" }
+      { name: "Nude, Black & Rose Set", hex: "#deb89d", image: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-bra-01", "mc-acc-03"]
   },
@@ -229,12 +229,12 @@ const DEFAULT_PRODUCTS = [
     description: "Full coverage high-rise fit that sits softly on the natural waistline. Non-binding waistband and gentle leg elastic that won't pinch or roll down.",
     fabric: "95% Combed Cotton, 5% Spandex",
     colors: [
-      { name: "Peach, White & Powder Blue Set", hex: "#fed7aa", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" }
+      { name: "Peach, White & Powder Blue Set", hex: "#fed7aa", image: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-bra-05", "mc-acc-03"]
   },
@@ -255,13 +255,13 @@ const DEFAULT_PRODUCTS = [
     description: "Delicate floral lace bikini panty with cheeky back cut and scalloped edge trims. Soft interior lining ensures irritation-free comfort against delicate skin.",
     fabric: "88% Polyamide Lace, 12% Spandex",
     colors: [
-      { name: "Wine Maroon", hex: "#8b1538", image: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80" },
-      { name: "Jet Black", hex: "#111111", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Wine Maroon", hex: "#8b1538", image: "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=80" },
+      { name: "Jet Black", hex: "#111111", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["S", "M", "L", "XL"],
     images: [
-      "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-bra-02", "mc-acc-01"]
   },
@@ -282,13 +282,13 @@ const DEFAULT_PRODUCTS = [
     description: "Extended leg length prevents inner-thigh friction under dresses, eastern lawn suits, and trousers. Made of cooling bamboo modal with natural antibacterial properties.",
     fabric: "92% Bamboo Modal, 8% Spandex",
     colors: [
-      { name: "Skin Nude", hex: "#deb89d", image: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" },
-      { name: "Deep Charcoal", hex: "#27272a", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Skin Nude", hex: "#deb89d", image: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80" },
+      { name: "Deep Charcoal", hex: "#27272a", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-shape-03", "mc-acc-03"]
   },
@@ -311,15 +311,15 @@ const DEFAULT_PRODUCTS = [
     description: "The crown jewel of our bridal trousseau. Handcrafted rich crimson embroidery with shimmering accents. Includes underwire plunge bra, matching scalloped panty, adjustable garter belt, and sheer stockings in a luxury satin gift box.",
     fabric: "Silk-Touch Satin, Metallic Embroidered Chantilly Lace",
     colors: [
-      { name: "Royal Crimson", hex: "#7a0c2e", image: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80" },
-      { name: "Midnight Black", hex: "#111111", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Royal Crimson", hex: "#7a0c2e", image: "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=80" },
+      { name: "Midnight Black", hex: "#111111", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["32B", "34B", "34C", "36B", "36C", "38C"],
     cupSizes: ["B", "C"],
     bandSizes: ["32", "34", "36", "38"],
     images: [
-      "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-bridal-02", "mc-acc-01"]
   },
@@ -340,13 +340,13 @@ const DEFAULT_PRODUCTS = [
     description: "Sensuous pearlescent white night chemise with delicate eyelash lace cups, criss-cross back straps, and matching high-slit sheer kimono robe. Comes with discreet privacy storage sleeve.",
     fabric: "95% Silk Satin, 5% Lace",
     colors: [
-      { name: "Pearl White", hex: "#ffffff", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" },
-      { name: "Blush Rose", hex: "#f3c5c9", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" }
+      { name: "Pearl White", hex: "#ffffff", image: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" },
+      { name: "Blush Rose", hex: "#f3c5c9", image: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["S", "M", "L", "XL"],
     images: [
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-bridal-01", "mc-acc-01"]
   },
@@ -367,13 +367,13 @@ const DEFAULT_PRODUCTS = [
     description: "Semi-sheer mesh babydoll with rose gold floral threadwork, flowing empire waist silhouette, and matching delicate G-string. Flattering and romantic.",
     fabric: "100% Sheer Polyamide Mesh & Embroidered Lace",
     colors: [
-      { name: "Dusty Rose Gold", hex: "#c98f98", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" },
-      { name: "Raven Black", hex: "#1c1917", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Dusty Rose Gold", hex: "#c98f98", image: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" },
+      { name: "Raven Black", hex: "#1c1917", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["S", "M", "L", "XL"],
     images: [
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-acc-01", "mc-night-03"]
   },
@@ -396,14 +396,14 @@ const DEFAULT_PRODUCTS = [
     description: "Indulgent 3-piece luxury sleep ensemble featuring a lace-trimmed camisole top, relaxed fluid trousers, and a tie-waist satin kimono robe. Non-static, breathable, and silky smooth.",
     fabric: "High-Grade Mulberry Satin Finish (Anti-Static)",
     colors: [
-      { name: "Champagne Gold", hex: "#e8d8b8", image: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" },
-      { name: "Dusty Rose", hex: "#c27d88", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" },
-      { name: "Midnight Navy", hex: "#1e293b", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Champagne Gold", hex: "#e8d8b8", image: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80" },
+      { name: "Dusty Rose", hex: "#c27d88", image: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" },
+      { name: "Midnight Navy", hex: "#1e293b", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["S", "M", "L", "XL"],
     images: [
-      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-night-03", "mc-acc-01"]
   },
@@ -424,13 +424,13 @@ const DEFAULT_PRODUCTS = [
     description: "Classic boyfriend cut sleepshirt crafted in whisper-soft Austrian modal cotton. Contrast piped lapel collar, chest pocket, and curved hem for effortless lounging.",
     fabric: "95% Lenzing Modal, 5% Spandex",
     colors: [
-      { name: "Powder Blue Striped", hex: "#bfdbfe", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" },
-      { name: "Soft Blush", hex: "#fbcfe8", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" }
+      { name: "Powder Blue Striped", hex: "#bfdbfe", image: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" },
+      { name: "Soft Blush", hex: "#fbcfe8", image: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-acc-03", "mc-panty-01"]
   },
@@ -451,13 +451,13 @@ const DEFAULT_PRODUCTS = [
     description: "Flirty and comfortable 2-piece cami shorts set. V-neckline with delicate eyelash lace inset, adjustable skinny straps, and elastic waist dolphin-hem tap shorts.",
     fabric: "100% Poly-Satin Sheen",
     colors: [
-      { name: "Emerald Green", hex: "#065f46", image: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80" },
-      { name: "Ruby Maroon", hex: "#881337", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Emerald Green", hex: "#065f46", image: "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=80" },
+      { name: "Ruby Maroon", hex: "#881337", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["S", "M", "L", "XL"],
     images: [
-      "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-night-01", "mc-acc-01"]
   },
@@ -480,13 +480,13 @@ const DEFAULT_PRODUCTS = [
     description: "Instantly flattens the tummy and sculpts the waistline by up to 2 dress sizes. Equipped with four flexible steel spiral bones to prevent roll-down, and seamless laser leg openings.",
     fabric: "80% Nylon Power-Compress, 20% Spandex with Cotton Lining",
     colors: [
-      { name: "Natural Nude", hex: "#deb89d", image: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" },
-      { name: "Jet Black", hex: "#111111", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Natural Nude", hex: "#deb89d", image: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80" },
+      { name: "Jet Black", hex: "#111111", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["M", "L", "XL", "XXL", "3XL"],
     images: [
-      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-shape-02", "mc-acc-01"]
   },
@@ -507,13 +507,13 @@ const DEFAULT_PRODUCTS = [
     description: "Wear with your favorite bra! Open-bust U-shape lifts the bustline while firm compression zones contour the midriff, back, hips, and tummy. Features a convenient hook-and-eye bathroom gusset.",
     fabric: "82% Polyamide, 18% Elastane High-Recovery Stretch",
     colors: [
-      { name: "Beige Skin", hex: "#d8b295", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" },
-      { name: "Classic Black", hex: "#18181b", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Beige Skin", hex: "#d8b295", image: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" },
+      { name: "Classic Black", hex: "#18181b", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-bra-03", "mc-acc-01"]
   },
@@ -534,13 +534,13 @@ const DEFAULT_PRODUCTS = [
     description: "Smooths hips and thighs without squeezing too tight. Prevents inner-thigh chafing during summer while offering gentle moderate tummy support under lawn kurtas.",
     fabric: "85% Microfiber, 15% Spandex",
     colors: [
-      { name: "Skin Nude", hex: "#deb89d", image: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" },
-      { name: "Onyx Black", hex: "#111111", image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80" }
+      { name: "Skin Nude", hex: "#deb89d", image: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80" },
+      { name: "Onyx Black", hex: "#111111", image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["M", "L", "XL", "XXL"],
     images: [
-      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-panty-04", "mc-acc-03"]
   },
@@ -563,12 +563,12 @@ const DEFAULT_PRODUCTS = [
     description: "Medical-grade hypoallergenic silicone pasties with ultra-thin tapered edges that blend seamlessly with any skin tone. Washable and reusable up to 30 times.",
     fabric: "100% Medical Bio-Silicone Adhesive",
     colors: [
-      { name: "Skin Tone", hex: "#deb89d", image: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" }
+      { name: "Skin Tone", hex: "#deb89d", image: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["One Size"],
     images: [
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-acc-02", "mc-acc-03"]
   },
@@ -589,12 +589,12 @@ const DEFAULT_PRODUCTS = [
     description: "Adds up to 2 inches of extra band breathing room to any tight bra. Standard 2-hook and 3-hook compatible plush micro-fiber with stainless steel hooks.",
     fabric: "Soft Microfiber with Stainless Steel Hooks",
     colors: [
-      { name: "Trio Pack (Skin, White, Black)", hex: "#d1d5db", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" }
+      { name: "Trio Pack (Skin, White, Black)", hex: "#d1d5db", image: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["3-Hook Standard"],
     images: [
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-acc-01", "mc-acc-03"]
   },
@@ -615,12 +615,12 @@ const DEFAULT_PRODUCTS = [
     description: "Prevents underwires from bending, straps from tangling, and delicate lace from tearing in washing machines. Features rust-proof hidden zipper lock and durable honeycomb mesh.",
     fabric: "Reinforced Honeycomb Breathable Polyester Mesh",
     colors: [
-      { name: "Clean White", hex: "#ffffff", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" }
+      { name: "Clean White", hex: "#ffffff", image: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" }
     ],
     sizes: ["Pack of 2"],
     images: [
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80"
     ],
     crossSells: ["mc-acc-01", "mc-acc-02"]
   }

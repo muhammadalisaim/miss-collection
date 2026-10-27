@@ -152,6 +152,9 @@
           <button id="adminMainAddBtn" onclick="AdminApp.handleContextualAdd()" class="px-3.5 py-2 bg-stone-900 hover:bg-[#B4640A] text-white text-xs font-bold uppercase rounded-lg transition flex items-center gap-1.5 shadow-sm">
             <i class="fa-solid fa-plus"></i> <span id="adminMainAddBtnText">Add Product</span>
           </button>
+          <button onclick="AdminApp.clearAllProducts()" class="px-3 py-2 border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold uppercase rounded-lg transition" title="Delete All Products">
+            <i class="fa-solid fa-trash-can mr-1"></i> Clear All
+          </button>
           <button onclick="AdminApp.restoreFactoryDefaults()" class="px-3 py-2 border border-stone-300 hover:bg-stone-100 text-stone-600 text-xs font-bold uppercase rounded-lg transition" title="Reset Catalog, Menu & Banners to Defaults">
             <i class="fa-solid fa-rotate mr-1"></i> Reset
           </button>
@@ -264,8 +267,8 @@
   <!-- ==========================================
        3. ADD / EDIT PRODUCT MODAL
        ========================================== -->
-  <div id="adminProductModal" class="hidden fixed inset-0 bg-stone-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6">
+  <div id="adminProductModal" class="hidden fixed inset-0 bg-stone-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full max-h-[92vh] overflow-y-auto shadow-2xl p-6 border border-stone-200">
       <div class="flex items-center justify-between pb-3 border-b border-stone-200">
         <h3 id="adminProductModalTitle" class="text-base font-bold text-stone-900 font-serif-luxury">
           Add New Intimate Product
@@ -275,70 +278,192 @@
         </button>
       </div>
 
-      <form id="adminAddProductForm" class="mt-4 space-y-3 text-xs">
+      <form id="adminAddProductForm" class="mt-4 space-y-4 text-xs">
         <input type="hidden" id="adminProductModalId" value="" />
 
+        <!-- 1. Product Name -->
         <div>
-          <label class="block font-bold text-stone-700 mb-1">Product Title *</label>
-          <input type="text" name="title" required placeholder="e.g. Silk Touch Wirefree Comfort Bra" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500 font-semibold" />
+          <label class="block font-bold text-stone-800 mb-1">Product Name (پروڈکٹ کا نام) *</label>
+          <input 
+            type="text" 
+            name="title" 
+            id="adminProductTitle"
+            required 
+            placeholder="e.g. Cloud Comfort Wireless T-Shirt Bra / Seamless Lace Bralette" 
+            class="w-full border border-stone-300 rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-[#D4AF37] font-semibold text-xs" 
+          />
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <!-- 2. Category Selection or Creation -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-stone-700 mb-1">Main Category *</label>
-            <select name="category" required class="w-full border border-stone-300 rounded px-3 py-2 bg-white focus:outline-none focus:border-rose-500 font-semibold">
-              <option value="bras">Bras & Bralettes</option>
-              <option value="panties">Panties & Briefs</option>
-              <option value="bridal">Bridal Trousseau</option>
-              <option value="nightwear">Silky Nightwear</option>
-              <option value="shapewear">Shapewear & Shapers</option>
-              <option value="accessories">Accessories & Care</option>
+            <label class="block font-bold text-stone-800 mb-1">Category (کیٹیگری منتخب کریں) *</label>
+            <select 
+              name="category" 
+              id="adminProductCategory" 
+              required 
+              onchange="AdminApp.handleCategoryChange(this.value)" 
+              class="w-full border border-stone-300 rounded-lg px-3 py-2.5 bg-white focus:outline-none focus:border-[#D4AF37] font-semibold"
+            >
+              <option value="bras">Bras & Bralettes (برا)</option>
+              <option value="panties">Panties & Briefs (پینٹی)</option>
+              <option value="bridal">Bridal Trousseau (برائیڈل)</option>
+              <option value="nightwear">Silky Sleepwear (نائٹ ویئر)</option>
+              <option value="shapewear">Shapewear & Shapers (شیپ ویئر)</option>
+              <option value="__custom__">+ Create New Category (نئی کیٹیگری بنائیں)</option>
             </select>
           </div>
 
-          <div>
-            <label class="block font-bold text-stone-700 mb-1">Subcategory / Style *</label>
-            <input type="text" name="subCategory" required placeholder="e.g. Wireless Bras" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500 font-semibold" />
+          <div id="adminCustomCategoryContainer" class="hidden">
+            <label class="block font-bold text-stone-800 mb-1">New Category Name (نئی کیٹیگری کا نام) *</label>
+            <input 
+              type="text" 
+              name="customCategory" 
+              id="adminCustomCategoryInput" 
+              placeholder="e.g. Cotton Loungewear" 
+              class="w-full border border-amber-300 bg-amber-50/50 rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#D4AF37] font-semibold" 
+            />
           </div>
         </div>
 
-        <div class="grid grid-cols-3 gap-3">
+        <!-- 3. Price in PKR -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-stone-700 mb-1">Sale Price (PKR) *</label>
-            <input type="number" name="price" required placeholder="1850" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500 font-bold" />
+            <label class="block font-bold text-stone-800 mb-1">Price in PKR (قیمت روپے میں) *</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-stone-400 font-bold">Rs.</span>
+              <input 
+                type="number" 
+                name="price" 
+                id="adminProductPrice"
+                required 
+                placeholder="1850" 
+                class="w-full border border-stone-300 rounded-lg pl-10 pr-3 py-2.5 focus:outline-none focus:border-[#D4AF37] font-bold text-stone-900" 
+              />
+            </div>
           </div>
 
           <div>
-            <label class="block font-bold text-stone-700 mb-1">Original Price (PKR)</label>
-            <input type="number" name="originalPrice" placeholder="2450" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
-          </div>
-
-          <div>
-            <label class="block font-bold text-stone-700 mb-1">Stock Units *</label>
-            <input type="number" name="stockCount" required value="20" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500 font-bold" />
+            <label class="block font-bold text-stone-800 mb-1">Original / Cut Price (Optional)</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-stone-400 font-bold">Rs.</span>
+              <input 
+                type="number" 
+                name="originalPrice" 
+                id="adminProductOriginalPrice"
+                placeholder="2400" 
+                class="w-full border border-stone-300 rounded-lg pl-10 pr-3 py-2.5 focus:outline-none focus:border-[#D4AF37] font-semibold text-stone-500" 
+              />
+            </div>
           </div>
         </div>
 
+        <!-- 4. Available Sizes -->
         <div>
-          <label class="block font-bold text-stone-700 mb-1">High-Res Image URL</label>
-          <input type="url" name="imageUrl" placeholder="https://images.unsplash.com/..." class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block font-bold text-stone-800">Available Sizes (دستیاب سائز منتخب کریں) *</label>
+            <span class="text-[10px] text-stone-500">Click to select/unselect sizes</span>
+          </div>
+
+          <!-- Cup Sizes -->
+          <div class="mb-2">
+            <span class="text-[10px] uppercase font-bold text-stone-400 block mb-1">Bra Sizes:</span>
+            <div class="flex flex-wrap gap-1.5" id="adminSizeChipsContainer">
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="32B">32B</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="34B">34B</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="36B">36B</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="38B">38B</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="40B">40B</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="32C">32C</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="34C">34C</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="36C">36C</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="38C">38C</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="40C">40C</button>
+            </div>
+          </div>
+
+          <!-- Standard Apparel / Panty Sizes -->
+          <div class="mb-2">
+            <span class="text-[10px] uppercase font-bold text-stone-400 block mb-1">Standard / Panty / Sleepwear Sizes:</span>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="XS">XS</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="S">S</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="M">M</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="L">L</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="XL">XL</button>
+              <button type="button" onclick="AdminApp.toggleSizeChip(this)" class="admin-size-chip px-2.5 py-1 rounded border border-stone-200 text-stone-700 font-bold hover:border-[#D4AF37]" data-size="Free Size">Free Size</button>
+            </div>
+          </div>
+
+          <div>
+            <input 
+              type="text" 
+              name="customSizes" 
+              id="adminCustomSizesInput" 
+              placeholder="Or type custom sizes separated by comma (e.g. 34B, 36B, 38B)" 
+              class="w-full border border-stone-200 rounded px-3 py-1.5 text-xs text-stone-700 focus:outline-none focus:border-[#D4AF37]" 
+            />
+          </div>
         </div>
 
-        <div>
-          <label class="block font-bold text-stone-700 mb-1">Fabric Composition</label>
-          <input type="text" name="fabric" placeholder="e.g. 85% Micro-Modal, 15% Elastane" class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500" />
+        <!-- 5. Product Image Upload (File from Computer / Phone + Preview) -->
+        <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
+          <label class="block font-bold text-stone-800">Product Picture (تصویر اپلوڈ کریں) *</label>
+
+          <div class="flex items-center gap-4">
+            <!-- Preview Box -->
+            <div id="adminProductImagePreviewBox" class="w-20 h-24 rounded-lg border-2 border-dashed border-stone-300 bg-white flex items-center justify-center overflow-hidden shrink-0">
+              <img id="adminProductImagePreview" src="" alt="Preview" class="w-full h-full object-cover hidden" />
+              <i id="adminProductImagePlaceholderIcon" class="fa-solid fa-image text-2xl text-stone-300"></i>
+            </div>
+
+            <!-- Upload Controls -->
+            <div class="flex-1 space-y-2">
+              <label class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-stone-900 hover:bg-[#B4640A] text-white rounded-lg font-bold text-xs transition shadow-sm">
+                <i class="fa-solid fa-upload"></i> Choose Picture from Device
+                <input 
+                  type="file" 
+                  id="adminProductFileInput" 
+                  accept="image/*" 
+                  class="hidden" 
+                  onchange="AdminApp.handleImageFileUpload(event)" 
+                />
+              </label>
+              <div class="text-[11px] text-stone-500">Supports JPG, PNG, WEBP from your phone or computer.</div>
+
+              <!-- Or URL Input -->
+              <div class="pt-1">
+                <input 
+                  type="url" 
+                  name="imageUrl" 
+                  id="adminProductImageUrlInput" 
+                  oninput="AdminApp.handleImageUrlInput(this.value)" 
+                  placeholder="Or paste image URL (https://...)" 
+                  class="w-full border border-stone-200 rounded px-2.5 py-1.5 text-xs text-stone-600 focus:outline-none focus:border-[#D4AF37]" 
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label class="block font-bold text-stone-700 mb-1">Description</label>
-          <textarea name="description" rows="3" placeholder="Key comfort features, coverage, and fit guidelines..." class="w-full border border-stone-300 rounded px-3 py-2 focus:outline-none focus:border-rose-500"></textarea>
+        <!-- 6. In Stock Status & Quantity -->
+        <div class="flex items-center justify-between p-2.5 bg-stone-50 rounded-lg border border-stone-200">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input type="checkbox" name="inStock" id="adminProductInStock" checked class="w-4 h-4 text-emerald-600 rounded accent-emerald-600" />
+            <span class="font-bold text-stone-800">In Stock (دستیاب ہے)</span>
+          </label>
+          <div class="flex items-center gap-1.5">
+            <span class="text-stone-500 text-[11px]">Units:</span>
+            <input type="number" name="stockCount" id="adminProductStockCount" value="20" min="1" class="w-16 border border-stone-300 rounded px-2 py-1 text-center font-bold" />
+          </div>
         </div>
 
+        <!-- Actions -->
         <div class="pt-3 border-t border-stone-200 flex justify-end gap-2">
-          <button type="button" onclick="AdminApp.closeProductModal()" class="px-4 py-2 border border-stone-300 rounded text-stone-700 font-bold hover:bg-stone-100 transition">
+          <button type="button" onclick="AdminApp.closeProductModal()" class="px-4 py-2.5 border border-stone-300 rounded-lg text-stone-700 font-bold hover:bg-stone-100 transition">
             Cancel
           </button>
-          <button type="submit" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded font-bold uppercase tracking-wider transition">
+          <button type="submit" class="px-6 py-2.5 bg-[#0A0908] hover:bg-[#D4AF37] hover:text-black text-white rounded-lg font-bold uppercase tracking-wider transition shadow-md">
             Save Product
           </button>
         </div>

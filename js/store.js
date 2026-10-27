@@ -35,14 +35,26 @@ const Store = {
   getProducts: function() {
     try {
       const stored = localStorage.getItem(this.KEYS.PRODUCTS);
-      if (stored) {
+      if (stored !== null) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) return parsed;
       }
     } catch (e) {
       console.warn("Error loading stored products", e);
     }
-    // Default fallback
+    // Default fallback - only runs if never initialized in localStorage
+    if (typeof DEFAULT_PRODUCTS !== "undefined") {
+      this.saveProducts(DEFAULT_PRODUCTS);
+      return DEFAULT_PRODUCTS;
+    }
+    return [];
+  },
+
+  clearAllProducts: function() {
+    this.saveProducts([]);
+  },
+
+  resetDefaultProducts: function() {
     if (typeof DEFAULT_PRODUCTS !== "undefined") {
       this.saveProducts(DEFAULT_PRODUCTS);
       return DEFAULT_PRODUCTS;
@@ -444,9 +456,9 @@ const Store = {
   getNavItems: function() {
     try {
       const stored = localStorage.getItem(this.KEYS.NAV_ITEMS);
-      if (stored) {
+      if (stored !== null) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) return parsed;
       }
     } catch (e) {
       console.warn("Error reading stored nav items", e);
@@ -517,7 +529,7 @@ const Store = {
       subtitle: "Cloud-soft wireless micro-modal intimates engineered for flawless invisible contours under luxury lawn suits and kurtis.",
       badge: "HAUTE EDIT • ZERO-WIRE COMFORT",
       badgeColor: "amber",
-      imageUrl: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1800&q=85",
+      imageUrl: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=1800&q=85",
       btnText: "Explore Seamless Bras",
       btnCategory: "bras",
       secondaryBtnText: "Fit Calculator",
@@ -531,7 +543,7 @@ const Store = {
       subtitle: "Handcrafted luxury bridal trousseau ensembles, embroidered corsets, and silk nightwear shipped in confidential keepsake boxes.",
       badge: "BRIDAL TROUSSEAU 2026",
       badgeColor: "rose",
-      imageUrl: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=1800&q=85",
+      imageUrl: "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=1800&q=85",
       btnText: "Discover Bridal Edit",
       btnCategory: "bridal",
       secondaryBtnText: "WhatsApp VIP Concierge",
@@ -545,7 +557,7 @@ const Store = {
       subtitle: "Sensual silk slip dresses, loungewear sets, and robes crafted for quiet nighttime indulgence and breathable grace.",
       badge: "PURE SILK LOUNGEWEAR",
       badgeColor: "amber",
-      imageUrl: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=1800&q=85",
+      imageUrl: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=1800&q=85",
       btnText: "Shop Sleepwear Sets",
       btnCategory: "nightwear",
       secondaryBtnText: "Fit Consultation",
@@ -558,9 +570,9 @@ const Store = {
   getBanners: function() {
     try {
       const stored = localStorage.getItem(this.KEYS.BANNERS);
-      if (stored) {
+      if (stored !== null) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) return parsed;
       }
     } catch (e) {
       console.warn("Error reading stored banners", e);
@@ -582,7 +594,7 @@ const Store = {
       subtitle: bannerData.subtitle || "",
       badge: bannerData.badge || "Featured",
       badgeColor: bannerData.badgeColor || "rose",
-      imageUrl: bannerData.imageUrl || "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1800&q=85",
+      imageUrl: bannerData.imageUrl || "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=1800&q=85",
       btnText: bannerData.btnText || "Shop Now →",
       btnCategory: bannerData.btnCategory || "all",
       secondaryBtnText: bannerData.secondaryBtnText || "",

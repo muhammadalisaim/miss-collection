@@ -312,7 +312,7 @@ const App = {
             </div>
           </div>
           <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.openQuickView('mc-bra-01')">
-            <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" alt="Seamless Cloud Lift" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <img src="https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" alt="Seamless Cloud Lift" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
             <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
               <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">Signature Bestseller</span>
               <h5 class="text-sm font-semibold text-white">Cloud-Soft Zero Wire T-Shirt Bra</h5>
@@ -343,7 +343,7 @@ const App = {
             </div>
           </div>
           <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.openQuickView('mc-pant-01')">
-            <img src="https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=800&q=80" alt="Laser Cut Panties" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <img src="https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=800&q=80" alt="Laser Cut Panties" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
             <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
               <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">100% Invisible Guarantee</span>
               <h5 class="text-sm font-semibold text-white">Seamless Laser-Cut Cheeky Brief</h5>
@@ -374,7 +374,7 @@ const App = {
             </div>
           </div>
           <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.openQuickView('mc-bridal-01')">
-            <img src="https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=800&q=80" alt="Bridal Robe" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <img src="https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=800&q=80" alt="Bridal Robe" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
             <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
               <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">Haute Trousseau</span>
               <h5 class="text-sm font-semibold text-white">Royal Crimson Silk Satin Robe</h5>
@@ -403,7 +403,7 @@ const App = {
             </div>
           </div>
           <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.openQuickView('mc-night-01')">
-            <img src="https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" alt="Silk Sleepwear" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <img src="https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80" alt="Silk Sleepwear" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
             <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
               <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">Pure Silk</span>
               <h5 class="text-sm font-semibold text-white">Midnight Black Cami & French Shorts</h5>
@@ -432,7 +432,7 @@ const App = {
             </div>
           </div>
           <div class="col-span-2 relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.openQuickView('mc-shape-01')">
-            <img src="https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=800&q=80" alt="Shapewear" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <img src="https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=800&q=80" alt="Shapewear" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
             <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
               <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">Level 3 Compression</span>
               <h5 class="text-sm font-semibold text-white">High-Waist Tummy Tamer Short</h5>
@@ -465,7 +465,7 @@ const App = {
             </div>
           </div>
           <div class="relative rounded-lg overflow-hidden group/card cursor-pointer border border-white/10" onclick="App.filterByCategory('${category}')">
-            <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" alt="${title}" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
+            <img src="https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80" alt="${title}" class="w-full h-44 object-cover group-hover/card:scale-105 transition duration-500" />
             <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
               <span class="text-[9px] uppercase font-bold tracking-[0.2em] text-[#D4AF37]">Featured Edit</span>
               <h5 class="text-sm font-semibold text-white">${title}</h5>
@@ -791,13 +791,13 @@ const App = {
     if (!container) return;
 
     const categories = [
-      { id: "all", name: "All Silhouettes", img: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=300&q=80", count: "22+ Designs" },
-      { id: "bras", name: "Luxury Bras", img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=300&q=80", count: "Seamless & Lace" },
-      { id: "panties", name: "Comfort Panties", img: "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=300&q=80", count: "No-Show & Cotton" },
-      { id: "bridal", name: "Bridal Trousseau", img: "https://images.unsplash.com/photo-1616150840617-a0684f0f089d?auto=format&fit=crop&w=300&q=80", count: "Royal Velvet" },
-      { id: "nightwear", name: "Silky Sleepwear", img: "https://images.unsplash.com/photo-1574015974293-817f0ebebb74?auto=format&fit=crop&w=300&q=80", count: "Satin PJ Sets" },
-      { id: "shapewear", name: "Tummy Shapewear", img: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=300&q=80", count: "Hourglass Fit" },
-      { id: "accessories", name: "Intimate Care", img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=300&q=80", count: "Pasties & Bags" }
+      { id: "all", name: "All Silhouettes", img: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=300&q=80", count: "22+ Designs" },
+      { id: "bras", name: "Luxury Bras", img: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=300&q=80", count: "Seamless & Lace" },
+      { id: "panties", name: "Comfort Panties", img: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?auto=format&fit=crop&w=300&q=80", count: "No-Show & Cotton" },
+      { id: "bridal", name: "Bridal Trousseau", img: "https://images.unsplash.com/photo-1568663521381-33b7c467fda0?auto=format&fit=crop&w=300&q=80", count: "Royal Velvet" },
+      { id: "nightwear", name: "Silky Sleepwear", img: "https://images.unsplash.com/photo-1574539602047-548bf9557352?auto=format&fit=crop&w=300&q=80", count: "Satin PJ Sets" },
+      { id: "shapewear", name: "Tummy Shapewear", img: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=300&q=80", count: "Hourglass Fit" },
+      { id: "accessories", name: "Intimate Care", img: "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=300&q=80", count: "Pasties & Bags" }
     ];
 
     container.innerHTML = categories.map(cat => `
@@ -1064,14 +1064,27 @@ const App = {
               ${p.originalPrice ? `<span class="card-price-original">${Store.formatPKR(p.originalPrice)}</span>` : ""}
             </div>
 
-            <!-- Mobile Quick Add Trigger -->
-            <button 
-              type="button" 
-              onclick="event.stopPropagation(); App.openMobileQuickAddSheet('${p.id}')"
-              class="md:hidden px-2.5 py-1 bg-[#181716] text-[#D4AF37] border border-white/10 hover:border-[#D4AF37]/50 rounded text-[10px] font-bold uppercase tracking-wider transition"
-            >
-              + Add
-            </button>
+            <div class="flex items-center gap-1.5">
+              <!-- WhatsApp Quick Order Button -->
+              <button 
+                type="button" 
+                onclick="event.stopPropagation(); App.orderViaWhatsApp(Store.getProductById('${p.id}'))"
+                class="px-2.5 py-1 bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-white border border-[#25D366]/40 rounded text-[10px] font-bold uppercase tracking-wider transition flex items-center gap-1"
+                title="Book via WhatsApp"
+              >
+                <i class="fa-brands fa-whatsapp text-xs"></i>
+                <span class="hidden sm:inline">Order</span>
+              </button>
+
+              <!-- Mobile Quick Add Trigger -->
+              <button 
+                type="button" 
+                onclick="event.stopPropagation(); App.openMobileQuickAddSheet('${p.id}')"
+                class="md:hidden px-2.5 py-1 bg-[#181716] text-[#D4AF37] border border-white/10 hover:border-[#D4AF37]/50 rounded text-[10px] font-bold uppercase tracking-wider transition"
+              >
+                + Add
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1132,6 +1145,14 @@ const App = {
           <i class="fa-solid fa-lock"></i>
           100% Discreet Packaging: Plain brown parcel, zero product labels.
         </div>
+
+        <button 
+          type="button" 
+          onclick="App.orderViaWhatsApp(App.activeProductForSheet)"
+          class="w-full mt-3 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs rounded-lg transition flex items-center justify-center gap-2 shadow-lg"
+        >
+          <i class="fa-brands fa-whatsapp text-base"></i> Order Directly on WhatsApp
+        </button>
       </div>
     `;
 
@@ -1416,10 +1437,10 @@ const App = {
 
             <button 
               type="button" 
-              onclick="App.orderViaWhatsApp(App.activeProductForModal)"
-              class="w-full h-10 bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs rounded transition flex items-center justify-center gap-2 shadow-xs"
+              onclick="App.orderModalProductViaWhatsApp()"
+              class="w-full h-11 bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-2 shadow-lg"
             >
-              <i class="fa-brands fa-whatsapp text-sm"></i> Order via WhatsApp Assistance
+              <i class="fa-brands fa-whatsapp text-lg"></i> Direct Order on WhatsApp (+92 326 6131394)
             </button>
           </div>
         </div>
@@ -1470,6 +1491,13 @@ const App = {
     this.closeAllModals();
     this.showToast(`Added ${this.activeProductForModal.title} to bag! 🛍️`);
     this.openCartDrawer();
+  },
+
+  orderModalProductViaWhatsApp: function () {
+    if (!this.activeProductForModal) return;
+    const activeSizeBtn = document.querySelector(".modal-size-btn.active");
+    const size = activeSizeBtn ? activeSizeBtn.getAttribute("data-size") : (this.activeProductForModal.sizes ? this.activeProductForModal.sizes[0] : null);
+    this.orderViaWhatsApp(this.activeProductForModal, size);
   },
 
   // Wishlist Logic
@@ -1947,7 +1975,7 @@ const App = {
 
     const orderData = {
       customer: customerDetails,
-      paymentMethod: formData.get("paymentMethod") || "Cash on Delivery (COD)",
+      paymentMethod: "Cash on Delivery (WhatsApp Booking)",
       items: cart,
       subtotal: totals.subtotal,
       discount: totals.discount,
@@ -1978,35 +2006,35 @@ const App = {
     if (!modal || !container) return;
 
     container.innerHTML = `
-      <div class="p-6 text-center">
-        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl animate-bounce">
+      <div class="p-6 text-center text-white bg-[#121110]">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[#25D366]/20 text-[#25D366] flex items-center justify-center text-3xl">
           <i class="fa-solid fa-check"></i>
         </div>
-        <span class="text-xs font-bold uppercase tracking-widest text-emerald-600">Order Placed Successfully!</span>
-        <h2 class="text-xl sm:text-2xl font-bold text-stone-900 font-serif-luxury mt-1">Thank You, ${order.customer.fullName}!</h2>
-        <p class="text-xs text-stone-500 mt-1">Your confidential order has been received and queued for dispatch.</p>
+        <span class="text-xs font-bold uppercase tracking-widest text-[#D4AF37]">Order Placed Successfully!</span>
+        <h2 class="text-xl sm:text-2xl font-bold text-white font-serif-luxury mt-1">Thank You, ${order.customer.fullName}!</h2>
+        <p class="text-xs text-stone-400 mt-1">Your confidential order has been received and queued for dispatch.</p>
 
         <!-- Order Details Card -->
-        <div class="my-5 p-4 bg-stone-50 border border-stone-200 rounded-xl text-left text-xs space-y-2">
-          <div class="flex justify-between items-center border-b border-stone-200 pb-2">
+        <div class="my-5 p-4 bg-[#181716] border border-white/10 rounded-xl text-left text-xs space-y-2 text-white">
+          <div class="flex justify-between items-center border-b border-white/10 pb-2">
             <div>
               <span class="text-stone-400 block text-[10px] uppercase">Order Reference</span>
-              <strong class="text-sm font-bold text-rose-600">${order.orderId}</strong>
+              <strong class="text-sm font-bold text-[#D4AF37]">${order.orderId}</strong>
             </div>
             <div>
               <span class="text-stone-400 block text-[10px] uppercase">TCS Tracking Code</span>
-              <strong class="text-sm font-bold text-stone-800">${order.trackingCode}</strong>
+              <strong class="text-sm font-bold text-white">${order.trackingCode}</strong>
             </div>
           </div>
-          <div class="grid grid-cols-2 gap-2 pt-1 text-stone-700">
+          <div class="grid grid-cols-2 gap-2 pt-1 text-stone-300">
             <div><strong>Recipient:</strong> ${order.customer.fullName}</div>
             <div><strong>City:</strong> ${order.customer.city}</div>
             <div><strong>Phone:</strong> ${order.customer.phone}</div>
             <div><strong>Payment:</strong> ${order.paymentMethod}</div>
           </div>
-          <div class="p-2.5 bg-emerald-50 text-emerald-800 rounded-lg text-[11px] font-medium border border-emerald-200 flex items-center gap-2">
-            <i class="fa-solid fa-shield-halved text-emerald-600"></i>
-            100% Confidential Delivery Guarantee: The parcel exterior has NO intimate wear labels.
+          <div class="p-2.5 bg-[#121110] text-[#D4AF37] rounded-lg text-[11px] font-medium border border-[#D4AF37]/30 flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved text-[#D4AF37]"></i>
+            100% Confidential Delivery: Unbranded box with NO intimate wear markings.
           </div>
         </div>
 
@@ -2015,7 +2043,7 @@ const App = {
           <a 
             href="${Store.getWhatsAppOrderUrl(order.customer, order.orderId)}" 
             target="_blank" 
-            class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-md flex items-center justify-center gap-2"
+            class="w-full py-3.5 bg-[#25D366] hover:bg-[#20ba5a] active:scale-[0.99] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-xl flex items-center justify-center gap-2"
           >
             <i class="fa-brands fa-whatsapp text-lg"></i> Send Order Details to WhatsApp (+92 326 6131394)
           </a>
@@ -2026,21 +2054,21 @@ const App = {
           <button 
             type="button" 
             onclick="App.closeAllModals(); App.openTrackingModalWithCode('${order.orderId}')" 
-            class="flex-1 py-3 bg-stone-900 hover:bg-rose-600 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-2 shadow-md"
+            class="flex-1 py-3 bg-[#D4AF37] hover:bg-[#c49f2e] text-[#0A0908] font-bold text-xs uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-2 shadow-md"
           >
             <i class="fa-solid fa-truck-fast"></i> Track Live Courier
           </button>
           <button 
             type="button" 
             onclick="window.print()" 
-            class="px-4 py-3 bg-white border border-stone-300 hover:bg-stone-100 text-stone-700 font-bold text-xs uppercase rounded-lg transition"
+            class="px-4 py-3 bg-[#181716] border border-white/10 hover:bg-white/10 text-stone-200 font-bold text-xs uppercase rounded-lg transition"
           >
             <i class="fa-solid fa-print mr-1"></i> Print Receipt
           </button>
           <button 
             type="button" 
             onclick="App.closeAllModals()" 
-            class="px-4 py-3 border border-stone-300 hover:bg-stone-100 text-stone-700 font-bold text-xs uppercase rounded-lg transition"
+            class="px-4 py-3 border border-white/10 hover:bg-white/10 text-stone-400 font-bold text-xs uppercase rounded-lg transition"
           >
             Continue
           </button>
@@ -2081,8 +2109,8 @@ const App = {
 
     if (!order) {
       container.innerHTML = `
-        <div class="p-4 bg-rose-50 border border-rose-200 rounded-lg text-center text-xs text-rose-700">
-          <i class="fa-solid fa-circle-exclamation text-lg mb-1 block"></i>
+        <div class="p-4 bg-red-950/40 border border-red-500/30 rounded-lg text-center text-xs text-red-300">
+          <i class="fa-solid fa-circle-exclamation text-lg mb-1 block text-red-400"></i>
           Order reference "${query}" not found. Please verify the code on your order invoice or SMS.
         </div>
       `;
@@ -2099,36 +2127,36 @@ const App = {
     ];
 
     container.innerHTML = `
-      <div class="p-4 bg-white border border-stone-200 rounded-xl space-y-4 text-xs">
-        <div class="flex items-center justify-between border-b border-stone-100 pb-2">
+      <div class="p-4 bg-[#181716] border border-white/10 rounded-xl space-y-4 text-xs text-white">
+        <div class="flex items-center justify-between border-b border-white/10 pb-2">
           <div>
             <span class="text-stone-400 block text-[10px]">ORDER ID</span>
-            <strong class="text-sm font-bold text-stone-900">${order.orderId}</strong>
+            <strong class="text-sm font-bold text-[#D4AF37]">${order.orderId}</strong>
           </div>
           <div class="text-right">
             <span class="text-stone-400 block text-[10px]">STATUS</span>
-            <span class="px-2 py-0.5 rounded text-xs font-bold ${order.status === "Delivered" ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}">
+            <span class="px-2 py-0.5 rounded text-xs font-bold ${order.status === "Delivered" ? "bg-emerald-900/60 text-emerald-300 border border-emerald-500/40" : "bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/40"}">
               ${order.status}
             </span>
           </div>
         </div>
 
-        <div class="relative pl-6 space-y-4 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-200">
+        <div class="relative pl-6 space-y-4 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-white/10">
           ${steps.map(s => `
             <div class="relative flex items-start gap-3">
-              <span class="absolute -left-6 w-4 h-4 rounded-full flex items-center justify-center text-[9px] ${s.done ? "bg-rose-600 text-white" : "bg-stone-200 text-stone-400"}">
+              <span class="absolute -left-6 w-4 h-4 rounded-full flex items-center justify-center text-[9px] ${s.done ? "bg-[#D4AF37] text-[#0A0908]" : "bg-[#252422] text-stone-500"}">
                 <i class="fa-solid fa-check"></i>
               </span>
               <div>
-                <h5 class="font-bold ${s.done ? "text-stone-900" : "text-stone-400"}">${s.title}</h5>
-                <p class="text-[11px] text-stone-500">${s.desc}</p>
+                <h5 class="font-bold ${s.done ? "text-white" : "text-stone-500"}">${s.title}</h5>
+                <p class="text-[11px] text-stone-400">${s.desc}</p>
               </div>
             </div>
           `).join("")}
         </div>
 
-        <div class="bg-stone-50 p-2.5 rounded text-[11px] text-stone-600 border border-stone-100">
-          <strong>Destination:</strong> ${order.customer.address}, ${order.customer.city}
+        <div class="bg-[#121110] p-2.5 rounded text-[11px] text-stone-300 border border-white/10">
+          <strong class="text-[#D4AF37]">Destination:</strong> ${order.customer.address}, ${order.customer.city}
         </div>
       </div>
     `;
@@ -2136,13 +2164,24 @@ const App = {
   },
 
   // WhatsApp 1-Click Order Assistant
-  orderViaWhatsApp: function (product) {
+  orderViaWhatsApp: function (product, selectedSize = null) {
     if (!product) return;
     const phone = (typeof Store !== "undefined" && Store.WHATSAPP_NUMBER) ? Store.WHATSAPP_NUMBER : "923266131394";
+    const sizeLine = selectedSize 
+      ? `• Selected Size: *${selectedSize}*\n` 
+      : (product.sizes && product.sizes.length ? `• Available Sizes: ${product.sizes.join(", ")}\n` : "");
+    const categoryLine = (product.category || product.subCategory) ? `• Category: ${product.category || product.subCategory}\n` : "";
+
     const msg = encodeURIComponent(
-      `Assalam-o-Alaikum Miss Collection!\n\nMujhe yeh product book/purchase karna hai:\n• Product: ${product.title}\n• Price: ${Store.formatPKR(product.price)}\n• Code: ${product.id}\n\nKindly availability confirm karein aur discreet private packaging ke sath dispatch karein. Shukriya!`
+      `Assalam-o-Alaikum Miss Collection!\n\nMujhe yeh product WhatsApp par book / purchase karna hai:\n\n• Product: *${product.title}*\n${categoryLine}${sizeLine}• Price: *${Store.formatPKR(product.price)}*\n• Item Code: ${product.id}\n\nKindly availability confirm karein aur 100% discreet packaging ke sath dispatch karein. Shukriya! ✨`
     );
-    window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+    const waUrl = `https://wa.me/${phone}?text=${msg}`;
+    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.location.href = waUrl;
+    } else {
+      window.open(waUrl, "_blank");
+    }
   },
 
   // VIP WhatsApp Haute Concierge

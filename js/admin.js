@@ -265,6 +265,16 @@ const AdminApp = {
     }
   },
 
+  currentUploadedImage: null,
+
+  clearAllProducts: function () {
+    if (confirm("⚠️ Kya aap waqai tamaam products ko catalog se delete karna chahte hain?\n\n(Yeh action tamam products remove kar dega aur woh dobara wapis nahi aayenge).")) {
+      Store.clearAllProducts();
+      this.refreshDashboard();
+      alert("Tamaam products kamyabi se delete ho chuki hain!");
+    }
+  },
+
   deleteProduct: function (productId) {
     if (confirm("Are you sure you want to remove this product from Miss Collection catalog?")) {
       let products = Store.getProducts();
@@ -274,11 +284,98 @@ const AdminApp = {
     }
   },
 
+  handleCategoryChange: function (val) {
+    const customContainer = document.getElementById("adminCustomCategoryContainer");
+    if (!customContainer) return;
+    if (val === "__custom__") {
+      customContainer.classList.remove("hidden");
+      const customInput = document.getElementById("adminCustomCategoryInput");
+      if (customInput) customInput.focus();
+    } else {
+      customContainer.classList.add("hidden");
+    }
+  },
+
+  toggleSizeChip: function (btn) {
+    if (btn.classList.contains("active")) {
+      btn.classList.remove("active", "bg-stone-900", "text-white", "border-stone-900");
+      btn.classList.add("border-stone-200", "text-stone-700");
+    } else {
+      btn.classList.add("active", "bg-stone-900", "text-white", "border-stone-900");
+      btn.classList.remove("border-stone-200", "text-stone-700");
+    }
+  },
+
+  handleImageFileUpload: function (e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Barah-e-karam valid image file (JPG, PNG, WEBP) select karein.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      const dataUrl = uploadEvent.target.result;
+      this.currentUploadedImage = dataUrl;
+
+      const preview = document.getElementById("adminProductImagePreview");
+      const placeholderIcon = document.getElementById("adminProductImagePlaceholderIcon");
+      if (preview && placeholderIcon) {
+        preview.src = dataUrl;
+        preview.classList.remove("hidden");
+        placeholderIcon.classList.add("hidden");
+      }
+    };
+    reader.readAsDataURL(file);
+  },
+
+  handleImageUrlInput: function (url) {
+    if (!url || !url.trim()) return;
+    const cleanUrl = url.trim();
+    this.currentUploadedImage = cleanUrl;
+
+    const preview = document.getElementById("adminProductImagePreview");
+    const placeholderIcon = document.getElementById("adminProductImagePlaceholderIcon");
+    if (preview && placeholderIcon) {
+      preview.src = cleanUrl;
+      preview.classList.remove("hidden");
+      placeholderIcon.classList.add("hidden");
+    }
+  },
+
   openAddProductModal: function () {
     const form = document.getElementById("adminAddProductForm");
     if (form) form.reset();
     document.getElementById("adminProductModalId").value = "";
-    document.getElementById("adminProductModalTitle").textContent = "Add New Intimate Product";
+    document.getElementById("adminProductModalTitle").textContent = "Add New Intimate Product (نیا پروڈکٹ شامل کریں)";
+    
+    // Reset category selector
+    const catSelect = document.getElementById("adminProductCategory");
+    if (catSelect) catSelect.value = "bras";
+    this.handleCategoryChange("bras");
+
+    // Reset size chips
+    document.querySelectorAll(".admin-size-chip").forEach(btn => {
+      btn.classList.remove("active", "bg-stone-900", "text-white", "border-stone-900");
+      btn.classList.add("border-stone-200", "text-stone-700");
+    });
+    // Default select standard bra sizes
+    document.querySelectorAll('.admin-size-chip[data-size="32B"], .admin-size-chip[data-size="34B"], .admin-size-chip[data-size="36B"]').forEach(btn => {
+      this.toggleSizeChip(btn);
+    });
+
+    // Reset image preview
+    this.currentUploadedImage = null;
+    const preview = document.getElementById("adminProductImagePreview");
+    const placeholderIcon = document.getElementById("adminProductImagePlaceholderIcon");
+    if (preview && placeholderIcon) {
+      preview.src = "";
+      preview.classList.add("hidden");
+      placeholderIcon.classList.remove("hidden");
+    }
+
     document.getElementById("adminProductModal").classList.remove("hidden");
   },
 
@@ -288,17 +385,49 @@ const AdminApp = {
 
     const form = document.getElementById("adminAddProductForm");
     document.getElementById("adminProductModalId").value = p.id;
-    document.getElementById("adminProductModalTitle").textContent = "Edit Product Details";
+    document.getElementById("adminProductModalTitle").textContent = "Edit Product Details (پروڈکٹ تبدیل کریں)";
 
-    form.title.value = p.title;
-    form.category.value = p.category;
-    form.subCategory.value = p.subCategory;
-    form.price.value = p.price;
+    form.title.value = p.title || "";
+    form.price.value = p.price || "";
     form.originalPrice.value = p.originalPrice || "";
-    form.stockCount.value = p.stockCount || 10;
-    form.description.value = p.description || "";
-    form.fabric.value = p.fabric || "";
-    form.imageUrl.value = p.images[0] || "";
+    form.stockCount.value = p.stockCount || 20;
+    form.inStock.checked = p.inStock !== false;
+
+    // Category
+    const catSelect = document.getElementById("adminProductCategory");
+    const knownCats = ["bras", "panties", "bridal", "nightwear", "shapewear"];
+    if (knownCats.includes(p.category)) {
+      catSelect.value = p.category;
+      this.handleCategoryChange(p.category);
+    } else {
+      catSelect.value = "__custom__";
+      this.handleCategoryChange("__custom__");
+      document.getElementById("adminCustomCategoryInput").value = p.category || "";
+    }
+
+    // Sizes
+    document.querySelectorAll(".admin-size-chip").forEach(btn => {
+      const sz = btn.getAttribute("data-size");
+      if (p.sizes && p.sizes.includes(sz)) {
+        btn.classList.add("active", "bg-stone-900", "text-white", "border-stone-900");
+        btn.classList.remove("border-stone-200", "text-stone-700");
+      } else {
+        btn.classList.remove("active", "bg-stone-900", "text-white", "border-stone-900");
+        btn.classList.add("border-stone-200", "text-stone-700");
+      }
+    });
+
+    // Image preview
+    const img = (p.images && p.images[0]) ? p.images[0] : "";
+    this.currentUploadedImage = img;
+    const preview = document.getElementById("adminProductImagePreview");
+    const placeholderIcon = document.getElementById("adminProductImagePlaceholderIcon");
+    if (img && preview && placeholderIcon) {
+      preview.src = img;
+      preview.classList.remove("hidden");
+      placeholderIcon.classList.add("hidden");
+      if (form.imageUrl) form.imageUrl.value = img.startsWith("data:") ? "" : img;
+    }
 
     document.getElementById("adminProductModal").classList.remove("hidden");
   },
@@ -312,17 +441,38 @@ const AdminApp = {
     const products = Store.getProducts();
 
     const title = form.title.value.trim();
-    const category = form.category.value;
-    const subCategory = form.subCategory.value.trim();
+    let category = form.category.value;
+    if (category === "__custom__") {
+      const customVal = document.getElementById("adminCustomCategoryInput").value.trim();
+      category = customVal || "General Intimates";
+    }
+
     const price = parseInt(form.price.value);
     const originalPrice = form.originalPrice.value ? parseInt(form.originalPrice.value) : null;
-    const stockCount = parseInt(form.stockCount.value) || 15;
-    const description = form.description.value.trim();
-    const fabric = form.fabric.value.trim();
-    const imageUrl = form.imageUrl.value.trim() || "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80";
+    const stockCount = parseInt(form.stockCount.value) || 20;
+    const inStock = form.inStock.checked;
+
+    // Gather selected sizes
+    const selectedSizes = [];
+    document.querySelectorAll(".admin-size-chip.active").forEach(btn => {
+      selectedSizes.push(btn.getAttribute("data-size"));
+    });
+    const customSizesStr = document.getElementById("adminCustomSizesInput").value.trim();
+    if (customSizesStr) {
+      customSizesStr.split(",").map(s => s.trim()).filter(Boolean).forEach(s => {
+        if (!selectedSizes.includes(s)) selectedSizes.push(s);
+      });
+    }
+    const finalSizes = selectedSizes.length > 0 ? selectedSizes : ["Standard"];
+
+    // Image resolution
+    const fallbackImage = "https://images.unsplash.com/photo-1594616091971-bf856a77b57d?auto=format&fit=crop&w=800&q=80";
+    const imageUrl = this.currentUploadedImage || (form.imageUrl && form.imageUrl.value.trim()) || fallbackImage;
+
+    const subCategory = category.charAt(0).toUpperCase() + category.slice(1);
 
     if (editId) {
-      // Edit existing
+      // Edit existing product
       const p = products.find(i => i.id === editId);
       if (p) {
         p.title = title;
@@ -331,13 +481,14 @@ const AdminApp = {
         p.price = price;
         p.originalPrice = originalPrice;
         p.stockCount = stockCount;
-        p.description = description;
-        p.fabric = fabric;
-        if (imageUrl) p.images[0] = imageUrl;
+        p.inStock = inStock;
+        p.sizes = finalSizes;
+        p.images[0] = imageUrl;
+        if (p.colors && p.colors[0]) p.colors[0].image = imageUrl;
       }
     } else {
-      // Add new
-      const newId = "mc-" + category.substring(0, 3) + "-" + Date.now().toString().slice(-4);
+      // Add new product
+      const newId = "mc-" + category.substring(0, 3).toLowerCase() + "-" + Date.now().toString().slice(-4);
       products.unshift({
         id: newId,
         title: title,
@@ -349,12 +500,12 @@ const AdminApp = {
         reviewsCount: 1,
         badge: "New Arrival",
         badgeColor: "rose",
-        inStock: true,
+        inStock: inStock,
         stockCount: stockCount,
-        description: description,
-        fabric: fabric,
-        colors: [{ name: "Standard", hex: "#deb89d", image: imageUrl }],
-        sizes: category === "bras" ? ["32B", "34B", "36B", "38B"] : ["S", "M", "L", "XL"],
+        description: `${title} - crafted with premium soft fabrics for supreme comfort, flawless silhouette, and confidential delivery.`,
+        fabric: "92% Ultra-Soft Micro-Modal, 8% Elastane",
+        colors: [{ name: "Standard", hex: "#d4af37", image: imageUrl }],
+        sizes: finalSizes,
         images: [imageUrl]
       });
     }
@@ -362,7 +513,7 @@ const AdminApp = {
     Store.saveProducts(products);
     this.closeProductModal();
     this.refreshDashboard();
-    alert("Catalog saved successfully!");
+    alert("Product catalog updated successfully!");
   },
 
   changeOrderStatus: function (orderId, newStatus) {
