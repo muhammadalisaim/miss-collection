@@ -41,6 +41,15 @@ const AdminApp = {
   bindEvents: function () {
     const self = this;
 
+    // Admin Tab Navigation Buttons
+    document.querySelectorAll("[data-admin-tab]").forEach(btn => {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        const tab = this.getAttribute("data-admin-tab");
+        if (tab) self.switchTab(tab);
+      });
+    });
+
     // Login Form
     const loginForm = document.getElementById("adminLoginForm");
     if (loginForm) {
@@ -56,6 +65,15 @@ const AdminApp = {
       addProductForm.addEventListener("submit", function (e) {
         e.preventDefault();
         self.handleSaveProduct(this);
+      });
+    }
+
+    // Navigation Menu Form
+    const navForm = document.getElementById("adminNavForm");
+    if (navForm) {
+      navForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        self.handleNavFormSubmit(e);
       });
     }
 
@@ -122,18 +140,37 @@ const AdminApp = {
     const activeContent = document.getElementById(`tabContent-${tabName}`);
     if (activeContent) activeContent.classList.remove("hidden");
 
-    // Contextual button label
+    // Contextual button label & render active section
+    const addBtn = document.getElementById("adminMainAddBtn");
     const addBtnText = document.getElementById("adminMainAddBtnText");
     if (addBtnText) {
-      if (tabName === "catalog") addBtnText.textContent = "Add Product";
-      else if (tabName === "navigation") addBtnText.textContent = "Add Menu Item";
-      else if (tabName === "banners") addBtnText.textContent = "Add Slide";
-      else if (tabName === "lookbook") addBtnText.textContent = "Edit Lookbook";
-      else if (tabName === "cloud") {
-        addBtnText.textContent = "Sync Catalog";
+      if (tabName === "catalog") {
+        addBtnText.textContent = "Add Product";
+        if (addBtn) addBtn.classList.remove("hidden");
+        this.renderProductsTable();
+      } else if (tabName === "navigation") {
+        addBtnText.textContent = "Add Menu Item";
+        if (addBtn) addBtn.classList.remove("hidden");
+        this.renderNavigationTable();
+      } else if (tabName === "banners") {
+        addBtnText.textContent = "Add Slide";
+        if (addBtn) addBtn.classList.remove("hidden");
+        this.renderBannersTable();
+      } else if (tabName === "lookbook") {
+        addBtnText.textContent = "Edit Lookbook";
+        if (addBtn) addBtn.classList.remove("hidden");
+        this.renderLookbookGrid();
+      } else if (tabName === "orders") {
+        addBtnText.textContent = "Refresh Orders";
+        if (addBtn) addBtn.classList.remove("hidden");
+        this.renderOrdersTable();
+      } else if (tabName === "cloud") {
+        addBtnText.textContent = "Upload All";
+        if (addBtn) addBtn.classList.remove("hidden");
         this.updateCloudStatusUI();
+      } else {
+        addBtnText.textContent = "New Item";
       }
-      else addBtnText.textContent = "New Item";
     }
   },
 
@@ -144,6 +181,10 @@ const AdminApp = {
       this.openAddBannerModal();
     } else if (this.currentTab === "lookbook") {
       this.openEditLookbookModal("lookbook-1");
+    } else if (this.currentTab === "orders") {
+      this.refreshOrdersFromCloud();
+    } else if (this.currentTab === "cloud") {
+      this.syncAllToGoogleSheets();
     } else {
       this.openAddProductModal();
     }
@@ -317,16 +358,21 @@ const AdminApp = {
   currentUploadedImage: null,
 
   clearAllProducts: async function () {
-    if (confirm("⚠️ Kya aap waqai tamaam products ko catalog se delete karna chahte hain?\n\n(Yeh action tamam products remove kar dega aur woh dobara wapis nahi aayenge).")) {
-      Store.clearAllProducts();
-      if (Store.isCloudConnected && Store.isCloudConnected()) {
-        try {
-          await Store.bulkSaveProductsToRemote([]);
-        } catch (e) {
-          console.warn("Could not clear remote products:", e);
-        }
+    if (!confirm("⚠️ Kya aap waqai tamaam products ko catalog se delete karna chahte hain?\n\n(Yeh action tamam products remove kar dega aur woh dobara wapis nahi aayenge).")) {
+      return;
+    }
+    Store.clearAllProducts();
+    this.refreshDashboard();
+
+    if (Store.isCloudConnected && Store.isCloudConnected()) {
+      try {
+        await Store.bulkSaveProductsToRemote([]);
+        alert("Tamaam products catalog aur Google Sheets Cloud database dono se delete ho chuki hain!");
+      } catch (e) {
+        console.warn("Could not clear remote products:", e);
+        alert("Local products delete ho gaye hain, lekin Google Sheet sync issue: " + e.message);
       }
-      this.refreshDashboard();
+    } else {
       alert("Tamaam products kamyabi se delete ho chuki hain!");
     }
   },
@@ -727,7 +773,8 @@ const AdminApp = {
     const form = document.getElementById("adminNavForm");
     if (!modal || !form) return;
     form.reset();
-    form.id.value = "";
+    const idInput = document.getElementById("adminNavModalId");
+    if (idInput) idInput.value = "";
     document.getElementById("adminNavModalTitle").textContent = "Add Top Menu Option";
     this.handleNavTypeChange("category");
     modal.classList.remove("hidden");
@@ -742,7 +789,8 @@ const AdminApp = {
     const item = items.find(i => i.id === id);
     if (!item) return;
 
-    form.id.value = item.id;
+    const idInput = document.getElementById("adminNavModalId");
+    if (idInput) idInput.value = item.id;
     form.title.value = item.title;
     form.targetType.value = item.targetType || "category";
     if (form.category) form.category.value = item.category || "all";
@@ -775,11 +823,12 @@ const AdminApp = {
   },
 
   handleNavFormSubmit: function (e) {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     const form = document.getElementById("adminNavForm");
     if (!form) return;
 
-    const id = form.id.value;
+    const idInput = document.getElementById("adminNavModalId");
+    const id = idInput ? idInput.value : "";
     const title = form.title.value.trim();
     const targetType = form.targetType.value;
     const category = form.category ? form.category.value : "all";
@@ -1071,23 +1120,34 @@ const AdminApp = {
     this.renderBannersTable();
   },
 
-  restoreFactoryDefaults: function () {
-    if (confirm("Reset Miss Collection catalog, header navigation menu, and hero banners to original factory defaults? All manual edits will be re-initialized.")) {
-      if (typeof DEFAULT_PRODUCTS !== "undefined") {
-        Store.saveProducts(DEFAULT_PRODUCTS);
-      }
-      if (Store.DEFAULT_NAV_ITEMS) {
-        Store.saveNavItems(Store.DEFAULT_NAV_ITEMS);
-      }
-      if (Store.DEFAULT_BANNERS) {
-        Store.saveBanners(Store.DEFAULT_BANNERS);
-      }
-      if (Store.DEFAULT_LOOKBOOK) {
-        Store.resetLookbookDefaults();
-      }
-      this.refreshDashboard();
-      alert("Restored factory catalog, navigation, and hero banners successfully.");
+  restoreFactoryDefaults: async function () {
+    if (!confirm("Reset Miss Collection catalog, header navigation menu, and hero banners to original factory defaults? All manual edits will be re-initialized.")) {
+      return;
     }
+    if (typeof DEFAULT_PRODUCTS !== "undefined") {
+      Store.saveProducts(DEFAULT_PRODUCTS);
+    }
+    if (Store.DEFAULT_NAV_ITEMS) {
+      Store.saveNavItems(Store.DEFAULT_NAV_ITEMS);
+    }
+    if (Store.DEFAULT_BANNERS) {
+      Store.saveBanners(Store.DEFAULT_BANNERS);
+    }
+    if (Store.DEFAULT_LOOKBOOK) {
+      Store.resetLookbookDefaults();
+    }
+    this.refreshDashboard();
+
+    if (Store.isCloudConnected && Store.isCloudConnected() && typeof DEFAULT_PRODUCTS !== "undefined") {
+      try {
+        await Store.bulkSaveProductsToRemote(DEFAULT_PRODUCTS);
+        alert("Factory defaults restore ho gaye hain aur Google Sheets Cloud par bhi sync ho chuke hain!");
+        return;
+      } catch (e) {
+        console.warn("Cloud sync error during factory reset:", e);
+      }
+    }
+    alert("Restored factory catalog, navigation, and hero banners successfully.");
   },
 
   // ==========================================

@@ -139,22 +139,22 @@
       <!-- Tabs Navigation -->
       <div class="flex items-center justify-between border-b border-stone-200 pb-2 flex-wrap gap-3">
         <div class="flex items-center gap-2 overflow-x-auto">
-          <button data-admin-tab="catalog" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider bg-stone-900 text-white transition shrink-0">
+          <button onclick="AdminApp.switchTab('catalog')" data-admin-tab="catalog" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider bg-stone-900 text-white transition shrink-0 cursor-pointer">
             <i class="fa-solid fa-boxes-stacked mr-1"></i> Products Catalog
           </button>
-          <button data-admin-tab="orders" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
+          <button onclick="AdminApp.switchTab('orders')" data-admin-tab="orders" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0 cursor-pointer">
             <i class="fa-solid fa-truck-ramp-box mr-1"></i> Customer Orders
           </button>
-          <button data-admin-tab="lookbook" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
+          <button onclick="AdminApp.switchTab('lookbook')" data-admin-tab="lookbook" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0 cursor-pointer">
             <i class="fa-solid fa-camera-retro mr-1"></i> The Lookbook Edit
           </button>
-          <button data-admin-tab="banners" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
+          <button onclick="AdminApp.switchTab('banners')" data-admin-tab="banners" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0 cursor-pointer">
             <i class="fa-solid fa-panorama mr-1"></i> Hero Banners
           </button>
-          <button data-admin-tab="navigation" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
+          <button onclick="AdminApp.switchTab('navigation')" data-admin-tab="navigation" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0 cursor-pointer">
             <i class="fa-solid fa-bars mr-1"></i> Header Menu
           </button>
-          <button data-admin-tab="cloud" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0">
+          <button onclick="AdminApp.switchTab('cloud')" data-admin-tab="cloud" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-stone-600 hover:bg-stone-100 transition shrink-0 cursor-pointer">
             <i class="fa-solid fa-cloud-arrow-up mr-1 text-[#D4AF37]"></i> Google Sheets DB
           </button>
         </div>
@@ -668,7 +668,7 @@
       </div>
 
       <form id="adminNavForm" onsubmit="AdminApp.handleNavFormSubmit(event)" class="mt-4 space-y-4 text-xs">
-        <input type="hidden" name="id" />
+        <input type="hidden" id="adminNavModalId" name="id" value="" />
 
         <div>
           <label class="block font-bold text-stone-700 mb-1">Menu Label / Title *</label>
